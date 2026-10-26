@@ -1,6 +1,6 @@
 # 🛡️ Vigilance SST
 
-### Serious game **Santé & Sécurité au Travail** — 3 niveaux, 290 points de vigilance, 100 % hors-ligne
+### Serious game **Santé & Sécurité au Travail** — 3 niveaux, 520 points de vigilance, 100 % hors-ligne
 
 <p>
   <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
@@ -59,10 +59,10 @@ Les formations SST sont souvent descendantes : un support, des slides, un questi
 
 | Objectif | Réponse apportée |
 | :-- | :-- |
-| Ancrer les définitions (accident, maladie professionnelle, feu, EPI) | 🔍 Quiz de 10 questions avec explication systématique |
-| Faire le lien entre risque et protection | 🧰 3 situations de travail à équiper correctement |
-| Reconnaître les familles de signaux d'un coup d'œil | ⚡ Flash de 12 s sur 10 pictogrammes ISO 7010 |
-| Donner envie de rejouer | 🏆 290 PV, 5 rangs, 5 badges, meilleurs scores conservés |
+| Ancrer les définitions (accident, maladie professionnelle, feu, EPI) | 🔍 Quiz de 10 questions tirées d'une banque de 20, avec explication systématique |
+| Faire le lien entre risque et protection | 🧰 4 situations de travail à équiper correctement |
+| Reconnaître les familles de signaux d'un coup d'œil | ⚡ Flash de 12 s sur 20 pictogrammes ISO 7010 |
+| Donner envie de rejouer | 🏆 520 PV, 5 rangs, 5 badges, meilleurs scores conservés et tirage aléatoire |
 | Rester utilisable en salle, sans réseau | 📴 Fichier local, aucune dépendance externe |
 
 Public visé : nouveaux arrivants, sensibilisation annuelle, ateliers de prévention, étudiants en
@@ -74,12 +74,14 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 
 - 🧭 **Tableau de bord unifié** — score global, anneau de progression, rang courant et état des 3 niveaux.
 - 🎯 **Parcours progressif** — les niveaux s'enchaînent, mais restent accessibles librement (navigation par onglets).
+- 🎲 **Quiz aléatoire** — 10 questions tirées parmi 20 à chaque tentative, sans reprendre exactement la même sélection.
 - 💾 **Progression persistante** — meilleurs scores sauvegardés dans `localStorage` (clé `vigilance_sst_v1`), appareil par appareil.
 - 🔁 **Rejouabilité** — chaque tentative peut améliorer le record ; le score total ne régresse jamais.
 - 🧾 **Feedback pédagogique** — chaque réponse est expliquée (bonne ou mauvaise), sans jamais laisser l'apprenant deviner.
 - ⏱️ **Chrono temps réel** — niveau 3, 12 secondes par signal, barre qui passe en alerte à 4 s.
 - 🏅 **Rangs et badges** — 5 paliers de « Observateur » à « Légende SST » et 5 badges de réussite.
-- 🧰 **Visuel EPI interactif** — un travailleur SVG réagit aux équipements sélectionnés.
+- 🧰 **Visuel EPI interactif** — un travailleur SVG réagit aux équipements sélectionnés, protections auditives comprises.
+- 🧯 **Pictogrammes officiels** — 20 signaux ISO 7010 intégrés en SVG inline, sans chargement réseau.
 - 📱 **Responsive** — grilles fluides du mobile au grand écran, barre supérieure collante.
 - ♿ **Accessible** — HTML sémantique, `aria-live` sur les retours, `aria-modal`, focus visibles, `prefers-reduced-motion`.
 - 🖨️ **Mémo imprimable** — fiche de révision « L'essentiel SST » consultable à tout moment.
@@ -91,42 +93,44 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 
 | # | Niveau | Mécanique | Contenu | Barème |
 | :-: | :-- | :-- | :-- | :-- |
-| **01** | 🔍 **Les fondamentaux** | Quiz à choix unique, correction expliquée | 10 questions : définitions, droits et obligations, feu, prévention | 10 PV / bonne réponse → **100 PV** |
-| **02** | 🧰 **Bien s'équiper** | Sélection multiple d'EPI sur 3 situations | Chantier extérieur · Travail en hauteur · Laboratoire | 10 PV / EPI correct, −5 PV / EPI inutile → **90 PV** |
-| **03** | ⚡ **L'œil du safety** | Reconnaissance de famille sous contrainte de temps | 10 pictogrammes, 5 familles ISO 7010 | 10 PV / signal en moins de 12 s → **100 PV** |
-| | | | **Total** | **290 PV** |
+| **01** | 🔍 **Les fondamentaux** | Quiz à choix unique, correction expliquée | Banque de 20 questions, 10 tirées au hasard par session | 10 PV / bonne réponse → **100 PV par session** (200 PV banque complète) |
+| **02** | 🧰 **Bien s'équiper** | Sélection multiple d'EPI sur 4 situations | Chantier extérieur · Travail en hauteur · Laboratoire · Atelier de meulage | 10 PV / EPI correct, −5 PV / EPI inutile → **120 PV** |
+| **03** | ⚡ **L'œil du safety** | Reconnaissance de famille sous contrainte de temps | 20 pictogrammes, 5 familles ISO 7010 | 10 PV / signal en moins de 12 s → **200 PV** |
+| | | | **Total** | **520 PV** |
 
 ### 01 · 🔍 Quiz SST — « Les fondamentaux »
 
-- 10 questions, une seule bonne réponse, validation puis correction immédiate.
+- **20 questions en banque**, dont **10 tirées au hasard** à chaque session : deux parties ne proposent pas le même parcours.
+- Une seule bonne réponse, validation puis correction immédiate.
 - Chaque question est accompagnée d'une **explication courte** issue du support de formation.
-- Panneau latéral : liste des questions avec ✓ pour celles déjà maîtrisées (meilleur score).
-- Écran de fin : bonnes réponses, meilleur score, message adapté (≥ 80 %, ≥ 50 %, sinon révision du mémo).
+- Panneau latéral : les 20 questions de la banque avec ✓ pour celles déjà maîtrisées ; la maîtrise est conservée d'une session à l'autre.
+- Écran de fin : bonnes réponses sur 10, meilleur score global sur 200, message adapté (≥ 80 %, ≥ 50 %, sinon révision du mémo).
 
 ### 02 · 🧰 Équipez le travailleur
 
-Trois scénarios, trois risques, trois EPI indispensables à chaque fois :
+Quatre scénarios, trois risques, trois EPI indispensables à chaque fois :
 
 | Scénario | Risques | EPI attendus |
 | :-- | :-- | :-- |
 | 🏗️ **Chantier extérieur** — déchargement de palettes | Chute d'objets, coupures, écrasement des pieds | Casque, gants, chaussures de sécurité |
 | 🪜 **Travail en hauteur** — contrôle sur échafaudage | Chute de hauteur, chute d'outils, perte d'équilibre | Casque, chaussures de sécurité, harnais antichute |
 | 🧪 **Laboratoire** — manipulation de produit chimique | Projections, contact cutané, vapeurs irritantes | Gants chimiques, lunettes, masque respiratoire |
+| ⚙️ **Atelier de meulage** — meulage d'une pièce métallique | Projections oculaires, bruit intense, coupures aux mains | Lunettes, gants, protections auditives |
 
 Le calcul est volontairement nuancé : **+10 PV** par EPI attendu, **−5 PV** par EPI superflu,
 score borné entre 0 et 30 par scénario. Le meilleur résultat est conservé.
 
 ### 03 · ⚡ Reconnaissance des signaux
 
-Dix pictogrammes, cinq familles, douze secondes. La réponse est un clic sur la famille perçue :
+Vingt pictogrammes, cinq familles, douze secondes. La réponse est un clic sur la famille perçue :
 
-| Famille | Forme et couleur | Exemple |
+| Famille | Forme et couleur | Exemples |
 | :-- | :-- | :-- |
-| 🔵 **Obligation** | Rond bleu, inscription blanche | Porter un casque · Protection auditive |
-| 🔴 **Interdiction** | Rond blanc, contour rouge, cercle barré | Interdiction de fumer · Téléphone interdit |
-| 🟡 **Danger** | Triangle jaune, inscription noire | Danger électrique · Risque d'incendie |
-| 🟢 **Secours** | Carré vert, inscription blanche | Premiers secours · Civière |
-| 🧯 **Incendie** | Carré rouge, inscription blanche | Extincteur · Boyau d'incendie |
+| 🔵 **Obligation** | Rond bleu, inscription blanche | Casque · Lunettes · Gants · Protection auditive |
+| 🔴 **Interdiction** | Rond blanc, contour rouge, cercle barré | Fumer · Téléphone · Flamme nue · Ne pas toucher |
+| 🟡 **Danger** | Triangle jaune, inscription noire | Électrique · Incendie · Danger général · Matières toxiques |
+| 🟢 **Secours** | Carré vert, inscription blanche | Premiers secours · Civière · Rassemblement · Rince-œil |
+| 🧯 **Incendie** | Carré rouge, inscription blanche | Extincteur · Boyau d'incendie · Échelle · Point d'alarme |
 
 À l'expiration du chrono, la réponse est comptée fausse — mais le pictogramme et sa famille sont
 toujours expliqués, pour transformer l'erreur en apprentissage.
@@ -135,15 +139,15 @@ toujours expliqués, pour transformer l'erreur en apprentissage.
 
 ## 🏅 Score, rangs et badges
 
-**Points de Vigilance (PV)** : 290 au maximum, affichés en permanence dans la barre supérieure et le pied de page.
+**Points de Vigilance (PV)** : 520 au maximum, affichés en permanence dans la barre supérieure et le pied de page.
 
 | Rang | Seuil | Message |
 | :-- | :-: | :-- |
 | 👀 Observateur | 0 PV | Le point de départ de toute vigilance |
-| 🟢 Vigilant | 60 PV | Les réflexes commencent à s'installer |
-| 🛡️ Gardien SST | 140 PV | Vous savez reconnaître et prévenir |
-| 🎓 Expert SST | 220 PV | Les fondamentaux sont solides |
-| 🏆 Légende SST | 290 PV | Parcours complet, sans faute |
+| 🟢 Vigilant | 110 PV | Les réflexes commencent à s'installer |
+| 🛡️ Gardien SST | 250 PV | Vous savez reconnaître et prévenir |
+| 🎓 Expert SST | 390 PV | Les fondamentaux sont solides |
+| 🏆 Légende SST | 520 PV | Parcours complet, sans faute |
 
 Badges débloqués en cours de route : **Premier pas** · **Quiz terminé** · **Bien équipé** ·
 **Œil de lynx** · **Légende SST**.
@@ -160,11 +164,11 @@ après confirmation dans une boîte de dialogue accessible.
 | **HTML5 sémantique** | Structure `header`/`nav`/`main`/`section`/`footer`, landmarks ARIA, `lang="fr"`, meta description |
 | **CSS3 pur** | Variables `:root`, CSS Grid, Flexbox, `clamp()`, dégradés radiaux, animations et media queries — *aucun framework CSS* |
 | **JavaScript ES6+ (vanilla)** | État applicatif, routage par hash, rendu par templates, `localStorage`, timers — *aucune bibliothèque, aucun build* |
-| **SVG** | Pictogrammes **ISO 7010** en `viewBox` 265×265 / 200×200, sprite `<symbol>` inline, travailleur et jauges animés |
+| **SVG** | Pictogrammes **ISO 7010** aux `viewBox` variés (265×265, 600×525, 200×200, 100×100, 52,9×52,9), sprite `<symbol>` inline, travailleur et jauges animés |
 | **localStorage** | Persistance `vigilance_sst_v1` : meilleurs scores, niveaux terminés, réinitialisation |
 
 > 🧊 **Zéro dépendance, zéro requête réseau.** Pas de CDN, pas de police distante, pas de
-> `npm install` : l'application est un unique fichier `index.html` autonome (~131 Ko).
+> `npm install` : l'application est un unique fichier `index.html` autonome (~166 Ko).
 
 ---
 
@@ -244,6 +248,8 @@ rechargement automatique à chaque sauvegarde.
 - **Support de formation** : *Règles de Santé et de Sécurité au Travail* (module M02) — `sst.pdf`.
 - **Référentiel graphique** : pictogrammes de sécurité conformes à la norme **ISO 7010**
   (formes et couleurs : obligation, interdiction, danger, secours, lutte incendie).
+- **Pictogrammes complémentaires** : fichiers SVG issus de **Wikimedia Commons** (M004, M009, P003,
+  P010, W001, W016, E007, E011, F003, F005), nettoyés puis intégrés directement dans `index.html`.
 - **Parti pris** : contenus reformulés et situations EPI simplifiées à des fins pédagogiques.
   Ce jeu **ne remplace pas** une formation réglementaire, un plan de prévention ou l'avis d'un
   préventeur : il sert à sensibiliser et à réviser.
@@ -285,6 +291,8 @@ Le code de l'application est publié sous **licence MIT** — voir le fichier [L
 MIT License · Copyright (c) 2026 fehmitn
 ```
 
+**Auteur** : Fehmi Ben Njima — [fehmitn@gmail.com](mailto:fehmitn@gmail.com).
+
 En résumé : utilisation, modification, distribution et usage commercial autorisés, à condition de
 conserver la mention de copyright et le texte de la licence. Le logiciel est fourni « en l'état »,
 sans garantie.
@@ -294,9 +302,10 @@ code de ce dépôt.
 
 **Ce qu'elle ne couvre pas** :
 
-- **Pictogrammes ISO 7010** — fichiers SVG fournis à la racine et dans `sante securite.zip` :
-  symboles normalisés, inclus à des fins pédagogiques et illustratives. La norme ISO 7010 reste la
-  propriété de l'ISO ; ils ne constituent pas des marqueurs de sécurité officiels.
+- **Pictogrammes ISO 7010** — fichiers SVG fournis à la racine, dans `sante securite.zip` et
+  pictogrammes complémentaires importés de **Wikimedia Commons** : symboles normalisés, inclus à
+  des fins pédagogiques et illustratives. La norme ISO 7010 reste la propriété de l'ISO ; ils ne
+  constituent pas des marqueurs de sécurité officiels.
 - **Support de formation** `sst.pdf` (module M02) : document source, repris à titre documentaire.
 
 Le contenu pédagogique (questions, scénarios, fiches mémo) est librement réutilisable dans un cadre
@@ -307,6 +316,7 @@ pictogrammes, vérifiez les conditions applicables auprès de l'ISO et de l'aute
 
 ```text
 Vigilance SST — https://github.com/fehmitn/Cour-sante-securite — MIT License
+Auteur : Fehmi Ben Njima — fehmitn@gmail.com
 ```
 
 <p align="center">

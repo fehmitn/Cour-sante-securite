@@ -51,6 +51,10 @@ h1,h2,h3{letter-spacing:-.025em}
 .brand-text{font-weight:800;font-size:1.03rem;line-height:1;letter-spacing:-.03em}
 .brand-text span{color:var(--teal-d)}
 .brand-sub{display:block;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:5px;font-weight:700}
+.brand-credit{margin-left:4px;padding-left:13px;border-left:1px solid var(--line);font-size:.62rem;line-height:1.35;color:var(--muted);font-weight:600}
+.brand-credit b{display:block;font-size:.67rem;color:#405a70;font-weight:800;letter-spacing:.01em}
+.brand-credit a{color:var(--teal-d);font-weight:700;text-decoration:none}
+.brand-credit a:hover{text-decoration:underline}
 .main-nav{
   margin-left:auto;display:flex;align-items:center;gap:3px;padding:4px;
   border-radius:13px;background:#eef4f8;
@@ -234,6 +238,7 @@ h1,h2,h3{letter-spacing:-.025em}
 .check-list li.ok{color:var(--ink)}
 .check-list li.ok .check-dot{background:var(--green);border-color:var(--green);color:#fff}
 .check-list li .check-dot .icon{width:9px;height:9px}
+.check-list.bank{grid-template-columns:1fr 1fr;gap:5px 10px;font-variant-numeric:tabular-nums}
 .mini-tip{font-size:.73rem;line-height:1.55;color:var(--muted);background:#f5f9fb;border:1px solid #e9f1f5;border-radius:12px;padding:12px;margin-top:18px}
 .quiz-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
 .quiz-meta .muted{font-size:.72rem;font-weight:700}
@@ -483,6 +488,8 @@ h1,h2,h3{letter-spacing:-.025em}
 /* ---------- footer / toast / modal ---------- */
 .footer{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:34px;padding:18px 4px 0;border-top:1px solid #e0e9f0;font-size:.68rem;color:#91a2b0}
 .footer strong{color:#5b7487}
+.footer a{color:var(--teal-d);font-weight:700;text-decoration:none}
+.footer a:hover{text-decoration:underline}
 .toast{
   position:fixed;left:50%;bottom:28px;z-index:300;transform:translate(-50%,18px);opacity:0;pointer-events:none;
   display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:12px;
@@ -507,6 +514,9 @@ h1,h2,h3{letter-spacing:-.025em}
 @keyframes confettiFall{to{transform:translate3d(var(--dx),108vh,0) rotate(760deg);opacity:.85}}
 
 /* ---------- responsive ---------- */
+@media(max-width:1200px){
+  .brand-credit{display:none}
+}
 @media(max-width:1080px){
   .hero{grid-template-columns:minmax(0,1fr) 310px;padding:34px;gap:26px}
   .levels-grid{grid-template-columns:1fr 1fr}
@@ -515,7 +525,7 @@ h1,h2,h3{letter-spacing:-.025em}
 }
 @media(max-width:900px){
   .topbar{flex-wrap:wrap;gap:9px;padding:9px 11px}
-  .brand{order:1}.top-actions{order:2;margin-left:auto}.main-nav{order:3;width:100%;margin-left:0;overflow:auto;justify-content:flex-start}
+  .brand{order:1}.brand-credit{display:none}.top-actions{order:2;margin-left:auto}.main-nav{order:3;width:100%;margin-left:0;overflow:auto;justify-content:flex-start}
   .nav-link{flex:0 0 auto;text-align:center;padding:8px 11px;font-size:.73rem}
   .hero{grid-template-columns:1fr;padding:30px}
   .score-panel{max-width:380px;width:100%;justify-self:center}
@@ -613,6 +623,7 @@ h1,h2,h3{letter-spacing:-.025em}
       <span class="brand-mark"><svg class="icon"><use href="#i-shield"></use></svg></span>
       <span class="brand-text">Vigilance <span>SST</span><small class="brand-sub">Santé &amp; sécurité au travail</small></span>
     </a>
+    <span class="brand-credit"><b>Fait par Fehmi Ben Njima</b><a href="mailto:fehmitn@gmail.com">fehmitn@gmail.com</a></span>
     <nav class="main-nav" aria-label="Navigation principale">
       <a class="nav-link active" data-nav="dashboard" href="#dashboard">Tableau de bord</a>
       <a class="nav-link" data-nav="quiz" href="#quiz">Niveau 1 · Quiz</a>
@@ -639,7 +650,7 @@ h1,h2,h3{letter-spacing:-.025em}
             <a class="btn btn-ghost-light" href="#memo"><svg class="icon"><use href="#i-book"></use></svg>Ouvrir le mémo SST</a>
           </div>
           <div class="hero-meta">
-            <span><svg class="icon"><use href="#i-target"></use></svg>290 PV à gagner</span>
+            <span><svg class="icon"><use href="#i-target"></use></svg>520 PV à gagner</span>
             <span><svg class="icon"><use href="#i-check"></use></svg>100 % hors-ligne</span>
             <span><svg class="icon"><use href="#i-trophy"></use></svg>Progression sauvegardée</span>
           </div>
@@ -652,7 +663,7 @@ h1,h2,h3{letter-spacing:-.025em}
               <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
               <circle class="ring-fg" id="scoreRing" cx="70" cy="70" r="58"></circle>
             </svg>
-            <div class="ring-center"><strong id="heroScore">0</strong><span>sur 290 PV</span></div>
+            <div class="ring-center"><strong id="heroScore">0</strong><span>sur 520 PV</span></div>
           </div>
           <div class="rank-row"><span class="rank-label">Rang actuel</span><span class="rank-pill" id="heroRank">Observateur</span></div>
           <div class="bar rank-bar"><span id="rankBar" style="width:0%"></span></div>
@@ -671,7 +682,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <div class="level-icon"><svg class="icon"><use href="#i-quiz"></use></svg></div>
           <h3>Les fondamentaux</h3>
           <p>Définitions, droits, obligations et notions essentielles sur le feu.</p>
-          <div class="level-score-row"><span><strong data-score="quiz">0</strong> / 100 PV</span><span data-sub="quiz">0/10 bonnes réponses</span></div>
+          <div class="level-score-row"><span><strong data-score="quiz">0</strong> / 200 PV</span><span data-sub="quiz">0/20 questions maîtrisées</span></div>
           <div class="bar"><span data-bar="quiz"></span></div>
           <a class="btn btn-primary btn-small" href="#quiz">Jouer au quiz <svg class="icon"><use href="#i-arrow"></use></svg></a>
         </article>
@@ -679,8 +690,8 @@ h1,h2,h3{letter-spacing:-.025em}
           <div class="level-top"><span class="level-num">NIVEAU 02</span><span class="level-state" data-status="ppe">À découvrir</span></div>
           <div class="level-icon"><svg class="icon"><use href="#i-ppe"></use></svg></div>
           <h3>Bien s'équiper</h3>
-          <p>Choisissez les EPI adaptés à trois situations de travail à risque.</p>
-          <div class="level-score-row"><span><strong data-score="ppe">0</strong> / 90 PV</span><span data-sub="ppe">0/3 scénarios</span></div>
+          <p>Choisissez les EPI adaptés à quatre situations de travail à risque.</p>
+          <div class="level-score-row"><span><strong data-score="ppe">0</strong> / 120 PV</span><span data-sub="ppe">0/4 scénarios</span></div>
           <div class="bar"><span data-bar="ppe"></span></div>
           <a class="btn btn-primary btn-small" href="#ppe">Équiper le travailleur <svg class="icon"><use href="#i-arrow"></use></svg></a>
         </article>
@@ -689,7 +700,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <div class="level-icon"><svg class="icon"><use href="#i-signals"></use></svg></div>
           <h3>L'œil du safety</h3>
           <p>Reconnaissez en un flash les formes et couleurs des signaux SST.</p>
-          <div class="level-score-row"><span><strong data-score="signals">0</strong> / 100 PV</span><span data-sub="signals">0/10 signaux</span></div>
+          <div class="level-score-row"><span><strong data-score="signals">0</strong> / 200 PV</span><span data-sub="signals">0/20 signaux</span></div>
           <div class="bar"><span data-bar="signals"></span></div>
           <a class="btn btn-primary btn-small" href="#signals">Lancer le flash <svg class="icon"><use href="#i-arrow"></use></svg></a>
         </article>
@@ -702,9 +713,9 @@ h1,h2,h3{letter-spacing:-.025em}
           <p class="muted small" style="margin-bottom:0">Les meilleurs scores sont conservés. Rejouez pour améliorer votre total.</p>
           <div class="stat-grid">
             <div class="stat"><span>Niveaux terminés</span><strong id="levelsDone">0 / 3</strong></div>
-            <div class="stat"><span>Quiz maîtrisé</span><strong id="quizMastered">0 / 10</strong></div>
-            <div class="stat"><span>Scénarios EPI</span><strong id="ppeDone">0 / 3</strong></div>
-            <div class="stat"><span>Signaux reconnus</span><strong id="signalsMastered">0 / 10</strong></div>
+            <div class="stat"><span>Quiz maîtrisé</span><strong id="quizMastered">0 / 20</strong></div>
+            <div class="stat"><span>Scénarios EPI</span><strong id="ppeDone">0 / 4</strong></div>
+            <div class="stat"><span>Signaux reconnus</span><strong id="signalsMastered">0 / 20</strong></div>
           </div>
           <div class="badge-row" id="badgeRow"></div>
         </div>
@@ -721,8 +732,8 @@ h1,h2,h3{letter-spacing:-.025em}
     <!-- QUIZ -->
     <section class="view" id="view-quiz" aria-labelledby="quizTitle">
       <div class="subpage-head">
-        <div><span class="eyebrow dark">Niveau 1 · Les fondamentaux</span><h1 id="quizTitle">Quiz SST</h1><p>10 questions sur les définitions, les droits et obligations, le feu et la prévention.</p></div>
-        <div class="level-chip"><b>01</b>100 PV possibles</div>
+        <div><span class="eyebrow dark">Niveau 1 · Les fondamentaux</span><h1 id="quizTitle">Quiz SST</h1><p>10 questions tirées au hasard parmi une banque de 20 : définitions, droits et obligations, feu, électricité et prévention.</p></div>
+        <div class="level-chip"><b>01</b>200 PV à maîtriser</div>
       </div>
       <div id="quizApp"></div>
     </section>
@@ -731,7 +742,7 @@ h1,h2,h3{letter-spacing:-.025em}
     <section class="view" id="view-ppe" aria-labelledby="ppeTitle">
       <div class="subpage-head">
         <div><span class="eyebrow dark">Niveau 2 · Bien s'équiper</span><h1 id="ppeTitle">Équipez le travailleur</h1><p>Analysez la situation, sélectionnez les EPI indispensables, puis validez votre choix.</p></div>
-        <div class="level-chip"><b>02</b>90 PV possibles</div>
+        <div class="level-chip"><b>02</b>120 PV possibles</div>
       </div>
       <div id="ppeApp"></div>
     </section>
@@ -740,7 +751,7 @@ h1,h2,h3{letter-spacing:-.025em}
     <section class="view" id="view-signals" aria-labelledby="signalsTitle">
       <div class="subpage-head">
         <div><span class="eyebrow dark">Niveau 3 · L'œil du safety</span><h1 id="signalsTitle">Reconnaissance des signaux</h1><p>Un signal apparaît. Identifiez sa famille avant la fin du chrono.</p></div>
-        <div class="level-chip"><b>03</b>100 PV possibles</div>
+        <div class="level-chip"><b>03</b>200 PV possibles</div>
       </div>
       <div id="signalsApp"></div>
     </section>
@@ -799,14 +810,15 @@ h1,h2,h3{letter-spacing:-.025em}
           </div>
         </article>
       </div>
-      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b>. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
+      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b>. Pictogrammes ISO 7010 issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
     </section>
   </main>
 
   <footer class="footer">
     <span><strong>Vigilance SST</strong> · Serious game santé &amp; sécurité au travail</span>
+    <span>Fait par <strong>Fehmi Ben Njima</strong> · <a href="mailto:fehmitn@gmail.com">fehmitn@gmail.com</a></span>
     <span>Fichier unique et autonome · fonctionne hors-ligne</span>
-    <span>Points de Vigilance : <strong id="footScore">0</strong> / 290</span>
+    <span>Points de Vigilance : <strong id="footScore">0</strong> / 520</span>
   </footer>
 </div>
 
@@ -939,6 +951,116 @@ h1,h2,h3{letter-spacing:-.025em}
       ],
       answer: 1,
       explain: "La prévention passe notamment par le rangement des produits, la ventilation, la gestion des déchets, des extincteurs entretenus et l'éloignement des sources d'étincelles."
+    },
+    {
+      tag: 'Électricité', q: "Quelles sont des causes fréquentes d'accident d'origine électrique ?",
+      options: [
+        "Un court-circuit, une installation mal faite ou des rallonges non protégées.",
+        "Un éclairage trop faible et un sol mouillé uniquement.",
+        "L'utilisation de gants isolants et de fusibles adaptés.",
+        "Le contrôle régulier des installations par un électricien."
+      ],
+      answer: 0,
+      explain: "Le support cite le court-circuit, une installation mal faite, l'utilisation du courant sans précaution et les rallonges mal installées ou non protégées."
+    },
+    {
+      tag: 'Électricité', q: "Que faut-il faire face à un problème électrique ?",
+      options: [
+        "Réparer soi-même rapidement pour éviter l'arrêt de production.",
+        "Toujours faire appel à un électricien.",
+        "Remplacer le fusible par un modèle de calibre supérieur.",
+        "Utiliser une échelle métallique pour atteindre le tableau."
+      ],
+      answer: 1,
+      explain: "Quel que soit le problème électrique, il faut toujours faire appel à un électricien. On ne surcharge pas une prise et on n'utilise jamais un fusible de calibre supérieur à celui indiqué."
+    },
+    {
+      tag: 'Électricité', q: "Quels effets un courant électrique peut-il provoquer chez une personne ?",
+      options: [
+        "Uniquement une sensation de picotement sans gravité.",
+        "Des chocs électriques, des brûlures et parfois la mort.",
+        "Des troubles auditifs seulement.",
+        "Une diminution temporaire de la vue, sans autre risque."
+      ],
+      answer: 1,
+      explain: "Pour la personne, les accidents d'origine électrique peuvent provoquer des chocs électriques, des brûlures et la mort."
+    },
+    {
+      tag: 'Incendie', q: "À quoi sert un avertisseur détecteur de fumée ?",
+      options: [
+        "À éteindre automatiquement un feu de cuisine.",
+        "À prévenir les occupants pour qu'ils quittent les lieux avant d'être piégés par les flammes.",
+        "À remplacer les extincteurs dans un bâtiment.",
+        "À signaler uniquement la présence de fumée de cigarette."
+      ],
+      answer: 1,
+      explain: "Bien installé et entretenu en quantité suffisante, il permet aux victimes de quitter les lieux avant d'être emprisonnées par les flammes."
+    },
+    {
+      tag: 'Incendie', q: "Que doivent respecter les extincteurs d'un bâtiment ?",
+      options: [
+        "Ils doivent être contrôlés et entretenus régulièrement.",
+        "Ils doivent rester cachés pour éviter le vol.",
+        "Ils doivent être vidés chaque mois pour vérifier la pression.",
+        "Ils doivent être placés uniquement à l'extérieur."
+      ],
+      answer: 0,
+      explain: "Les extincteurs doivent être contrôlés et entretenus. Ils permettent d'attaquer le foyer à son stade de commencement en attendant l'arrivée du service de protection incendie."
+    },
+    {
+      tag: 'Incendie', q: "Où les boyaux d'incendie doivent-ils être installés ?",
+      options: [
+        "Dans des endroits stratégiques, accessibles rapidement.",
+        "Uniquement dans les bureaux administratifs.",
+        "Dans les zones où l'on stocke des produits inflammables, sans signalisation.",
+        "À l'extérieur, loin des issues de secours."
+      ],
+      answer: 0,
+      explain: "Les boyaux d'incendie doivent être fixés dans des endroits stratégiques. Le support les indique notamment pour les feux de matières sèches."
+    },
+    {
+      tag: 'Environnement', q: "Parmi ces situations, laquelle est un danger lié à l'aménagement des lieux ?",
+      options: [
+        "Des matériels suspendus trop bas et un rangement désordonné.",
+        "Une ventilation correcte des locaux.",
+        "Un nombre de personnes adapté à l'espace.",
+        "Des outils rangés dans leur armoire."
+      ],
+      answer: 0,
+      explain: "Le support cite la mauvaise position de l'appareillage (matériels suspendus trop bas), la concentration de personnes et le rangement désordonné des matériaux ou outils."
+    },
+    {
+      tag: 'Signalisation', q: "Quelles sont les cinq grandes familles de signaux de sécurité ?",
+      options: [
+        "Obligation, interdiction, danger, secours et lutte incendie.",
+        "Rouge, bleu, jaune, vert et noir.",
+        "Information, direction, circulation, chantier et bureau.",
+        "Électrique, chimique, mécanique, thermique et biologique."
+      ],
+      answer: 0,
+      explain: "Les consignes de sécurité distinguent cinq familles : obligation, interdiction, avertissement/danger, sauvetage/secours et lutte incendie."
+    },
+    {
+      tag: 'Outils', q: "Comment utiliser correctement une clé pour serrer un boulon ?",
+      options: [
+        "Choisir une clé universelle pour aller plus vite.",
+        "Choisir la clé qui convient exactement à l'écrou et la placer perpendiculairement à l'axe du boulon.",
+        "Utiliser une pince multiprise à la place d'une clé.",
+        "Frapper la clé avec un marteau pour la bloquer."
+      ],
+      answer: 1,
+      explain: "Il faut choisir la clé exactement adaptée à l'écrou ou au boulon. La clé se place perpendiculairement à l'axe ; si elle doit être poussée, on utilise le talon de la paume pour éviter les blessures."
+    },
+    {
+      tag: 'EPI', q: "Quelle est l'obligation de l'employeur en matière d'EPI ?",
+      options: [
+        "Fournir gratuitement les équipements et les moyens de protection individuels.",
+        "Laisser le travailleur acheter ses EPI puis le rembourser une fois par an.",
+        "Fournir les EPI uniquement aux nouveaux arrivants.",
+        "Prêter les EPI à condition que le travailleur les rende à chaque pause."
+      ],
+      answer: 0,
+      explain: "L'employeur doit fournir gratuitement les équipements et moyens de protection individuels, et s'assurer que le travailleur reçoit la formation, l'entraînement et la supervision nécessaires."
     }
   ];
 
@@ -948,7 +1070,8 @@ h1,h2,h3{letter-spacing:-.025em}
     { id: 'chaussures', name: 'Chaussures', hint: 'Protègent les pieds', icon: 'i-chaussures' },
     { id: 'lunettes', name: 'Lunettes', hint: 'Protègent les yeux', icon: 'i-lunettes' },
     { id: 'masque', name: 'Masque', hint: 'Protège les voies respiratoires', icon: 'i-masque' },
-    { id: 'harnais', name: 'Harnais', hint: 'Protège contre les chutes', icon: 'i-harnais' }
+    { id: 'harnais', name: 'Harnais', hint: 'Protège contre les chutes', icon: 'i-harnais' },
+    { id: 'auditif', name: 'Protections auditives', hint: 'Protègent l\'ouïe du bruit', icon: 'i-ear' }
   ];
 
   const PPE_SCENARIOS = [
@@ -972,6 +1095,13 @@ h1,h2,h3{letter-spacing:-.025em}
       risks: ['Projections', 'Contact cutané', 'Vapeurs irritantes'],
       correct: ['gants', 'lunettes', 'masque'],
       explain: "Des gants adaptés aux produits chimiques, des lunettes de protection et un masque respiratoire filtrant protègent des projections et des vapeurs."
+    },
+    {
+      title: 'Atelier de meulage', subtitle: 'Meulage d\'une pièce métallique',
+      desc: "Vous meulez une pièce métallique. La meule projette des étincelles et des particules, l'outil est bruyant et la pièce peut couper.",
+      risks: ['Projections oculaires', 'Bruit intense', 'Coupures aux mains'],
+      correct: ['lunettes', 'gants', 'auditif'],
+      explain: "Des lunettes de protection arrêtent les étincelles et particules, des gants protègent des arêtes coupantes et des protections auditives limitent le bruit de la meuleuse."
     }
   ];
 
@@ -1221,6 +1351,36 @@ h1,h2,h3{letter-spacing:-.025em}
        inkscape:label="1" />
   </g>
 </svg>`
+    },
+    { cat: "obligation", icon: "i-lunettes", label: "Porter des lunettes de protection", hint: "Rond bleu, lunettes blanches : protection obligatoire des yeux.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265"><path d="M0 132.46C0 59.514 59.525 0 132.501 0 205.469 0 265 59.513 265 132.459 265 205.417 205.469 265 132.501 265 59.537 265 0 205.417 0 132.46" fill="#005387"/><path d="M132.509 235.575c-30.16.13-50.638-19.989-61.406-60.356-10.177 0-15.469-5.546-21.475-19.222-9.758-22.201-7.971-38.874 7.162-39.606-4.879-50.031 34.927-87.4 75.719-87.4 40.774 0 80.586 37.37 75.701 87.4 15.139.732 16.915 17.405 7.162 39.606-6.018 13.676-11.31 19.222-21.475 19.222-10.767 40.367-31.246 60.485-61.388 60.356m-7.882-8.401c-21.08-3.056-36.715-19.517-45.919-53.984l-1.563-5.853c-.867-3.493-5.859-3.186-6.909-.484-.761 2.024-7.688-1.044-13.393-14.024-4.649-10.561-5.953-18.614-5.186-23.446.584-3.676 4.018-6.395 6.301-5.168 1.215 5.994 8.602 3.522 7.865-.979l-.897-5.687 12.891 8.219-.059-6.826-13.458-8.219c-1.345-39.517 28.219-69.099 60.326-73.335 5.192-.69 10.484-.69 15.877 0 32.078 4.23 61.636 33.777 60.326 73.258l-13.593 8.295-.053 6.826 13.027-8.313-.903 5.782c-.737 4.502 6.643 6.974 7.853.979 2.289-1.227 5.735 1.493 6.307 5.168.773 4.832-.537 12.885-5.18 23.446-5.699 12.98-12.632 16.048-13.387 14.024-1.068-2.702-6.047-3.009-6.921.484l-1.563 5.853c-9.21 34.467-24.838 50.928-45.913 53.984a60.1 60.1 0 0 1-15.877 0m16.537-109.796c14.112-.808 28.614-.472 43.511 1.021l-.218 27.086c-.083 10.077-9.988 17.115-19.045 16.986l-3.965-.047c-11.67-.165-20.762-7.422-20.626-18.531zm38.591 5.469l-.183 22.591c-.059 6.661-6.956 12.26-14.089 12.154l-3.965-.053c-9.788-.142-15.9-5.912-15.818-13.587l.283-21.918c11.021-.437 22.272-.165 33.771.814m-3.015 22.567c-.035 4.726-5.257 9.44-11.222 9.351l-3.965-.053c-8.637-.124-13.086-4.997-13.015-10.72l.242-19.228c9.21-.266 18.585-.035 28.125.69zm19.835-34.721l-9.363 5.375-2.277-.23c-6.702-.667-13.31-1.109-19.841-1.316 9.794-1.681 22.496-3.328 31.482-3.829m-9.422 17.806l7.735-4.92c-.614 6.342-1.858 13.758-3.752 21.67l-4.413 3.381c.195-1.009.283-2.053.307-3.127zm-63.317-11.121c-14.107-.808-28.614-.472-43.511 1.021l.23 27.086c.083 10.077 9.971 17.115 19.033 16.986l3.965-.047c11.67-.165 20.762-7.422 20.626-18.531zm-38.597 5.469l.201 22.591c.053 6.661 6.95 12.26 14.077 12.154l3.971-.053c9.77-.142 15.906-5.912 15.8-13.587l-.277-21.918c-11.015-.437-22.272-.165-33.771.814m3.021 22.567c.035 4.726 5.257 9.44 11.222 9.351l3.959-.053c8.637-.124 13.104-4.997 13.027-10.72l-.248-19.228c-9.21-.266-18.585-.035-28.125.69zm-19.829-34.721l9.357 5.375 2.277-.23c6.69-.667 13.31-1.109 19.847-1.316-9.806-1.681-22.514-3.328-31.482-3.829m9.41 17.806l-7.723-4.92c.619 6.342 1.864 13.758 3.752 21.67l4.407 3.381a18.67 18.67 0 0 1-.295-3.127zm48.986-6.59c3.516-3.475 7.292-3.475 11.334 0v2.95h-11.334zm0 7.251c3.516-3.475 7.292-3.475 11.334 0v2.95h-11.334z" fill="#fff" fill-rule="evenodd"/></svg>`
+    },
+    { cat: "obligation", icon: "i-gants", label: "Porter des gants de protection", hint: "Rond bleu, gants blancs : protection obligatoire des mains.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265"><path d="M265 132.503C265 205.674 205.674 265 132.503 265S0 205.674 0 132.503 59.326 0 132.503 0 265 59.331 265 132.503" fill="#005387"/><g fill="#fff"><path d="M143.643 175.932c4.704-1.344 32.605-10.046 42.018-11.488l-6.627-34.463c-1.825-12.959-4.13-26.017-5.087-39.069-.863-11.615-.863-23.231-.863-35.327V45.314c0-3.267-2.403-6.048-5.567-6.048-3.267 0-6.146 2.781-6.146 6.048v16.319c0 1.344-1.442 3.262-3.262 3.262-1.344 0-3.267-1.918-3.267-3.262l.481-27.071c0-3.267-2.781-6.048-6.048-6.048-3.645 0-6.048 2.781-6.048 6.048v28.896a3.265 3.265 0 1 1-6.529 0V39.266c0-3.36-2.781-5.665-5.567-5.665-3.262 0-5.661 2.305-5.661 5.665l-.387 35.42c0 1.825-1.437 3.267-3.262 3.267-1.923 0-3.262-1.442-3.262-3.267V46.658c0-2.305-1.829-4.13-4.611-4.13-2.305 0-4.704 1.825-4.704 4.13l-.383 45.019c-2.497-2.301-5.185-2.781-6.146-2.781l.481-42.238c0-5.474 5.185-10.752 10.752-10.752 1.825 0 3.169.574 4.611 1.055.957-5.665 6.524-10.271 12.572-10.271 2.786 0 5.091.961 7.009 2.305 2.305-4.13 5.95-6.529 11.135-6.529 7.009 0 12.096 5.185 12.096 12.096 2.305-.961 3.841-1.344 6.146-1.344 6.911 0 11.998 5.185 11.998 12.096v6.529c0 32.541.481 34.459.957 38.589 1.344 21.504 6.146 51.744 13.057 79.198-9.693 1.437-40.478 10.414-47.1 12.817z"/><path d="M87.355 233.776c-10.79-34.149-23.646-70.423-38.568-108.822a7.52 7.52 0 0 1 4.49-9.635c3.903-1.419 8.216.591 9.639 4.494l5.433 14.741 4.167 11.61c.311.867 1.269 1.313 2.137.997s1.317-1.273.997-2.141l-4.218-11.587-9.363-25.716c-1.159-3.182.378-6.659 3.422-7.77l.469-.166c3.051-1.112 6.458.568 7.621 3.745l9.418 25.697 1.928 5.476c.319.867 1.277 1.317 2.145 1.001a1.67 1.67 0 0 0 .997-2.145l-1.987-5.456-10.223-28.074c-1.313-3.611.544-7.605 4.159-8.918s7.609.548 8.922 4.159l10.278 28.05 1.932 5.48c.315.867 1.273 1.313 2.141 1.001a1.67 1.67 0 0 0 .997-2.145l-1.987-5.456-7.329-20.134a6.68 6.68 0 0 1 3.994-8.563c3.465-1.262 7.301.528 8.563 3.998 13.27 35.635 28.641 73.017 46.118 112.149-22.649 6.095-44.75 14.141-66.291 24.127m30.953-118.862l.781-3.099.02-.087c1.447-6.418 5.854-7.826 9.19-7.073 4.199.942 7.932 5.472 6.205 13.183l-5.437 24.238 4.423 10.814 7.534-33.589c2.61-11.65-3.686-19.468-11.259-21.167-5.488-1.234-11.784.895-15.218 6.954l3.761 9.824" fill-rule="nonzero"/></g></svg>`
+    },
+    { cat: "interdiction", icon: "i-flame", label: "Interdiction de flamme nue", hint: "Rond blanc barré de rouge : pas de flamme, d'étincelle ni de source d'ignition.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265" fill-rule="evenodd"><path d="M251.75 132.5c0-65.86-53.39-119.25-119.25-119.25S13.25 66.64 13.25 132.5 66.64 251.75 132.5 251.75s119.25-53.39 119.25-119.25" fill="#fff"/><path d="M83.21 158.864c-7.642 2.085-10.24-.353-13.937-3.232 2.537 11.803 10.711 17.222 17.867 18.923 8.27 1.965 14.525 2.396 17.349 9.101-.494-12.853 6.532-20.177 11.739-27.919s-2.848-23.963-11.858-25.445c-.228 5.104 3.437 8.318 2.297 15.041-2.513-4.5-4.216-15.041-21.514-15.07.368 1.841 1.26 1.791 1.853 3.294-5.493.706-11.384-3.236-13.424-9.682-4.813 15.352 4.552 28.462 9.628 34.991zm42.491 3.172c-5.2 6.091-4.098 14.222-7.853 20.99-4.591 8.274-15.402 9.125-21.877 14.033-5.872 4.45-7.541 14.472-1.659 19.739 6.453 5.778 15.727 2.589 20.396-2.848 4.361-5.079 4.143-17.564 12.288-24.569 4.863-4.182 12.685-5.384 17.29-10.779l71.012-83.183-1.434-13.809-19.348-.184zm15.685 13.531c-3.251 3.808-8.09 6.198-13.102 5.906l81.798-95.817.874 8.419zm-16.189 3.108c-1.422-4.952.089-9.722 3.08-13.226l68.141-79.836 8.153.078zm-58.688-63.416c-4.401-2.244-5.189-4.437-7.034-7.42-7.525 17.441-4.464 30.772 4.938 46.182-2.776.734-6.333.318-8.206-.568-.21 12.516 14.304 17.267 14.657 18.937l-3.906-.324c8.629 16.312 26.276 1.13 37.167 18.55 4.716.26 14.11-10.49 11.253-18.601-1.125 2.196-3.498 4.488-5.744 5.264 2.444-7.934 16.512-24.182 19.741-34.066 5.521-16.896-2.237-50.773-15.795-62.621.361 3.119.42 6.374-.018 9.855-13.942-5.47-7.743-24.803-.366-34.341-19.989 9.555-53.571 27.554-46.69 59.153"/><path d="M238.369 132.5c0-58.47-47.399-105.869-105.869-105.869a105.42 105.42 0 0 0-67.175 24.04l149.366 148.554c14.802-18.209 23.678-41.429 23.678-66.725zM50.309 65.775c-14.801 18.21-23.678 41.429-23.678 66.725 0 58.47 47.399 105.869 105.869 105.869 25.503 0 48.899-9.019 67.175-24.04zM265 132.5C265 59.322 205.678 0 132.5 0S0 59.322 0 132.5 59.322 265 132.5 265 265 205.678 265 132.5" fill="#b71f2e"/></svg>`
+    },
+    { cat: "interdiction", icon: "i-x", label: "Ne pas toucher", hint: "Rond blanc barré de rouge : ne pas toucher l'équipement ou la surface signalée.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265" fill-rule="evenodd"><path d="M251.75 132.5c0-65.86-53.39-119.25-119.25-119.25S13.25 66.64 13.25 132.5 66.64 251.75 132.5 251.75s119.25-53.39 119.25-119.25" fill="#fff"/><path d="M116.743 178.951c5.513 2.131 8.126-1.063 11.128-4.552 1.161-4.351.482-8.416-1.452-12.866l-12.968 8.903c.777 4.061 2.033 6.768 3.292 8.515m21.193-24.971l-9.001 6.29c1.354 3.779 2.225 7.259 2.225 12.003 4.07-.487 8.13-2.417 11.132-10.744-.098-2.805-1.546-5.32-4.356-7.55m12.476-11.096c13.741-7.84 19.741-12.776 22.354-16.649 3.096-4.543 8.036-12.481 11.226-18.481 5.709-10.936 17.324-25.548 25.838-33.58-11.123-13.741-18.289-19.356-29.711-26.321-25.646 13.741-68.898 17.029-74.513 27.192-12.973 10.257-22.162 29.225-33.196 46.258-2.511 3.775-3.288 7.643-1.546 16.837l1.161 39.097c3.386 5.03 13.451-1.546 13.545-4.646 3.971-13.254 4.744-23.417 3.878-37.837 1.447-4.838 4.351-8.711 10.351-14.125l11.231-6.875-9.582 10.257c-6.486 9.1-.197 11.615 4.257 25.262 4.641-3.971 5.325-4.941 11.709-8.809l6.482-5.419-4.74 6.482c-8.711 7.255-23.323 15.483-21.389 29.131 1.452 3.391 2.323 6.772 8.322 2.229 13.933-10.842 29.613-20.134 44.324-30.002m-88.647 42.385l93.485-.094v13.259H61.765v-13.165"/><path d="M238.369 132.5c0-58.47-47.399-105.869-105.869-105.869a105.42 105.42 0 0 0-67.175 24.04l149.366 148.554c14.802-18.209 23.678-41.429 23.678-66.725zM50.309 65.775c-14.801 18.21-23.678 41.429-23.678 66.725 0 58.47 47.399 105.869 105.869 105.869 25.503 0 48.899-9.019 67.175-24.04zM265 132.5C265 59.322 205.678 0 132.5 0S0 59.322 0 132.5 59.322 265 132.5 265 265 205.678 265 132.5" fill="#b71f2e"/></svg>`
+    },
+    { cat: "danger", icon: "i-alert", label: "Danger général", hint: "Triangle jaune à bord noir : avertissement, un risque est présent.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 524"><path d="m300 16 284 492h-568z" fill="#F9A800" stroke-linejoin="round" stroke="#000" stroke-width="32"/><path d="m337 192a37 37 0 0 0-74 0l11 143a26 26 0 0 0 52 0m12 85a38 38 0 1 1 0-1"/></svg>`
+    },
+    { cat: "danger", icon: "i-boyau", label: "Matières toxiques", hint: "Triangle jaune et tête de mort : substances toxiques, danger pour la santé.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 525"><defs /><path d="M 597.6 499.6 313.8 8 c -2.9 -5 -8.2 -8 -13.9 -8 s -11 3.1 -13.9 8 L 2.2 499.6 c -2.9 5 -2.9 11.1 0 16 2.9 5 8.2 8 13.9 8 h 567.6 c 5.7 0 11 -3.1 13.9 -8 2.9-5 2.9 -11.1 0 -16 z" /><path fill="#f9a800" d="m 300.005 50.036 256 441.489 H 44 z" /><path fill="none" stroke="#000000" stroke-width="8" d="M 348.34 408.62 s 41.617 17.949 42.478 18.461 c 8.278 4.922 17.33 -0.251 20.776 2.962 3.446 3.213 -3.896 8.193 -4.832 13.466 -1.403 7.898 1.459 14.01 -4.24 14.005 -4.916 -0.004 -6.524 -5.679 -19.396 -12.509 -15.513 -8.231 -44.3 -21.768 -44.3 -21.768 z m 8.055 -38.544 s 33.064 -13.887 49.427 -21.454 c 4.062 -1.879 11.035 -10.634 15.914 -7.564 3.612 2.273 3.065 6.872 3.375 12.647.31 5.775 4.007 8.037 3.84 12.524 -0.304 8.02 -7.066 -1.69 -17.116.75205 -18.258 4.437 -58.641 22.497 -58.641 22.497 z m -102.86 38.307 s -42.561 19.611 -43.437 20.098 c -8.415 4.683 -16.98 -2.901 -20.517.21274 -3.537 3.113 1.862 10.56 4.201 15.377 2.439 5.023 -1.02 10.447 3.939 12.305 4.604 1.725 5.557 -5.125 18.62 -11.584 15.742 -7.783 43.139 -20.896 43.139 -20.896 z m -11.387 -40.01 s -33.821 -11.39 -49.835 -19.669 c -3.975 -2.055 -9.59 -9.424 -14.6 -6.571 -3.709 2.112 -1.866 5.018 -2.43 10.774 -0.563 5.756 -4.216 10.328 -4.245 14.818 -0.049 8.026 9.479 -2.787 19.412.946 18.046 5.235 55.944 21.177 55.944 21.177 z" /><path fill-rule="evenodd" d="M 285.57 350.59 c -3.381 16.765 3.835 22.437 14.959 14 15.788 10.394 14.943 -2.562 14.365 -13.497 -0.328 -27.371 -25.936 -30.324 -29.324 -0.503 z" /><path d="M 250.31 317.44 c .82293 -9.576 8.315 -15.128 19.861 -14.305 10.424.73661 21.078 4.21 18.543 13.481 -2.618 9.576 -10.506 22.638 -20.955 22.813 -10.449.17456 -18.271 -12.413 -17.448 -21.989 z m 99.21 -0.76 c -0.823 -9.576 -11.455 -14.499 -23.001 -13.677 -10.424.73661 -18.188 5.466 -15.653 14.737 2.618 9.576 11.26 22.01 21.709 22.185 10.449.17456 17.769 -13.669 16.946 -23.245 z" /><path fill="none" stroke="#000000" stroke-width="8" d="M 363.12 319.27 c 3.035 -7.934 11.04 -15.912 12.688 -31.734 1.648 -15.822 -7.978 -42.569 -23.934 -56.034 -11.03 -9.308 -30.828 -18.633 -52.551 -18.678 m -63.598 106.45 c -3.035 -7.934 -11.04 -15.912 -12.688 -31.734 -1.648 -15.822 7.978 -42.569 23.934 -56.034 11.03 -9.308 30.828 -18.633 52.551 -18.678" /><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="8" d="M 338.72 378.32 c -0.106 3.347 2.457 -14.704 8.787 -18.205 9.939 -5.496 17.303 -15.498 14.753 -11.942 m -62.889 89.538 c 9.262.16744 23.454 -0.897 33.892 -14.868 6 -8.03 17.675 -26.201 17.575 -46.294 -0.092 -18.396 4.649 -14.725 8.929 -22.533 7.927 -14.46 7.184 -18.132 1.977 -42.245 -2.568 -11.893 -1.528 -9.422.62157 -22.497 2.411 -14.667 2.184 -20.69 -2.774 -28.676 m -95.792 117.01 c .10622 3.347 -6.01 -14.349 -12.341 -17.85 -9.939 -5.496 -18.369 -16.209 -15.819 -12.653 m 64.311 90.604 c -9.048 -1.333 -22.853 -5.596 -33.892 -14.868 -8.579 -7.205 -15.898 -32.24 -17.575 -46.294 -2.18 -18.267 -4.502 -14.097 -8.929 -21.822 -5.939 -10.363 -7.717 -24.501 -0.867 -41.43 4.564 -11.279 -0.062 -12.079 -1.228 -25.279 -1.406 -15.923 -0.928 -20.941 2.774 -28.173" /><path d="M 258.99 373.18 c 28.833 14.283 54.296 11.669 81.982 -0.944 14.954 46.208 -88.23 55.936 -81.982.94405 z" color="#000000" /></svg>`
+    },
+    { cat: "secours", icon: "i-shield", label: "Point de rassemblement", hint: "Carré vert avec flèches : lieu où se regrouper après une évacuation.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" style="fill:#ffffff"/><rect x="5" y="5" width="190" height="190" style="fill:#237F52"/><g style="fill:#ffffff;stroke:none"><path d="m29.772 21.893-7.5945 7.5905 22.091 22.095h-22.08l10.065 10.065h29.682v-29.69l-10.081-10.061v22.091z"/><path d="m22.178 169.95 7.5905 7.5945 22.095-22.091v22.08l10.065-10.065v-29.682h-29.69l-10.061 10.081h22.091z"/><path d="m177.73 29.488-7.5905-7.5945-22.095 22.091v-22.08l-10.065 10.065v29.682h29.69l10.061-10.081h-22.091z"/><path d="m170.13 177.54 7.5945-7.5906-22.092-22.095h22.08l-10.065-10.065h-29.682v29.69l10.081 10.061v-22.091z"/><path d="m123.14 81.435h-12.701c-5.3996-0.15904-8.4884 3.0501-9.195 7.4104l-0.0738 19.594c0.0102 1.56 0.89469 2.9826 2.8087 2.975 1.9009-9e-3 2.7718-1.4266 2.7859-2.975v-17.981c4e-3 -0.26065 0.72981-0.47672 1.0558-0.48059 0.32944-0.0027 0.98013 0.21232 0.98365 0.48059v51.712c0.0101 1.779 1.6195 3.4194 3.8036 3.4129 2.1793-3e-3 3.7294-1.6377 3.7387-3.4129l0.0135-29.91c0.12117-0.25958 0.6984-0.40194 0.96202-0.39867 0.25936-5e-3 0.86657 0.13421 0.97838 0.39867l0.017 29.91c4e-3 1.779 1.4664 3.4194 3.6506 3.4129 2.1793-3e-3 3.8716-1.6377 3.8764-3.4129v-51.712c4e-3 -0.26065 0.66946-0.47672 0.99072-0.48059 0.32943-0.0027 1.005 0.21232 1.0086 0.48059v17.981c0.0102 1.56 0.76809 2.9826 2.6819 2.975 1.9009-9e-3 2.8973-1.4266 2.9066-2.975l-0.0748-19.594c-0.70659-4.3604-3.7957-7.5694-9.1905-7.4104" /><path d="m124.28 72.7c0-3.8268-3.1062-6.9282-6.933-6.9282-3.8282 0-6.9293 3.1012-6.9293 6.9282 0 3.8279 3.1012 6.9341 6.9293 6.9341 3.8268 0 6.933-3.1062 6.933-6.9341" /><path d="m107.03 61.505c0-3.8268-3.1062-6.9282-6.933-6.9282-3.8282 0-6.9293 3.1012-6.9293 6.9282 0 3.8279 3.1012 6.9341 6.9293 6.9341 3.8268 0 6.933-3.1062 6.933-6.9341" /><path d="m88.632 81.435h-12.701c-5.3996-0.15904-8.4884 3.0501-9.195 7.4104l-0.07382 19.594c0.01017 1.56 0.89469 2.9826 2.8087 2.975 1.901-9e-3 2.7718-1.4266 2.7859-2.975v-17.981c0.0033-0.26065 0.72981-0.47672 1.0558-0.48059 0.32943-0.0027 0.98012 0.21232 0.98365 0.48059v51.712c0.01016 1.779 1.6195 3.4194 3.8036 3.4129 2.1793-3e-3 3.7293-1.6377 3.7387-3.4129l0.01355-29.91c0.12118-0.25958 0.69841-0.40194 0.96202-0.39867 0.25935-5e-3 0.86657 0.13421 0.97837 0.39867l0.01693 29.91c0.0033 1.779 1.4664 3.4194 3.6506 3.4129 2.1793-3e-3 3.8716-1.6377 3.8764-3.4129v-51.712c0.0033-0.26065 0.66944-0.47672 0.99071-0.48059 0.32943-0.0027 1.005 0.21232 1.0086 0.48059v17.981c0.01017 1.56 0.76809 2.9826 2.6819 2.975 1.9009-9e-3 2.8973-1.4266 2.9066-2.975l-0.0748-19.594c-0.7066-4.3604-3.7957-7.5694-9.1905-7.4104" /><path d="m89.781 72.7c0-3.8268-3.1062-6.9282-6.933-6.9282-3.8282 0-6.9293 3.1012-6.9293 6.9282 0 3.8279 3.1012 6.9341 6.9293 6.9341 3.8268 0 6.933-3.1062 6.933-6.9341" /></g></svg>`
+    },
+    { cat: "secours", icon: "i-cross", label: "Rince-œil de secours", hint: "Carré vert avec rinçage oculaire : rincer les yeux immédiatement après une projection.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><g style="stroke:none"><rect style="fill:#ffffff;stroke:none;fill-rule:nonzero" y="0" x="0" height="200" width="200" /><rect style="fill:#237F52;stroke:none;fill-rule:nonzero" y="5" x="5" height="190" width="190" /><g style="fill:#ffffff"><path d="m 75.71,24.69 c -0.55298,-6.64e-4 -1.1006,0.0081 -1.65625,0.03125 -17.13808,0.382983 -32.76608,11.784423 -42.40625,27.1875 15.85273,26.677122 52.702598,33.588636 74.874996,12.65625 4.60586,-3.60243 8.56785,-7.981331 11.78125,-13.1875 C 108.6554,36.059066 92.854194,24.708073 75.711864,24.6875 z m 16.75,12.125 c 5.622669,3.50124 10.539136,8.535054 14.218746,14.375 -2.35144,3.80968 -5.2546,7.051378 -8.624996,9.6875 -16.22493,15.317535 -43.18082,10.240067 -54.78125,-9.28125 3.663992,-5.854336 8.493522,-10.913643 14.06,-14.47 a 19.69,19.69 0 0 0 -2.03,9.19 19.69,19.69 0 1 0 39.34,0 19.69,19.69 0 0 0 -2.19,-9.5 z m -18.12,0.38 a 9.22,9.22 0 0 1 9.875,9.22 9.22,9.22 0 0 1 -18.44,0 9.22,9.22 0 0 1 8.56,-9.22 z" /><path d="m 146.69,53.96 0,16.89 16.55,0 0,-16.89 16.55,0 0,-16.55 -16.55,0 0,-16.55 -16.55,0 0,16.55 -16.89,0 0,16.55 16.89,0" /><path d="m 105.29,133.68 c 0,7.72 -5.42,14.13 -10.23,14.13 -4.81,0 -12.94,1.14 -12.94,8.47502 l 0,22.65 -14.14,0 0,-22.65 c 0,-7.23 -9.43,-8.48 -14.74,-8.48 -5.32,0 -8.73,-6.08 -8.73,-14.13 z" /><path d="m 26.81,67.09 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 10.23,12.25 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 15.05,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 51.24,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 14.83,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -6.37,10.18 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -12.85,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -10.19,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -11.02,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -11.23,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -10.08,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -12.93,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 4.36,9.32 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 11.52,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 9.36,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 9.073194,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 8.79,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 9.54,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 11.38,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -3.10,8.65 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -10.48,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -8.42518,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -7.78,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -7.92,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -8.57,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -10.33,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 1.87,7.26 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 9.54,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 8.21,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 7.27,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 7.13,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 8.00,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 9.61,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -1.26,7.26 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -8.86,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -7.74,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -6.91,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -7.20,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -7.633041,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m -8.93,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 0.61,6.65 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 8.57,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 7.31,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 7.24,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 7.20,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 7.38,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 8.32,0 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z m 27.90,-61.57 a 2.60,2.60 0 0 1 -5.26,0 2.60,2.60 0 1 1 5.26,0 z" /></g></g></svg>`
+    },
+    { cat: "incendie", icon: "i-fire", label: "Échelle d'incendie", hint: "Carré rouge avec échelle : moyen d'évacuation et d'intervention des secours.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs /><path fill="#9B2423" d="m5.4189,5.423,189.16,0,0,189.15-189.16,0,0-189.15z" fill-rule="evenodd" style="fill:#9b2423" /><path style="color:#000000" d="M46.688,28.062l-12.688,144.22h7.562l1.469-16.53h50.625l1.469,16.53h7.565l-12.69-144.22h-7.562l1.031,11.563h-30.25l1.031-11.563h-7.562zm5.968,18.032h31.375l1.375,15.781h-34.125l1.375-15.781zm-1.937,22.25h35.25l1.406,15.812h-38.063l1.407-15.812zm-1.969,22.281h39.188l1.374,15.535h-41.937l1.375-15.535zm-1.938,21.965h43.063l1.281,14.75h-45.625l1.281-14.75zm-1.874,21.16h46.812l1.344,15.59h-49.5l1.344-15.59z" fill="#ffffff" /><path style="fill:#ffffff;stroke:none" d="m 148.98468,51.353762 c -1.67226,6.313288 -2.17756,13.862444 -0.95842,20.330533 2.45705,9.211801 8.02983,16.351235 14.99455,22.274947 1.22904,1.105905 2.61801,1.865497 3.99857,2.578816 V 77.394059 c -4.13972,-0.656524 -7.24274,-4.363172 -9.47685,-7.631888 -3.76382,-5.795834 -6.16522,-12.132857 -8.55779,-18.408409 z m -23.87127,8.341748 c -0.95267,0.0028 -1.96716,0.03649 -2.98177,0.07035 5.50202,4.211279 7.21791,10.545249 9.02933,16.520578 1.88866,6.567199 4.24165,12.863982 7.95938,18.295246 6.97248,9.252866 17.53949,13.335326 27.89897,10.361576 -9.16472,-3.81327 -14.80599,-12.741074 -19.02571,-20.41283 -3.82527,-6.046977 -4.90635,-13.689448 -9.9998,-18.657056 -3.72752,-3.535181 -7.96479,-6.186686 -12.8804,-6.177724 z m 1.48317,27.682922 c -0.64347,11.821175 3.3476,21.652498 10.51745,29.863958 7.59087,8.86726 19.71901,13.38135 29.90512,16.64919 v -19.144 c -6.5164,-0.12768 -12.45036,-2.29298 -17.45852,-5.30854 -9.89941,-6.0052 -16.92981,-12.896224 -22.96422,-22.060608 z m -13.71885,36.785858 c 9.23852,2.20011 13.55622,8.14502 18.71017,14.34471 4.12277,5.26391 9.59132,8.39406 15.61698,9.45797 7.50471,1.26311 14.64825,0.094 19.81444,-5.43712 -12.01741,-2.13538 -19.07107,-9.52512 -27.26798,-16.27027 -9.59544,-6.42339 -17.04756,-9.5145 -26.87361,-2.09529 z m 13.67939,19.04638 c 1.08898,6.06195 2.9963,11.75792 6.44195,16.38342 9.47931,11.17395 21.79075,10.96794 34.02025,11.18634 v -19.144 c -7.76116,1.81984 -17.27123,2.68549 -24.46284,0.92932 -6.55861,-1.3462 -11.49791,-5.23486 -15.99936,-9.35509 z" /></svg>`
+    },
+    { cat: "incendie", icon: "i-alert", label: "Point d'alarme incendie", hint: "Carré rouge avec dispositif d'alarme : déclencher l'alerte dès le départ de feu.",
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.916664 52.916664"><defs /><g transform="translate(-122.21374,-147.68073)"><path d="m 123.64778,149.11609 h 50.04858 v 50.04593 h -50.04858 z" fill-rule="evenodd" fill="#9B2423" style="fill:#9b2423" /><path style="fill:#ffffff;stroke:none" d="m 162.71015,160.39581 c -0.45861,1.73137 -0.59718,3.80166 -0.26284,5.57549 0.67383,2.52626 2.20212,4.4842 4.11214,6.10873 0.33705,0.30329 0.71797,0.5116 1.09657,0.70722 v -5.25009 c -1.13528,-0.18005 -1.98626,-1.19657 -2.59895,-2.09299 -1.03219,-1.58946 -1.69076,-3.32734 -2.3469,-5.04836 z m -6.54651,2.28766 c -0.26127,7.6e-4 -0.53948,0.01 -0.81773,0.0193 1.50889,1.15491 1.97945,2.89195 2.47622,4.53064 0.51795,1.801 1.16324,3.52785 2.1828,5.01733 1.91215,2.53753 4.81007,3.65711 7.65108,2.84158 -2.51335,-1.04576 -4.06043,-3.49414 -5.21766,-5.59806 -1.04905,-1.65834 -1.34552,-3.75423 -2.74236,-5.11655 -1.02225,-0.9695 -2.18429,-1.69666 -3.53235,-1.6942 z m 0.40674,7.59182 c -0.17646,3.24187 0.91806,5.93803 2.88433,8.18996 2.08174,2.43178 5.40779,3.66974 8.20125,4.56592 v -5.2501 c -1.78707,-0.035 -3.41441,-0.62883 -4.78786,-1.45582 -2.71484,-1.64688 -4.64287,-3.53669 -6.29776,-6.04996 z m -3.76228,10.08824 c 2.53359,0.60337 3.71768,2.23371 5.13112,3.93393 1.13063,1.44358 2.63034,2.302 4.28283,2.59378 2.05811,0.34639 4.01717,0.0258 5.43396,-1.49109 -3.29569,-0.58562 -5.23009,-2.61219 -7.47804,-4.462 -2.63147,-1.76157 -4.67516,-2.60928 -7.36987,-0.57462 z m 3.75146,5.22333 c 0.29865,1.66244 0.82171,3.22451 1.76666,4.49302 2.59963,3.06437 5.97594,3.00787 9.32979,3.06777 v -5.2501 c -2.12844,0.49908 -4.7365,0.73648 -6.70875,0.25486 -1.79864,-0.36918 -3.15321,-1.43561 -4.3877,-2.56556 z" /><path style="fill:#ffffff;stroke:none;stroke-dashoffset:2.39055;paint-order:markers stroke fill" d="m 131.6018,155.52098 v 10.17612 h 2.70733 v -1.47484 h -1.23352 v -7.22747 h 7.22746 v 7.22747 h -1.60196 v 1.47484 h 3.07681 v -10.17612 z m 5.08754,2.22157 c -1.58333,-1.4e-4 -2.86663,1.28368 -2.86649,2.86701 3.2e-4,1.58301 1.28348,2.86611 2.86649,2.86597 1.58301,1.4e-4 2.8667,-1.28296 2.86701,-2.86597 1.4e-4,-1.58333 -1.28368,-2.86715 -2.86701,-2.86701 z m -0.75861,6.27042 c -0.64433,0 -1.16323,0.54775 -1.16323,1.22835 v 16.6951 c -0.18903,0.14404 -0.45188,0.30051 -0.71779,0.28991 -0.47785,-0.019 -0.43667,-0.71779 -0.43667,-0.71779 v -5.64048 c 0.0176,-0.96781 -1.2198,-1.76095 -2.11976,-1.8526 -1.21394,0.0139 -1.34049,0.98237 -1.34049,0.98237 v 8.88628 l 3.96152,7.73906 v 1.27021 h 13.20642 v -2.82619 c 0.95425,-0.43213 1.50706,-1.15639 1.52549,-2.33371 v -12.14189 c 0.0109,-0.43512 -0.50451,-0.98434 -1.2237,-1.00769 -1.11983,0.0323 -1.55725,1.50332 -1.73839,1.52342 -0.48172,-0.0242 0.68898,-3.1578 -1.89239,-3.11867 -1.36603,0.0226 -1.14958,1.39414 -1.64435,1.38751 -0.30967,0.004 -0.0382,-2.81953 -1.85828,-2.8267 -1.09886,-0.0132 -2.14664,1.48259 -2.14664,1.48259 l -0.21187,-0.19223 v -7.5985 c 0,-0.6806 -0.51839,-1.22835 -1.16272,-1.22835 z" /></g></svg>`
     }
   ];
 
@@ -1234,10 +1394,10 @@ h1,h2,h3{letter-spacing:-.025em}
 
   const RANKS = [
     { min: 0, name: 'Observateur' },
-    { min: 60, name: 'Vigilant' },
-    { min: 140, name: 'Gardien SST' },
-    { min: 220, name: 'Expert SST' },
-    { min: 290, name: 'Légende SST' }
+    { min: 110, name: 'Vigilant' },
+    { min: 250, name: 'Gardien SST' },
+    { min: 390, name: 'Expert SST' },
+    { min: 520, name: 'Légende SST' }
   ];
 
   const MAX = QUIZ.length * 10 + PPE_SCENARIOS.length * 30 + SIGNALS.length * 10;
@@ -1301,7 +1461,7 @@ h1,h2,h3{letter-spacing:-.025em}
 
   const ui = {
     view: 'dashboard',
-    quiz: { active: false, index: 0, selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 },
+    quiz: { active: false, index: 0, pool: [], selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 },
     ppe: {
       scenario: 0,
       selections: PPE_SCENARIOS.map(() => []),
@@ -1504,7 +1664,7 @@ h1,h2,h3{letter-spacing:-.025em}
   function confirmReset() {
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     state = defaultState();
-    ui.quiz = { active: false, index: 0, selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 };
+    ui.quiz = { active: false, index: 0, pool: [], selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 };
     ui.ppe = {
       scenario: 0,
       selections: PPE_SCENARIOS.map(function () { return []; }),
@@ -1525,16 +1685,49 @@ h1,h2,h3{letter-spacing:-.025em}
   }
 
   /* ---------- Niveau 1 : quiz ---------- */
+  const QUIZ_SESSION_SIZE = 10;
+  let lastQuizPool = [];
+
+  function shuffleIndices(list) {
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i];
+      a[i] = a[j];
+      a[j] = tmp;
+    }
+    return a;
+  }
+
+  function sameQuizPool(a, b) {
+    if (a.length !== b.length) return false;
+    const sa = a.slice().sort(function (x, y) { return x - y; });
+    const sb = b.slice().sort(function (x, y) { return x - y; });
+    return sa.every(function (v, i) { return v === sb[i]; });
+  }
+
+  function pickQuizPool() {
+    const all = QUIZ.map(function (_, i) { return i; });
+    let pool = shuffleIndices(all).slice(0, QUIZ_SESSION_SIZE);
+    let tries = 0;
+    while (lastQuizPool.length && sameQuizPool(pool, lastQuizPool) && tries < 20) {
+      pool = shuffleIndices(all).slice(0, QUIZ_SESSION_SIZE);
+      tries++;
+    }
+    lastQuizPool = pool.slice();
+    return pool;
+  }
+
   function quizSideHTML() {
     const best = quizScore();
     const items = QUIZ.map(function (_, i) {
-      return '<li class="' + (state.quizBest[i] ? 'ok' : '') + '"><span class="check-dot">' + icon('i-check') + '</span>Question ' + (i + 1) + '</li>';
+      return '<li class="' + (state.quizBest[i] ? 'ok' : '') + '"><span class="check-dot">' + icon('i-check') + '</span>Q' + (i + 1) + '</li>';
     }).join('');
     return '<aside class="quiz-side"><div class="panel coach-card">' +
       '<span class="eyebrow dark">Votre progression</span>' +
-      '<div class="coach-score"><strong>' + best + '</strong><span>/ 100 PV</span></div>' +
-      '<div class="bar"><span style="width:' + best + '%"></span></div>' +
-      '<ul class="check-list">' + items + '</ul>' +
+      '<div class="coach-score"><strong>' + best + '</strong><span>/ ' + (QUIZ.length * 10) + ' PV</span></div>' +
+      '<div class="bar"><span style="width:' + (best / (QUIZ.length * 10) * 100) + '%"></span></div>' +
+      '<ul class="check-list bank">' + items + '</ul>' +
       '<div class="mini-tip"><strong>Astuce :</strong> une mauvaise réponse ne fait pas perdre de points. Relisez l\'explication et retentez votre chance.</div>' +
       '</div></aside>';
   }
@@ -1544,8 +1737,8 @@ h1,h2,h3{letter-spacing:-.025em}
       '<div class="start-emblem">' + icon('i-quiz') + '</div>' +
       '<span class="eyebrow dark">Prêt pour le niveau 1 ?</span>' +
       '<h2>Testez vos fondamentaux SST</h2>' +
-      '<p>10 questions, 10 Points de Vigilance par bonne réponse. Les définitions, droits, obligations et notions sur le feu n\'auront plus de secrets pour vous.</p>' +
-      '<div class="start-facts"><span class="badge">' + icon('i-clock') + '5 à 8 minutes</span><span class="badge">' + icon('i-target') + '100 PV</span><span class="badge">' + icon('i-refresh') + 'Rejouable</span></div>' +
+      '<p>10 questions tirées au hasard parmi une banque de 20, 10 Points de Vigilance par bonne réponse. Les définitions, droits, obligations et notions sur le feu n\'auront plus de secrets pour vous.</p>' +
+      '<div class="start-facts"><span class="badge">' + icon('i-clock') + '5 à 8 minutes</span><span class="badge">' + icon('i-target') + '100 PV par session</span><span class="badge">' + icon('i-refresh') + 'Rejouable</span></div>' +
       '<button class="btn btn-accent" type="button" data-action="quiz-start">' + icon('i-arrow') + 'Démarrer le quiz</button>' +
       '</div>' + quizSideHTML() + '</div>';
   }
@@ -1560,7 +1753,7 @@ h1,h2,h3{letter-spacing:-.025em}
       '<h2>' + runScore + '<small> / 100 PV</small></h2>' +
       '<div class="stars">' + [0,1,2,3].map(function (i) { return '<span class="' + (i < stars ? '' : 'off') + '">★</span>'; }).join('') + '</div>' +
       '<p>' + (runScore >= 80 ? 'Excellent réflexe SST ! Vous maîtrisez les fondamentaux.' : runScore >= 50 ? 'Bonne base ! Relisez les explications pour viser le sans-faute.' : 'Le risque, c\'est d\'improviser. Relisez le mémo puis retentez le quiz.') + '</p>' +
-      '<div class="result-stats"><div class="result-stat"><span>Bonnes réponses</span><strong>' + ui.quiz.runCorrect + ' / ' + QUIZ.length + '</strong></div><div class="result-stat"><span>Meilleur score</span><strong>' + best + ' PV</strong></div></div>' +
+      '<div class="result-stats"><div class="result-stat"><span>Bonnes réponses</span><strong>' + ui.quiz.runCorrect + ' / ' + QUIZ_SESSION_SIZE + '</strong></div><div class="result-stat"><span>Meilleur score</span><strong>' + best + ' PV</strong></div></div>' +
       '<div class="hero-actions"><button class="btn btn-primary" type="button" data-action="quiz-restart">' + icon('i-refresh') + 'Rejouer</button><a class="btn btn-accent" href="#ppe">Passer au niveau 2' + icon('i-arrow') + '</a></div>' +
       '</div>' + quizSideHTML() + '</div>';
   }
@@ -1569,8 +1762,9 @@ h1,h2,h3{letter-spacing:-.025em}
     const app = $('#quizApp');
     if (!app) return;
     if (!ui.quiz.active) { app.innerHTML = quizStartHTML(); return; }
-    if (ui.quiz.index >= QUIZ.length) { app.innerHTML = quizSummaryHTML(); return; }
-    const q = QUIZ[ui.quiz.index];
+    if (ui.quiz.index >= QUIZ_SESSION_SIZE) { app.innerHTML = quizSummaryHTML(); return; }
+    const qIndex = ui.quiz.pool[ui.quiz.index];
+    const q = QUIZ[qIndex];
     const letters = ['A', 'B', 'C', 'D'];
     const answered = ui.quiz.answered;
     const options = q.options.map(function (opt, i) {
@@ -1592,11 +1786,11 @@ h1,h2,h3{letter-spacing:-.025em}
         '<p><strong>Réponse : ' + esc(q.options[q.answer]) + '</strong><br>' + esc(q.explain) + '</p></div>';
     }
     const actions = answered
-      ? '<div class="quiz-actions"><button class="btn btn-accent" type="button" data-action="quiz-next">' + (ui.quiz.index === QUIZ.length - 1 ? 'Voir mon résultat' : 'Question suivante') + icon('i-arrow') + '</button></div>'
+      ? '<div class="quiz-actions"><button class="btn btn-accent" type="button" data-action="quiz-next">' + (ui.quiz.index === QUIZ_SESSION_SIZE - 1 ? 'Voir mon résultat' : 'Question suivante') + icon('i-arrow') + '</button></div>'
       : '<div class="quiz-actions"><button class="btn btn-primary" id="validateQuiz" type="button" data-action="quiz-validate"' + (ui.quiz.selected === null ? ' disabled' : '') + '>Valider ma réponse</button><span class="muted small">Une seule réponse possible.</span></div>';
     app.innerHTML = '<div class="quiz-layout"><div class="card quiz-main">' +
-      '<div class="quiz-meta"><span class="tag">Question ' + (ui.quiz.index + 1) + ' / ' + QUIZ.length + '</span><span class="muted">' + esc(q.tag) + ' · ' + (state.quizBest[ui.quiz.index] ? 'déjà maîtrisée' : 'à valider') + '</span></div>' +
-      '<div class="bar quiz-progress"><span style="width:' + ((ui.quiz.index) / QUIZ.length * 100) + '%"></span></div>' +
+      '<div class="quiz-meta"><span class="tag">Question ' + (ui.quiz.index + 1) + ' / ' + QUIZ_SESSION_SIZE + '</span><span class="muted">' + esc(q.tag) + ' · ' + (state.quizBest[qIndex] ? 'déjà maîtrisée' : 'à valider') + '</span></div>' +
+      '<div class="bar quiz-progress"><span style="width:' + ((ui.quiz.index) / QUIZ_SESSION_SIZE * 100) + '%"></span></div>' +
       '<h2 class="question">' + esc(q.q) + '</h2>' +
       '<div class="options" id="quizOptions">' + options + '</div>' +
       feedback + actions +
@@ -1604,23 +1798,24 @@ h1,h2,h3{letter-spacing:-.025em}
   }
 
   function startQuiz() {
-    ui.quiz = { active: true, index: 0, selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 };
+    ui.quiz = { active: true, index: 0, pool: pickQuizPool(), selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 };
     renderQuiz();
     scrollPageTop();
   }
 
   function validateQuiz() {
     if (!ui.quiz.active || ui.quiz.answered || ui.quiz.selected === null) return;
-    const q = QUIZ[ui.quiz.index];
+    const qIndex = ui.quiz.pool[ui.quiz.index];
+    const q = QUIZ[qIndex];
     const correct = ui.quiz.selected === q.answer;
-    const already = state.quizBest[ui.quiz.index];
+    const already = state.quizBest[qIndex];
     ui.quiz.answered = true;
     ui.quiz.lastCorrect = correct;
     ui.quiz.gained = 0;
     if (correct) {
       ui.quiz.runCorrect++;
       if (!already) {
-        state.quizBest[ui.quiz.index] = true;
+        state.quizBest[qIndex] = true;
         ui.quiz.gained = 10;
         saveState();
         updateScoreUI(true);
@@ -1636,7 +1831,7 @@ h1,h2,h3{letter-spacing:-.025em}
 
   function nextQuiz() {
     if (!ui.quiz.active || !ui.quiz.answered) return;
-    if (ui.quiz.index < QUIZ.length - 1) {
+    if (ui.quiz.index < QUIZ_SESSION_SIZE - 1) {
       ui.quiz.index++;
       ui.quiz.selected = null;
       ui.quiz.answered = false;
@@ -1645,7 +1840,7 @@ h1,h2,h3{letter-spacing:-.025em}
       renderQuiz();
       scrollPageTop();
     } else {
-      ui.quiz.index = QUIZ.length;
+      ui.quiz.index = QUIZ_SESSION_SIZE;
       state.completed.quiz = true;
       saveState();
       updateScoreUI();
@@ -1703,6 +1898,14 @@ h1,h2,h3{letter-spacing:-.025em}
       '<rect x="105" y="97" width="20" height="14" rx="4" fill="none" stroke="#1e3a5f" stroke-width="3"></rect>' +
       '<rect x="135" y="97" width="20" height="14" rx="4" fill="none" stroke="#1e3a5f" stroke-width="3"></rect>' +
       '<path d="M125 103 H135 M105 102 L95 99 M155 102 L165 99" stroke="#1e3a5f" stroke-width="3" fill="none" stroke-linecap="round"></path>' +
+      '</g>' +
+
+      '<g class="gear' + on('auditif') + '" data-gear="auditif">' +
+      '<path d="M89 102 A43 43 0 0 1 171 102" stroke="#ff8a3d" stroke-width="7" fill="none" stroke-linecap="round"></path>' +
+      '<rect x="79" y="99" width="15" height="30" rx="7" fill="#ff8a3d" stroke="#c2591c" stroke-width="2"></rect>' +
+      '<rect x="166" y="99" width="15" height="30" rx="7" fill="#ff8a3d" stroke="#c2591c" stroke-width="2"></rect>' +
+      '<rect x="84" y="106" width="5" height="16" rx="2.5" fill="#ffd1a8"></rect>' +
+      '<rect x="171" y="106" width="5" height="16" rx="2.5" fill="#ffd1a8"></rect>' +
       '</g>' +
 
       '<g class="gear' + on('masque') + '" data-gear="masque">' +
@@ -1768,7 +1971,7 @@ h1,h2,h3{letter-spacing:-.025em}
     }
 
     const completeBanner = state.completed.ppe
-      ? '<div class="completion-banner">' + icon('i-trophy') + '<div><strong>Niveau 2 terminé !</strong><p>Vous avez validé les trois situations. Rejouez un scénario pour décrocher le sans-faute.</p></div></div>'
+      ? '<div class="completion-banner">' + icon('i-trophy') + '<div><strong>Niveau 2 terminé !</strong><p>Vous avez validé les quatre situations. Rejouez un scénario pour décrocher le sans-faute.</p></div></div>'
       : '';
 
     app.innerHTML = '<div class="scenario-nav">' + chips + '</div>' +
@@ -1838,8 +2041,8 @@ h1,h2,h3{letter-spacing:-.025em}
     }).join('');
     return '<aside class="signals-side"><div class="panel coach-card">' +
       '<span class="eyebrow dark">Votre score</span>' +
-      '<div class="coach-score"><strong>' + best + '</strong><span>/ 100 PV</span></div>' +
-      '<div class="bar"><span style="width:' + best + '%"></span></div>' +
+      '<div class="coach-score"><strong>' + best + '</strong><span>/ ' + (SIGNALS.length * 10) + ' PV</span></div>' +
+      '<div class="bar"><span style="width:' + (best / (SIGNALS.length * 10) * 100) + '%"></span></div>' +
       '<div class="progress-dots">' + dots + '</div>' +
       '<div class="mini-tip"><strong>Flash :</strong> 12 secondes par signal. Une erreur ne retire aucun point, mais seule une bonne réponse rapporte 10 PV.</div>' +
       '</div><div class="panel signal-legend-card"><h3>Rappel express</h3><ul class="legend-list">' +
@@ -1861,8 +2064,8 @@ h1,h2,h3{letter-spacing:-.025em}
       '<div class="start-emblem">' + icon('i-signals') + '</div>' +
       '<span class="eyebrow">Niveau 3 · Flash visuel</span>' +
       '<h2 style="font-size:1.75rem;margin:8px 0 9px;color:#fff">Formes et couleurs sous pression</h2>' +
-      '<p style="max-width:440px;margin:0 auto 20px;color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.65">Dix signaux vont apparaître. Associez chacun à sa famille : obligation, interdiction, danger, secours ou incendie. Vous avez 12 secondes par carte.</p>' +
-      '<div class="start-facts" style="justify-content:center"><span class="badge" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8)">' + icon('i-clock') + '12 s / carte</span><span class="badge" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8)">' + icon('i-target') + '100 PV</span></div>' +
+      '<p style="max-width:440px;margin:0 auto 20px;color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.65">Vingt signaux vont apparaître. Associez chacun à sa famille : obligation, interdiction, danger, secours ou incendie. Vous avez 12 secondes par carte.</p>' +
+      '<div class="start-facts" style="justify-content:center"><span class="badge" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8)">' + icon('i-clock') + '12 s / carte</span><span class="badge" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8)">' + icon('i-target') + '200 PV</span></div>' +
       '<button class="btn btn-accent" type="button" data-action="signals-start">' + icon('i-arrow') + 'Lancer le flash</button>' +
       '</div></div>' + signalSideHTML() + '</div>';
   }
@@ -1872,9 +2075,9 @@ h1,h2,h3{letter-spacing:-.025em}
     return '<div class="signals-layout"><div class="flash-card"><div class="flash-inner">' +
       '<div class="start-emblem" style="background:linear-gradient(145deg,#ff9a50,#ff6b2c);box-shadow:0 20px 36px -18px rgba(255,107,44,.7)">' + icon('i-trophy') + '</div>' +
       '<span class="eyebrow">Niveau 3 terminé</span>' +
-      '<h2 style="font-size:2.6rem;margin:6px 0 0;color:#fff">' + run + '<small style="font-size:.95rem;color:rgba(255,255,255,.55);letter-spacing:0"> / 100 PV</small></h2>' +
-      '<div class="stars">' + [0,1,2,3].map(function (i) { return '<span class="' + (i < Math.round(run / 25) ? '' : 'off') + '">★</span>'; }).join('') + '</div>' +
-      '<p style="max-width:440px;margin:0 auto 20px;color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.65">' + (run >= 80 ? 'Œil de lynx confirmé ! Les formes et couleurs ne vous échappent plus.' : run >= 50 ? 'Bonne reconnaissance. Un nouveau passage vous rapprochera du sans-faute.' : 'La couleur et la forme sont des réflexes : appuyez-vous sur le mémo pour les ancrer.') + '</p>' +
+      '<h2 style="font-size:2.6rem;margin:6px 0 0;color:#fff">' + run + '<small style="font-size:.95rem;color:rgba(255,255,255,.55);letter-spacing:0"> / ' + (SIGNALS.length * 10) + ' PV</small></h2>' +
+      '<div class="stars">' + [0,1,2,3].map(function (i) { return '<span class="' + (i < Math.round(run / (SIGNALS.length * 10 / 4)) ? '' : 'off') + '">★</span>'; }).join('') + '</div>' +
+      '<p style="max-width:440px;margin:0 auto 20px;color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.65">' + (run >= 160 ? 'Œil de lynx confirmé ! Les formes et couleurs ne vous échappent plus.' : run >= 100 ? 'Bonne reconnaissance. Un nouveau passage vous rapprochera du sans-faute.' : 'La couleur et la forme sont des réflexes : appuyez-vous sur le mémo pour les ancrer.') + '</p>' +
       '<div class="hero-actions" style="justify-content:center"><button class="btn btn-ghost-light" type="button" data-action="signals-restart">' + icon('i-refresh') + 'Rejouer</button><a class="btn btn-accent" href="#dashboard">Retour au tableau de bord' + icon('i-arrow') + '</a></div>' +
       '</div></div>' + signalSideHTML() + '</div>';
   }
@@ -1989,7 +2192,7 @@ h1,h2,h3{letter-spacing:-.025em}
       saveState();
       updateScoreUI();
       renderSignals();
-      if (ui.signals.runScore >= 70) confetti(90);
+      if (ui.signals.runScore >= 160) confetti(90);
       toast('Niveau 3 terminé !', 'good');
     }
   }
