@@ -19,17 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------------
-
-Note relative aux contenus et pictogrammes :
-
-La licence MIT ci-dessus couvre le code source de l'application (index.html,
-CSS, JavaScript, structure du document).
-
-Les pictogrammes de sécurité conformes à la norme ISO 7010, les fichiers SVG
-associés, l'archive "sante securite.zip" et le support de formation "sst.pdf"
-sont des contenus tiers / documentaires. Ils sont inclus à des fins
-pédagogiques et illustratives ; la norme ISO 7010 reste la propriété de l'ISO.
-Ils ne sont pas couverts par la licence MIT et ne peuvent pas être réutilisés
-comme marqueurs de sécurité officiels sans respecter la norme applicable.
