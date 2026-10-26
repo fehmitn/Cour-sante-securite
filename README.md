@@ -1,6 +1,6 @@
 # 🛡️ Vigilance SST
 
-### Serious game **Santé & Sécurité au Travail** — 3 niveaux, 520 points de vigilance, 100 % hors-ligne
+### Serious game **Santé & Sécurité au Travail** — 3 niveaux, mode examen, 520 points de vigilance, 100 % hors-ligne
 
 <p>
   <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
@@ -18,7 +18,7 @@
 
 > **Vigilance SST** est une application web de gamification qui transforme les règles de santé et de
 > sécurité au travail en un parcours ludique : un quiz sur les fondamentaux, des scénarios
-> d'équipement EPI et un jeu de reconnaissance des signaux ISO 7010.
+> d'équipement EPI, un jeu de reconnaissance des signaux ISO 7010 et un **mode examen imprimable**.
 >
 > Un seul fichier, aucun serveur, aucune installation : **double-cliquez, jouez, progressez.**
 >
@@ -41,6 +41,7 @@ salle, sur un poste isolé ou sans Wi-Fi. La progression reste sur l'appareil (`
 - [🎯 Le projet](#-le-projet)
 - [✨ Fonctionnalités](#-fonctionnalités)
 - [🎮 Le parcours en 3 niveaux](#-le-parcours-en-3-niveaux)
+- [🖨️ Mode examen](#-mode-examen)
 - [🏅 Score, rangs et badges](#-score-rangs-et-badges)
 - [🧱 Technologies utilisées](#-technologies-utilisées)
 - [📁 Arborescence](#-arborescence)
@@ -62,6 +63,7 @@ Les formations SST sont souvent descendantes : un support, des slides, un questi
 | Ancrer les définitions (accident, maladie professionnelle, feu, EPI) | 🔍 Quiz de 10 questions tirées d'une banque de 20, avec explication systématique |
 | Faire le lien entre risque et protection | 🧰 4 situations de travail à équiper correctement |
 | Reconnaître les familles de signaux d'un coup d'œil | ⚡ Flash de 12 s sur 20 pictogrammes ISO 7010 |
+| Évaluer les acquis sur papier | 🖨️ Examen A4 de 10 questions, 3 scénarios EPI et 10 signaux, corrigé optionnel |
 | Donner envie de rejouer | 🏆 520 PV, 5 rangs, 5 badges, meilleurs scores conservés et tirage aléatoire |
 | Rester utilisable en salle, sans réseau | 📴 Fichier local, aucune dépendance externe |
 
@@ -85,7 +87,8 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 - 📱 **Responsive** — grilles fluides du mobile au grand écran, barre supérieure collante.
 - ♿ **Accessible** — HTML sémantique, `aria-live` sur les retours, `aria-modal`, focus visibles, `prefers-reduced-motion`.
 - 🖨️ **Mémo imprimable** — fiche de révision « L'essentiel SST » consultable à tout moment.
-- 🔗 **Routes par ancre** — `#dashboard`, `#quiz`, `#ppe`, `#signals`, `#memo` : chaque écran est partageable.
+- 🧾 **Mode examen** — 10 questions du niveau 1, 3 scénarios EPI et 10 signaux tirés au hasard, document A4 avec corrigé optionnel sur une page séparée.
+- 🔗 **Routes par ancre** — `#dashboard`, `#quiz`, `#ppe`, `#signals`, `#exam`, `#memo` : chaque écran est partageable.
 
 ---
 
@@ -137,6 +140,33 @@ toujours expliqués, pour transformer l'erreur en apprentissage.
 
 ---
 
+## 🖨️ Mode examen
+
+Le mode examen transforme la banque de contenus en une **épreuve papier prête à imprimer**, sans
+quitter l'application et sans connexion réseau.
+
+| Partie | Tirage | Barème indicatif |
+| :-- | :-- | :-: |
+| Niveau 1 · fondamentaux | 10 questions tirées parmi 20, 4 choix par question | 10 pts |
+| Niveau 2 · EPI | 3 scénarios tirés parmi 4, 3 EPI à cocher par scénario | 9 pts |
+| Niveau 3 · signaux | 10 pictogrammes tirés parmi 20, 1 famille à cocher | 10 pts |
+| | **Total** | **29 pts** |
+
+- **Tirage aléatoire sans répétition** à l'intérieur de chaque partie, avec un code de sujet
+  (`EX-AAAAMMJJ-NN`) et une date de génération.
+- Document **A4** avec en-tête, champs nom/prénom/date, consignes, cases à cocher et barème.
+- **Corrigé optionnel** : la case « Inclure le corrigé » ajoute une page séparée, détachable avant
+  distribution.
+- Impression par le bouton **Imprimer** ou par `Ctrl+P` / `Cmd+P` ; seule l'épreuve est imprimée,
+  sans la navigation de l'application.
+- Le mode examen est **indépendant de la progression** : il ne modifie ni les scores, ni les badges,
+  ni les meilleurs résultats.
+- Astuce : choisir « Enregistrer au format PDF » dans la boîte d'impression pour archiver un sujet.
+
+Accès direct : `index.html#exam`.
+
+---
+
 ## 🏅 Score, rangs et badges
 
 **Points de Vigilance (PV)** : 520 au maximum, affichés en permanence dans la barre supérieure et le pied de page.
@@ -168,7 +198,7 @@ après confirmation dans une boîte de dialogue accessible.
 | **localStorage** | Persistance `vigilance_sst_v1` : meilleurs scores, niveaux terminés, réinitialisation |
 
 > 🧊 **Zéro dépendance, zéro requête réseau.** Pas de CDN, pas de police distante, pas de
-> `npm install` : l'application est un unique fichier `index.html` autonome (~166 Ko).
+> `npm install` : l'application est un unique fichier `index.html` autonome (~190 Ko).
 
 ---
 
@@ -239,6 +269,7 @@ rechargement automatique à chaque sauvegarde.
 | Niveau 1 · Quiz | `index.html#quiz` |
 | Niveau 2 · EPI | `index.html#ppe` |
 | Niveau 3 · Signaux | `index.html#signals` |
+| Mode examen | `index.html#exam` |
 | Mémo SST | `index.html#memo` |
 
 ---
@@ -264,6 +295,8 @@ rechargement automatique à chaque sauvegarde.
 - `aria-label` sur les pictogrammes et le travailleur SVG ; focus visibles sur boutons et liens.
 - Respect de `prefers-reduced-motion` (animations désactivées si l'utilisateur le demande).
 - Responsive sans débordement horizontal, cibles tactiles confortables.
+- Mode examen : corrigé masqué par défaut, consignes explicites et impression A4 sur une page
+  distincte pour la correction.
 - Code sans dépendance : surface d'attaque minimale, aucune donnée envoyée à un serveur.
 
 ---
