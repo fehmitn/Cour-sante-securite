@@ -200,7 +200,7 @@ après confirmation dans une boîte de dialogue accessible.
 | **localStorage** | Persistance `vigilance_sst_v1` : meilleurs scores, niveaux terminés, réinitialisation |
 
 > 🧊 **Zéro dépendance, zéro requête réseau.** Pas de CDN, pas de police distante, pas de
-> `npm install` : l'application est un unique fichier `index.html` autonome (~190 Ko).
+> `npm install` : l'application est un unique fichier `index.html` autonome (~195 Ko).
 
 ---
 
@@ -211,21 +211,12 @@ Cour-sante-securite/
 ├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes inline
 ├── README.md                     # Ce document
 ├── LICENSE                       # Licence MIT (code) + note sur les contenus et pictogrammes
-├── s01.svg                       # Civière de premiers secours
-├── Boyau d'incendie.svg          # Signal incendie
-├── Danger électrique.svg         # Signal danger
-├── Extincteur.svg                # Signal incendie
-├── Interdiction de fumer.svg     # Signal interdiction
-├── Premiers secours.svg          # Signal secours
-├── Protection auditive.svg       # Signal obligation
-├── Risque d'incendie.svg         # Signal danger
-├── Téléphone interdit.svg        # Signal interdiction
-├── sante securite.zip            # Archive des pictogrammes sources
 └── sst.pdf                       # Support de formation M02 (source pédagogique)
 ```
 
-Les SVG à la racine sont les **sources vectorielles** des pictogrammes ; dans l'application, ils sont
-intégrés en inline (aucun chargement de fichier externe, donc aucun problème de `file://`).
+Tous les pictogrammes sont **embarqués en SVG inline** dans `index.html` : le dépôt ne contient aucun
+fichier SVG séparé. Aucun chargement de fichier externe n'est effectué, donc aucun problème de
+`file://` — et l'application se distribue en un seul fichier.
 
 ---
 
@@ -280,9 +271,11 @@ rechargement automatique à chaque sauvegarde.
 
 - **Support de formation** : *Règles de Santé et de Sécurité au Travail* (module M02) — `sst.pdf`.
 - **Référentiel graphique** : pictogrammes de sécurité conformes à la norme **ISO 7010**
-  (formes et couleurs : obligation, interdiction, danger, secours, lutte incendie).
-- **Pictogrammes complémentaires** : fichiers SVG issus de **Wikimedia Commons** (M004, M009, P003,
-  P010, W001, W016, E007, E011, F003, F005), nettoyés puis intégrés directement dans `index.html`.
+  (formes et couleurs : obligation, interdiction, danger, secours, lutte incendie), embarqués en
+  SVG inline dans `index.html`.
+- **Pictogrammes complémentaires** : SVG issus de **Wikimedia Commons** (M004, M009, P003, P010,
+  W001, W016, E007, E011, F003, F005), nettoyés puis intégrés directement dans `index.html` — le
+  dépôt ne distribue aucun fichier SVG séparé.
 - **Parti pris** : contenus reformulés et situations EPI simplifiées à des fins pédagogiques.
   Ce jeu **ne remplace pas** une formation réglementaire, un plan de prévention ou l'avis d'un
   préventeur : il sert à sensibiliser et à réviser.
@@ -337,10 +330,10 @@ code de ce dépôt.
 
 **Ce qu'elle ne couvre pas** :
 
-- **Pictogrammes ISO 7010** — fichiers SVG fournis à la racine, dans `sante securite.zip` et
-  pictogrammes complémentaires importés de **Wikimedia Commons** : symboles normalisés, inclus à
-  des fins pédagogiques et illustratives. La norme ISO 7010 reste la propriété de l'ISO ; ils ne
-  constituent pas des marqueurs de sécurité officiels.
+- **Pictogrammes ISO 7010** — symboles intégrés en SVG inline dans `index.html`, dont certains issus
+  de **Wikimedia Commons** : symboles normalisés, inclus à des fins pédagogiques et illustratives.
+  La norme ISO 7010 reste la propriété de l'ISO ; ils ne constituent pas des marqueurs de sécurité
+  officiels.
 - **Support de formation** `sst.pdf` (module M02) : document source, repris à titre documentaire.
 
 Le contenu pédagogique (questions, scénarios, fiches mémo) est librement réutilisable dans un cadre
