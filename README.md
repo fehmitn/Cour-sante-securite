@@ -87,7 +87,7 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 - 📱 **Responsive** — grilles fluides du mobile au grand écran, barre supérieure collante.
 - ♿ **Accessible** — HTML sémantique, `aria-live` sur les retours, `aria-modal`, focus visibles, `prefers-reduced-motion`.
 - 🖨️ **Mémo imprimable** — fiche de révision « L'essentiel SST » consultable à tout moment.
-- 🧾 **Mode examen** — 10 questions du niveau 1, 3 scénarios EPI et 10 signaux tirés au hasard, document A4 avec corrigé optionnel sur une page séparée.
+- 🧾 **Mode examen** — 10 questions du niveau 1, 3 scénarios EPI et 10 signaux tirés au hasard, document A4 avec corrigé optionnel sur une page séparée et planche « Tout imprimer » des 20 pictogrammes.
 - 🔗 **Routes par ancre** — `#dashboard`, `#quiz`, `#ppe`, `#signals`, `#exam`, `#memo` : chaque écran est partageable.
 
 ---
@@ -159,6 +159,8 @@ quitter l'application et sans connexion réseau.
   distribution.
 - Impression par le bouton **Imprimer** ou par `Ctrl+P` / `Cmd+P` ; seule l'épreuve est imprimée,
   sans la navigation de l'application.
+- **Tout imprimer** génère une planche A4 de contrôle visuel des **20 pictogrammes**, classés par
+  famille avec leur libellé, accessible depuis l'écran de génération comme depuis la barre d'outils.
 - Le mode examen est **indépendant de la progression** : il ne modifie ni les scores, ni les badges,
   ni les meilleurs résultats.
 - Astuce : choisir « Enregistrer au format PDF » dans la boîte d'impression pour archiver un sujet.

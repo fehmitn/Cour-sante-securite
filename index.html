@@ -593,6 +593,23 @@ h1,h2,h3{letter-spacing:-.025em}
 .exam-key-list li strong{color:#10283d}
 .exam-key-note{font-size:.62rem;color:#7a8fa1;margin:4px 0 0;line-height:1.45}
 
+.exam-picto-sheet{display:none}
+.exam-picto-sheet-head{border-bottom:2px solid #172b3d;padding-bottom:8px;margin-bottom:10px}
+.exam-picto-sheet-head h1{font-size:1.35rem;margin:7px 0 3px;color:#10283d}
+.exam-picto-sheet-head p{font-size:.68rem;line-height:1.45;color:#5f788d;margin:0}
+.exam-picto-group{margin-top:9px;break-inside:avoid;page-break-inside:avoid}
+.exam-picto-group-head{display:flex;align-items:center;gap:7px;border-bottom:1px solid #dce6ed;padding-bottom:4px;margin-bottom:5px}
+.exam-picto-group-head .mini{width:15px;height:15px}
+.exam-picto-group-head h2{font-size:.78rem;margin:0;color:#10283d}
+.exam-picto-group-head span:last-child{font-size:.57rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7a8fa1;margin-left:auto}
+.exam-picto-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.exam-picto-card{border:1px solid #dce6ed;border-radius:8px;background:#fff;padding:5px;text-align:center;break-inside:avoid}
+.exam-picto-card .signal-picto{width:84px;height:84px;filter:none;margin:0 auto 4px}
+.exam-picto-card .signal-picto svg{width:100%;height:100%}
+.exam-picto-card .signal-picto.danger{padding-top:0}
+.exam-picto-card strong{display:block;font-size:.61rem;line-height:1.25;color:#172b3d}
+.exam-picto-card small{display:block;font-size:.52rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#7a8fa1;margin-top:2px}
+
 @media screen and (max-width:900px){
   .exam-promo{align-items:flex-start;flex-wrap:wrap}
   .exam-promo .btn{margin-left:0;width:100%}
@@ -733,6 +750,10 @@ h1,h2,h3{letter-spacing:-.025em}
   body.exam-active.exam-ready .exam-paper{max-width:none;width:auto;margin:0;padding:0;border:0;border-radius:0;box-shadow:none}
   body.exam-active.exam-ready .exam-answer-key{break-before:page;page-break-before:always;margin-top:0;padding-top:0;border-top:0}
   body.exam-active.exam-ready .exam-answer-key[hidden]{display:none!important}
+  body.exam-active.exam-ready.exam-print-all .exam-paper,
+  body.exam-active.exam-ready.exam-print-all .exam-toolbar,
+  body.exam-active.exam-ready.exam-print-all .exam-start{display:none!important}
+  body.exam-active.exam-ready.exam-print-all .exam-picto-sheet{display:block!important}
   body.exam-active.exam-ready .exam-question,
   body.exam-active.exam-ready .exam-scenario,
   body.exam-active.exam-ready .exam-signal,
@@ -938,6 +959,7 @@ h1,h2,h3{letter-spacing:-.025em}
         <div class="level-chip"><b>EX</b>A4 · corrigé optionnel</div>
       </div>
       <div id="examApp"></div>
+      <div id="examPictoSheet" class="exam-picto-sheet" aria-hidden="true"></div>
     </section>
 
     <!-- MEMO -->
@@ -2446,9 +2468,10 @@ h1,h2,h3{letter-spacing:-.025em}
       '</div>' +
       '<div class="exam-actions">' +
         '<button class="btn btn-accent" type="button" data-action="exam-generate">' + icon('i-print') + 'Générer l\'examen</button>' +
+        '<button class="btn btn-ghost" type="button" data-action="exam-print-all" title="Imprimer une planche de contrôle des 20 pictogrammes">' + icon('i-print') + 'Tout imprimer</button>' +
         '<a class="btn btn-ghost" href="#memo">' + icon('i-book') + 'Réviser le mémo</a>' +
       '</div>' +
-      '<p class="exam-hint">Astuce : dans la boîte d\'impression, choisissez « Enregistrer au format PDF » pour conserver une copie du sujet.</p>' +
+      '<p class="exam-hint">Astuce : dans la boîte d\'impression, choisissez « Enregistrer au format PDF » pour conserver une copie du sujet. « Tout imprimer » produit une planche de contrôle des 20 pictogrammes.</p>' +
     '</div>';
   }
 
@@ -2458,6 +2481,7 @@ h1,h2,h3{letter-spacing:-.025em}
       '<div class="exam-toolbar-actions">' +
         '<label class="exam-toggle"><input type="checkbox" data-action="exam-toggle-key"' + (ui.exam.includeKey ? ' checked' : '') + '> Inclure le corrigé</label>' +
         '<button class="btn btn-ghost btn-small" type="button" data-action="exam-generate">' + icon('i-refresh') + 'Nouveau tirage</button>' +
+        '<button class="btn btn-ghost btn-small" type="button" data-action="exam-print-all" title="Imprimer une planche de contrôle des 20 pictogrammes">' + icon('i-print') + 'Tout imprimer</button>' +
         '<button class="btn btn-primary btn-small" type="button" data-action="exam-print">' + icon('i-print') + 'Imprimer</button>' +
       '</div>' +
     '</div>';
@@ -2550,6 +2574,32 @@ h1,h2,h3{letter-spacing:-.025em}
     '</div>';
   }
 
+  function examPictoSheetHTML() {
+    const shapes = {
+      obligation: 'Rond bleu',
+      interdiction: 'Rond blanc barré de rouge',
+      danger: 'Triangle jaune',
+      secours: 'Carré vert',
+      incendie: 'Carré rouge'
+    };
+    const groups = CATEGORIES.map(function (cat) {
+      const items = SIGNALS.filter(function (signal) { return signal.cat === cat.id; });
+      const cards = items.map(function (signal) {
+        return '<article class="exam-picto-card">' + signalPictoHTML(signal) +
+          '<strong>' + esc(signal.label) + '</strong><small>' + esc(cat.label) + '</small></article>';
+      }).join('');
+      return '<section class="exam-picto-group">' +
+        '<div class="exam-picto-group-head"><span class="mini ' + cat.id + '"></span><h2>' + esc(cat.label) + '</h2><span>' + items.length + ' signaux · ' + esc(shapes[cat.id]) + '</span></div>' +
+        '<div class="exam-picto-grid">' + cards + '</div>' +
+      '</section>';
+    }).join('');
+    return '<header class="exam-picto-sheet-head">' +
+      '<div class="exam-doc-top"><span><b>Vigilance SST</b> · Contrôle visuel</span><span>' + SIGNALS.length + ' pictogrammes · ' + examDateLabel() + '</span></div>' +
+      '<h1>Tous les pictogrammes de sécurité</h1>' +
+      '<p>Planche de contrôle des ' + SIGNALS.length + ' signaux du mode examen, classés par famille pour vérifier leur lisibilité avant impression.</p>' +
+    '</header>' + groups;
+  }
+
   function toggleExamKey(checked) {
     ui.exam.includeKey = !!checked;
     const key = $('#examAnswerKey');
@@ -2558,9 +2608,28 @@ h1,h2,h3{letter-spacing:-.025em}
 
   function printExam() {
     if (!ui.exam.generated) return;
+    document.body.classList.remove('exam-print-all');
     document.body.classList.add('exam-active');
     document.body.classList.add('exam-ready');
     window.print();
+  }
+
+  function printAllPictos() {
+    const sheet = $('#examPictoSheet');
+    if (!sheet) return;
+    sheet.innerHTML = examPictoSheetHTML();
+    document.body.classList.add('exam-active', 'exam-ready', 'exam-print-all');
+    const cleanup = function () {
+      document.body.classList.remove('exam-print-all');
+      document.body.classList.toggle('exam-ready', ui.view === 'exam' && ui.exam.generated);
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+    try {
+      window.print();
+    } finally {
+      cleanup();
+    }
   }
 
   /* ---------- Actions ---------- */
@@ -2596,6 +2665,7 @@ h1,h2,h3{letter-spacing:-.025em}
       case 'signals-restart': startSignals(); break;
       case 'exam-generate': generateExam(); break;
       case 'exam-print': printExam(); break;
+      case 'exam-print-all': printAllPictos(); break;
       default: break;
     }
   });
