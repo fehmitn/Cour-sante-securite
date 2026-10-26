@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vigilance SST — Serious game Santé & Sécurité au Travail</title>
+<meta name="description" content="Jeu de gamification SST hors-ligne : quiz, équipement EPI et reconnaissance des signaux de sécurité.">
+<style>
+:root{
+  --navy:#0b2136; --navy2:#123b57; --ink:#12263a; --muted:#60798f;
+  --bg:#f2f6fa; --card:#ffffff; --line:#dfe9f1;
+  --teal:#0ea5a4; --teal-d:#087f7e; --orange:#ff7a33; --amber:#f5b82e;
+  --red:#df4a3f; --green:#1c9c63; --blue:#1466d8;
+  --shadow:0 20px 50px -32px rgba(11,33,54,.4);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink); min-height:100vh;
+  font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(900px 500px at 8% -5%, rgba(14,165,164,.13), transparent 62%),
+    radial-gradient(800px 500px at 100% 8%, rgba(255,122,51,.12), transparent 60%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin-top:0}
+h1,h2,h3{letter-spacing:-.025em}
+::selection{background:rgba(14,165,164,.24)}
+.app{max-width:1280px;margin:0 auto;padding:16px 22px 44px}
+.icon{width:20px;height:20px;flex:0 0 auto;display:inline-block;vertical-align:middle}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:12px;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:10px 12px 10px 16px;border:1px solid rgba(223,233,241,.9);border-radius:18px;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(16px);
+  box-shadow:0 16px 40px -30px rgba(11,33,54,.5);
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:0 0 auto}
+.brand-mark{
+  width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,#0f3b57,#0a6b70);
+  box-shadow:0 8px 18px -8px rgba(8,127,126,.8);
+}
+.brand-mark .icon{width:23px;height:23px}
+.brand-text{font-weight:800;font-size:1.03rem;line-height:1;letter-spacing:-.03em}
+.brand-text span{color:var(--teal-d)}
+.brand-sub{display:block;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:5px;font-weight:700}
+.main-nav{
+  margin-left:auto;display:flex;align-items:center;gap:3px;padding:4px;
+  border-radius:13px;background:#eef4f8;
+}
+.nav-link{
+  text-decoration:none;color:#506a80;font-size:.82rem;font-weight:700;padding:9px 13px;
+  border-radius:10px;white-space:nowrap;transition:.18s;
+}
+.nav-link:hover{color:var(--navy);background:rgba(255,255,255,.7)}
+.nav-link.active{background:#fff;color:var(--navy);box-shadow:0 5px 14px -8px rgba(11,33,54,.4)}
+.top-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.score-pill{
+  display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;
+  background:linear-gradient(135deg,#fff4ea,#ffe8d8);border:1px solid #ffd9bd;
+  color:#9a4318;font-weight:800;font-size:.9rem;transition:.25s;
+}
+.score-pill .icon{width:17px;height:17px;color:var(--orange)}
+.score-pill small{font-size:.62rem;letter-spacing:.08em;font-weight:800;opacity:.75}
+.score-pill.bump{transform:scale(1.08);box-shadow:0 0 0 4px rgba(255,122,51,.14)}
+.icon-btn{
+  width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:#fff;
+  color:#547086;display:grid;place-items:center;cursor:pointer;transition:.18s;
+}
+.icon-btn:hover{color:var(--red);border-color:#f3c9c5;background:#fff7f6}
+
+/* ---------- layout / views ---------- */
+.view{display:none}
+.view.active{display:block;animation:viewIn .38s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.muted{color:var(--muted)}
+.small{font-size:.82rem}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:.69rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.72);
+}
+.eyebrow.dark{color:var(--teal-d)}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:#6ee7d8;box-shadow:0 0 0 4px rgba(110,231,216,.16)}
+.section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:30px 2px 16px}
+.section-heading h2{font-size:clamp(1.35rem,2.4vw,1.75rem);margin:5px 0 0}
+.section-heading .muted{font-size:.82rem;margin-bottom:3px}
+.card,.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.panel{padding:24px}
+.bar{height:8px;background:#eaf1f6;border-radius:99px;overflow:hidden}
+.bar>span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--teal),#46c9b7);transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;
+  padding:12px 17px;border-radius:12px;font-size:.86rem;font-weight:800;text-decoration:none;
+  transition:transform .18s,box-shadow .18s,background .18s,opacity .18s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn .icon{width:17px;height:17px}
+.btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-accent{background:linear-gradient(135deg,#ff9a50,#ff6b2c);color:#fff;box-shadow:0 12px 24px -14px rgba(255,107,44,.9)}
+.btn-primary{background:var(--navy);color:#fff;box-shadow:0 12px 24px -16px rgba(11,33,54,.8)}
+.btn-primary:hover{background:#123c5a}
+.btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:#bed3e2;background:#fbfdff}
+.btn-ghost-light{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px)}
+.btn-ghost-light:hover{background:rgba(255,255,255,.15)}
+.btn-small{padding:10px 13px;font-size:.8rem}
+.text-link{color:var(--teal-d);font-weight:800;font-size:.82rem;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.text-link:hover{text-decoration:underline}
+.tag{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:99px;
+  background:#eef7f6;color:var(--teal-d);font-size:.68rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.1em;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:99px;
+  font-size:.7rem;font-weight:800;background:#eef7f6;color:var(--teal-d);border:1px solid #d5efec;
+}
+.badge.done{background:#e9f9f1;color:#167a4e;border-color:#c8efdb}
+.badge.locked{background:#f2f5f8;color:#8b9cad;border-color:#e5ecf2}
+.badge .icon{width:14px;height:14px}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;overflow:hidden;margin-top:20px;padding:42px;border-radius:32px;color:#fff;
+  display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:34px;align-items:center;
+  background:
+    radial-gradient(circle at 88% 12%,rgba(255,122,51,.24),transparent 34%),
+    radial-gradient(circle at 10% 100%,rgba(14,165,164,.22),transparent 36%),
+    linear-gradient(135deg,#081b2d 0%,#103b55 56%,#0a5960 100%);
+  box-shadow:0 34px 80px -46px rgba(8,27,45,.9);
+}
+.hero:before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.32;
+  background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);
+  background-size:42px 42px;
+  -webkit-mask-image:linear-gradient(120deg,#000,transparent 72%);
+  mask-image:linear-gradient(120deg,#000,transparent 72%);
+}
+.hero:after{
+  content:"";position:absolute;width:260px;height:260px;right:-70px;bottom:-120px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);box-shadow:0 0 0 42px rgba(255,255,255,.035),0 0 0 84px rgba(255,255,255,.02);
+}
+.hero-copy,.score-panel{position:relative;z-index:1}
+.hero h1{font-size:clamp(2.2rem,4.2vw,3.55rem);line-height:1.02;margin:16px 0 18px;letter-spacing:-.045em}
+.hero h1 span{color:#ffb06f}
+.hero p{max-width:570px;color:rgba(255,255,255,.72);line-height:1.65;font-size:.98rem;margin-bottom:25px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:16px;margin-top:25px;color:rgba(255,255,255,.55);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.hero-meta span{display:inline-flex;align-items:center;gap:6px}
+.hero-meta .icon{width:14px;height:14px;color:#79dfd2}
+.score-panel{
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.16);border-radius:26px;
+  padding:24px;backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.panel-label{display:block;text-align:center;font-size:.66rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.score-ring{position:relative;width:184px;height:184px;margin:16px auto 12px}
+.score-ring svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.12);stroke-width:10}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:10;stroke-linecap:round;stroke-dasharray:364.4;stroke-dashoffset:364.4;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-center strong{font-size:2.8rem;line-height:1;letter-spacing:-.05em}
+.ring-center span{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.55);margin-top:7px;font-weight:800}
+.rank-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;font-size:.76rem}
+.rank-label{color:rgba(255,255,255,.55);font-weight:700}
+.rank-pill{padding:6px 10px;border-radius:99px;background:rgba(255,176,111,.14);border:1px solid rgba(255,176,111,.3);color:#ffc79a;font-weight:800}
+.rank-bar{height:6px;background:rgba(255,255,255,.1);margin-top:12px}
+.rank-bar>span{background:linear-gradient(90deg,#ffb06f,#ff7a33)}
+.rank-next{font-size:.7rem;color:rgba(255,255,255,.52);margin:9px 0 0;text-align:center}
+
+/* ---------- dashboard cards ---------- */
+.levels-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.level-card{
+  position:relative;overflow:hidden;padding:22px;border-radius:22px;background:#fff;
+  border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .22s,box-shadow .22s;
+}
+.level-card:hover{transform:translateY(-4px);box-shadow:0 28px 56px -34px rgba(11,33,54,.55)}
+.level-card:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--level,var(--teal))}
+.level-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.level-num{font-size:.68rem;font-weight:900;letter-spacing:.14em;color:#94a8b8}
+.level-state{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:99px;background:#f2f5f8;color:#8195a6}
+.level-state.started{background:#fff4e8;color:#b55b21}
+.level-state.done{background:#e9f9f1;color:#167a4e}
+.level-icon{
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin:18px 0 14px;
+  background:color-mix(in srgb,var(--level) 12%,white);color:var(--level);
+}
+.level-icon .icon{width:24px;height:24px}
+.level-card h3{font-size:1.08rem;margin-bottom:7px}
+.level-card p{font-size:.82rem;line-height:1.55;color:var(--muted);min-height:52px;margin-bottom:16px}
+.level-score-row{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;color:var(--muted);margin-bottom:8px}
+.level-score-row strong{font-size:.98rem;color:var(--ink)}
+.level-card .bar{margin-bottom:17px}
+.level-card .btn{width:100%}
+.dash-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-top:20px}
+.dash-grid h3{font-size:1.05rem;margin-bottom:5px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
+.stat{padding:14px;border-radius:14px;background:#f7fafc;border:1px solid #eaf1f6}
+.stat span{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.stat strong{font-size:1.18rem;letter-spacing:-.03em}
+.badge-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}
+.tip-card{background:linear-gradient(145deg,#0e2d45,#0a525b);color:#fff;border:0;position:relative;overflow:hidden}
+.tip-card:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-55px;top:-60px;background:rgba(255,255,255,.06)}
+.tip-card .eyebrow.dark{color:#79dfd2}
+.tip-card h3{font-size:1.35rem;margin:8px 0 10px;color:#fff}
+.tip-card p{font-size:.84rem;line-height:1.65;color:rgba(255,255,255,.68)}
+.tetra-chips{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 18px}
+.tetra-chips span{font-size:.67rem;font-weight:700;padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+.tip-card .text-link{color:#8ce8dc}
+
+/* ---------- sub pages ---------- */
+.subpage-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:32px 2px 20px}
+.subpage-head h1{font-size:clamp(1.7rem,3.2vw,2.35rem);margin:6px 0 7px}
+.subpage-head p{color:var(--muted);margin:0;font-size:.88rem;max-width:650px;line-height:1.6}
+.level-chip{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:.73rem;font-weight:800;color:#4e687e;box-shadow:var(--shadow)}
+.level-chip b{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#eef7f6;color:var(--teal-d);font-size:.7rem}
+.quiz-layout{display:grid;grid-template-columns:minmax(0,1fr) 306px;gap:20px;align-items:start}
+.quiz-main{padding:28px}
+.quiz-side{position:sticky;top:100px}
+.coach-card{padding:20px}
+.coach-score{display:flex;align-items:baseline;gap:7px;margin:12px 0 8px}
+.coach-score strong{font-size:2rem;letter-spacing:-.04em}
+.coach-score span{font-size:.72rem;color:var(--muted);font-weight:700}
+.check-list{list-style:none;padding:0;margin:17px 0 0;display:grid;gap:7px}
+.check-list li{display:flex;align-items:center;gap:8px;font-size:.74rem;color:#8799a8;font-weight:600}
+.check-list li .check-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid #d8e2ea;display:grid;place-items:center;flex:0 0 auto;color:transparent;font-size:.58rem}
+.check-list li.ok{color:var(--ink)}
+.check-list li.ok .check-dot{background:var(--green);border-color:var(--green);color:#fff}
+.check-list li .check-dot .icon{width:9px;height:9px}
+.mini-tip{font-size:.73rem;line-height:1.55;color:var(--muted);background:#f5f9fb;border:1px solid #e9f1f5;border-radius:12px;padding:12px;margin-top:18px}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.quiz-meta .muted{font-size:.72rem;font-weight:700}
+.quiz-progress{margin-bottom:22px}
+.question{font-size:clamp(1.16rem,2.2vw,1.42rem);line-height:1.4;margin:18px 0 20px;letter-spacing:-.02em}
+.options{display:grid;gap:9px}
+.option{
+  width:100%;display:flex;align-items:center;gap:13px;text-align:left;padding:14px 15px;
+  border:1.5px solid #e2ebf2;border-radius:13px;background:#fff;color:var(--ink);
+  cursor:pointer;transition:.17s;font-size:.86rem;line-height:1.45;
+}
+.option:hover:not(:disabled){border-color:#7dd7cf;background:#f4fcfb;transform:translateX(2px)}
+.option .key{
+  width:27px;height:27px;border-radius:8px;background:#f1f6f9;color:#73899b;display:grid;place-items:center;
+  font-size:.68rem;font-weight:900;flex:0 0 auto;transition:.17s;
+}
+.option.selected{border-color:var(--teal);background:#edfbf9;box-shadow:0 0 0 3px rgba(14,165,164,.09)}
+.option.selected .key{background:var(--teal);color:#fff}
+.option.correct{border-color:var(--green);background:#edfaf3}
+.option.correct .key{background:var(--green);color:#fff}
+.option.wrong{border-color:var(--red);background:#fdf0ef}
+.option.wrong .key{background:var(--red);color:#fff}
+.option.dim{opacity:.53}
+.option:disabled{cursor:default}
+.quiz-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}
+.feedback{border-radius:15px;padding:16px;margin-top:18px;border:1px solid;animation:popIn .3s ease both}
+.feedback.good{background:#eefaf4;border-color:#c6efdb}
+.feedback.bad{background:#fdf1f0;border-color:#f6d2ce}
+.feedback.neutral{background:#f5f9fb;border-color:#e5eef4}
+.feedback-head{display:flex;align-items:center;gap:8px;font-size:.86rem;font-weight:800}
+.feedback.good .feedback-head{color:#167a4e}
+.feedback.bad .feedback-head{color:#a8352c}
+.feedback p{font-size:.8rem;line-height:1.6;color:#516b80;margin:8px 0 0}
+.feedback .icon{width:18px;height:18px}
+.feedback-list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:4px;font-size:.76rem;color:#536d81}
+.feedback-list li.ok{color:#167a4e}
+.feedback-list li.no{color:#a8352c}
+@keyframes popIn{from{opacity:0;transform:translateY(5px) scale(.99)}to{opacity:1;transform:none}}
+.start-card{padding:48px 30px;text-align:center;background:radial-gradient(circle at 50% 0%,#f0fbfa,transparent 65%),#fff}
+.start-emblem{width:86px;height:86px;border-radius:26px;margin:0 auto 20px;display:grid;place-items:center;background:linear-gradient(145deg,#0e3b57,#0a7778);color:#fff;box-shadow:0 20px 36px -18px rgba(8,127,126,.7)}
+.start-emblem .icon{width:42px;height:42px}
+.start-card h2{font-size:1.6rem;margin-bottom:9px}
+.start-card p{max-width:460px;margin:0 auto 22px;color:var(--muted);font-size:.87rem;line-height:1.65}
+.start-facts{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.result-card{padding:38px 28px;text-align:center}
+.result-icon{width:82px;height:82px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;background:linear-gradient(145deg,#fff3e6,#ffe4cc);color:var(--orange)}
+.result-icon .icon{width:41px;height:41px}
+.result-card h2{font-size:2.5rem;margin:5px 0 0;letter-spacing:-.05em}
+.result-card h2 small{font-size:.95rem;color:var(--muted);letter-spacing:0;font-weight:700}
+.result-card>p{max-width:460px;margin:10px auto 20px;color:var(--muted);font-size:.86rem;line-height:1.65}
+.result-stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:23px}
+.result-stat{padding:12px 16px;border-radius:12px;background:#f7fafc;border:1px solid #eaf1f6;min-width:120px}
+.result-stat span{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:4px}
+.result-stat strong{font-size:1.05rem}
+.result-card .hero-actions{justify-content:center}
+.stars{color:#f5b82e;letter-spacing:4px;font-size:1.3rem;margin-bottom:15px}
+.stars .off{color:#e4ebf1}
+
+/* ---------- PPE ---------- */
+.scenario-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.scenario-chip{
+  display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:11px;border:1px solid var(--line);
+  background:#fff;color:#617b90;font-size:.75rem;font-weight:800;cursor:pointer;transition:.18s;
+}
+.scenario-chip:hover{border-color:#bed9d6;color:var(--navy)}
+.scenario-chip b{width:23px;height:23px;border-radius:7px;display:grid;place-items:center;background:#f0f5f8;color:#688196;font-size:.67rem}
+.scenario-chip.active{border-color:var(--teal);background:#edfbf9;color:var(--teal-d);box-shadow:0 0 0 3px rgba(14,165,164,.08)}
+.scenario-chip.active b{background:var(--teal);color:#fff}
+.scenario-chip.done b{background:var(--green);color:#fff}
+.situation{
+  display:flex;align-items:flex-start;gap:14px;padding:17px 19px;border-radius:16px;
+  background:linear-gradient(120deg,#f4fbfa,#f8fbfd);border:1px solid #dceeea;margin-bottom:17px;
+}
+.situation-icon{width:39px;height:39px;border-radius:11px;flex:0 0 auto;display:grid;place-items:center;background:#e2f7f4;color:var(--teal-d)}
+.situation h3{font-size:.95rem;margin-bottom:4px}
+.situation p{font-size:.79rem;line-height:1.55;color:var(--muted);margin:0}
+.risk-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.risk-chips span{font-size:.62rem;font-weight:800;padding:4px 7px;border-radius:6px;background:#fff;border:1px solid #dfeaf0;color:#5e788c}
+.ppe-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:20px;align-items:start}
+.worker-stage{
+  position:relative;overflow:hidden;border-radius:24px;padding:20px;min-height:500px;
+  background:
+    radial-gradient(circle at 50% 38%,rgba(64,210,193,.17),transparent 40%),
+    linear-gradient(155deg,#0a2034,#0e3c53 65%,#0a5960);
+  color:#fff;box-shadow:0 28px 60px -36px rgba(8,27,45,.8);
+}
+.worker-stage:before{
+  content:"";position:absolute;inset:0;opacity:.28;
+  background-image:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px);
+  background-size:36px 36px;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000,transparent 75%);
+  mask-image:radial-gradient(circle at 50% 50%,#000,transparent 75%);
+}
+.stage-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.7rem;font-weight:800;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em}
+.stage-top b{color:#fff;font-size:.78rem}
+.worker-wrap{position:relative;z-index:1;display:grid;place-items:center;min-height:365px;padding:6px 0}
+.worker-svg{width:min(270px,76%);height:auto;overflow:visible;filter:drop-shadow(0 24px 30px rgba(0,0,0,.25))}
+.gear{opacity:0;transform:translateY(-4px) scale(.97);transform-box:fill-box;transform-origin:center;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.8,.2,1)}
+.gear.on{opacity:1;transform:none}
+.stage-bottom{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(255,255,255,.1);padding-top:14px}
+.stage-bottom p{margin:0;font-size:.72rem;color:rgba(255,255,255,.55)}
+.equip-count{font-size:.71rem;font-weight:800;color:#ffc79a;background:rgba(255,176,111,.1);border:1px solid rgba(255,176,111,.22);padding:6px 9px;border-radius:8px;white-space:nowrap}
+.gear-panel{padding:22px}
+.gear-panel h3{font-size:1.08rem;margin-bottom:5px}
+.gear-panel>p{font-size:.79rem;color:var(--muted);line-height:1.5;margin-bottom:16px}
+.gear-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gear-card{
+  display:flex;align-items:center;gap:10px;padding:11px 12px;text-align:left;border:1.5px solid #e2ebf2;
+  border-radius:12px;background:#fff;cursor:pointer;transition:.17s;color:var(--ink);position:relative;
+}
+.gear-card:hover:not(:disabled){border-color:#88d9d1;background:#f5fdfc;transform:translateY(-1px)}
+.gear-card.active{border-color:var(--orange);background:#fff8f2;box-shadow:0 0 0 3px rgba(255,122,51,.09)}
+.gear-card:disabled{cursor:default}
+.gear-icon{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:#f1f7f9;color:#537286;flex:0 0 auto}
+.gear-card.active .gear-icon{background:#ffebdc;color:#c95b21}
+.gear-icon .icon{width:19px;height:19px}
+.gear-card strong{display:block;font-size:.76rem;line-height:1.15}
+.gear-card small{display:block;font-size:.6rem;color:var(--muted);margin-top:2px}
+.gear-tick{margin-left:auto;width:16px;height:16px;border-radius:50%;border:1.5px solid #dce6ed;color:transparent;display:grid;place-items:center;font-size:.55rem;flex:0 0 auto}
+.gear-card.active .gear-tick{background:var(--orange);border-color:var(--orange);color:#fff}
+.gear-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:17px}
+.ppe-note{font-size:.68rem;color:#8da0ae;line-height:1.5;margin-top:12px}
+.completion-banner{display:flex;align-items:center;gap:13px;margin-top:18px;padding:17px 19px;border-radius:16px;background:linear-gradient(120deg,#e9f9f1,#f4fcf8);border:1px solid #c8efdb;color:#156c48}
+.completion-banner .icon{width:25px;height:25px;flex:0 0 auto}
+.completion-banner strong{display:block;font-size:.88rem;margin-bottom:2px}
+.completion-banner p{font-size:.75rem;margin:0;color:#4c7f68}
+
+/* ---------- signals ---------- */
+.signals-layout{display:grid;grid-template-columns:minmax(0,1fr) 288px;gap:20px;align-items:start}
+.flash-card{
+  position:relative;overflow:hidden;border-radius:28px;padding:30px;color:#fff;
+  background:
+    radial-gradient(circle at 83% 8%,rgba(255,122,51,.2),transparent 33%),
+    radial-gradient(circle at 8% 100%,rgba(14,165,164,.2),transparent 38%),
+    linear-gradient(150deg,#081b2d,#0e354e 65%,#0a4f59);
+  box-shadow:0 32px 70px -44px rgba(8,27,45,.9);
+}
+.flash-card:before{
+  content:"";position:absolute;inset:0;opacity:.3;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:38px 38px;
+  -webkit-mask-image:radial-gradient(circle at 50% 45%,#000,transparent 78%);
+  mask-image:radial-gradient(circle at 50% 45%,#000,transparent 78%);
+}
+.flash-top,.flash-inner{position:relative;z-index:1}
+.flash-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.72rem;font-weight:800;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em}
+.timer{display:flex;align-items:center;gap:6px;color:#ffc79a;background:rgba(255,176,111,.1);border:1px solid rgba(255,176,111,.2);padding:6px 9px;border-radius:8px}
+.timer .icon{width:15px;height:15px}
+.timer-bar{position:relative;z-index:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:12px 0 4px}
+.timer-bar span{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#6ee7d8,#ffb06f);transition:width .1s linear,background .3s}
+.timer-bar span.urgent{background:linear-gradient(90deg,#ff9b6b,#ef5b4e)}
+.signal-stage{display:grid;place-items:center;padding:22px 0 14px}
+.signal-picto{
+  width:180px;height:180px;display:flex;align-items:center;justify-content:center;position:relative;
+  filter:drop-shadow(0 22px 30px rgba(0,0,0,.28));transition:transform .25s;
+}
+.signal-picto:hover{transform:scale(1.025)}
+.signal-picto svg{width:88px;height:88px;color:inherit}
+.signal-picto.obligation{background:linear-gradient(145deg,#2b7eed,#0a50ae);border-radius:50%;color:#fff}
+.signal-picto.interdiction{background:#fff;border:16px solid #d94136;border-radius:50%;color:#101820}
+.signal-picto.interdiction:after{
+  content:"";position:absolute;left:50%;top:50%;width:16px;height:118%;
+  transform:translate(-50%,-50%) rotate(45deg);border-radius:9px;background:#d94136;z-index:2;
+  box-shadow:0 0 0 2px rgba(255,255,255,.14);
+}
+.signal-picto.interdiction svg{position:relative;z-index:1;width:80px;height:80px}
+.signal-picto.danger{background:linear-gradient(160deg,#ffdb5e,#efb61e);clip-path:polygon(50% 0,100% 100%,0 100%);color:#151515;padding-top:49px}
+.signal-picto.danger svg{width:64px;height:64px}
+.signal-picto.secours{background:linear-gradient(145deg,#24b979,#0f8350);border-radius:22px;color:#fff}
+.signal-picto.incendie{background:linear-gradient(145deg,#e95c50,#b72e26);border-radius:22px;color:#fff}
+.signal-picto.official-picto{background:transparent;padding:0;border:0;border-radius:0;clip-path:none}
+.signal-picto.official-picto:after{display:none}
+.signal-picto.official-picto svg{width:100%;height:100%;display:block;border-radius:18px}
+.flash-question{position:relative;z-index:1;text-align:center;font-size:1.05rem;font-weight:800;margin:0 0 18px}
+.category-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.cat-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:11px 6px;
+  border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.055);color:rgba(255,255,255,.78);
+  border-radius:11px;font-size:.66rem;font-weight:800;cursor:pointer;transition:.17s;min-height:70px;
+}
+.cat-btn:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff;transform:translateY(-1px)}
+.cat-btn:disabled{cursor:default;opacity:.56}
+.cat-btn.correct{background:rgba(28,156,99,.28);border-color:#4ade9e;color:#fff;opacity:1}
+.cat-btn.wrong{background:rgba(223,74,63,.25);border-color:#ff8c83;color:#fff;opacity:1}
+.mini{width:23px;height:23px;display:inline-block;flex:0 0 auto}
+.mini.obligation{border-radius:50%;background:linear-gradient(145deg,#2b7eed,#0a50ae)}
+.mini.interdiction{border-radius:50%;background:#fff;border:5px solid #d94136;position:relative}
+.mini.danger{background:#f5c22e;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.mini.secours{border-radius:5px;background:#20a96d}
+.mini.incendie{border-radius:5px;background:#df4a3f}
+.flash-feedback{position:relative;z-index:1;margin-top:17px;padding:15px;border-radius:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);animation:popIn .3s ease both}
+.flash-feedback.good{border-color:rgba(74,222,158,.45);background:rgba(28,156,99,.16)}
+.flash-feedback.bad{border-color:rgba(255,140,131,.4);background:rgba(223,74,63,.14)}
+.flash-feedback strong{display:block;font-size:.86rem;margin-bottom:5px}
+.flash-feedback p{font-size:.76rem;line-height:1.55;color:rgba(255,255,255,.72);margin:0}
+.flash-feedback .pts{float:right;color:#ffc79a;font-weight:800;font-size:.72rem}
+.flash-actions{position:relative;z-index:1;display:flex;justify-content:center;margin-top:16px}
+.signals-side{display:grid;gap:14px;position:sticky;top:100px}
+.signal-legend-card{padding:19px}
+.signal-legend-card h3{font-size:.9rem;margin-bottom:13px}
+.legend-list{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+.legend-list li{display:flex;align-items:center;gap:9px;font-size:.7rem;font-weight:700;color:#587186}
+.legend-list .mini{width:19px;height:19px}
+.legend-list small{display:block;font-size:.62rem;color:#91a3b1;font-weight:600;margin-top:1px}
+.progress-dots{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.progress-dots i{width:17px;height:5px;border-radius:99px;background:#e4ecf2}
+.progress-dots i.ok{background:var(--green)}
+.progress-dots i.miss{background:#f2b3ad}
+.signal-start{text-align:center;padding:42px 26px}
+
+/* ---------- memo ---------- */
+.memo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.memo-card{padding:23px}
+.memo-card h3{font-size:1.05rem;display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.memo-card h3 .icon{width:20px;height:20px;color:var(--teal-d)}
+.memo-card p{font-size:.8rem;line-height:1.65;color:#516b80;margin-bottom:0}
+.memo-card .quote{font-size:.8rem;line-height:1.65;color:#516b80;border-left:3px solid #7fd8d0;padding-left:13px;margin:11px 0 0}
+.memo-card ul{margin:11px 0 0;padding-left:18px;font-size:.78rem;line-height:1.65;color:#516b80}
+.memo-card li{margin-bottom:6px}
+.memo-card li::marker{color:var(--teal)}
+.two-col-list{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.two-col-list h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;margin:0 0 7px;color:var(--teal-d)}
+.two-col-list ul{margin:0;padding-left:16px}
+.signal-legend{grid-column:1/-1;padding:23px}
+.legend-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-top:16px}
+.legend-item{padding:14px 10px;border-radius:14px;background:#f8fbfc;border:1px solid #e9f0f4;text-align:center}
+.legend-shape{width:62px;height:62px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;color:#fff;filter:drop-shadow(0 8px 13px rgba(11,33,54,.12))}
+.legend-shape svg{width:31px;height:31px}
+.legend-shape.obligation{border-radius:50%;background:linear-gradient(145deg,#2b7eed,#0a50ae)}
+.legend-shape.interdiction{border-radius:50%;background:#fff;border:7px solid #d94136;color:#111;position:relative}
+.legend-shape.interdiction:after{content:"";position:absolute;width:7px;height:112%;background:#d94136;transform:rotate(45deg);border-radius:4px;z-index:2}
+.legend-shape.interdiction svg{position:relative;z-index:1}
+.legend-shape.danger{background:#f5c22e;clip-path:polygon(50% 0,100% 100%,0 100%);color:#111;padding-top:19px}
+.legend-shape.danger svg{width:24px;height:24px}
+.legend-shape.secours{border-radius:10px;background:linear-gradient(145deg,#24b979,#0f8350)}
+.legend-shape.incendie{border-radius:10px;background:linear-gradient(145deg,#e95c50,#b72e26)}
+.legend-item strong{display:block;font-size:.73rem;margin-bottom:4px}
+.legend-item small{display:block;font-size:.62rem;line-height:1.45;color:#8397a6}
+.fire-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
+.fire-chip{padding:10px 11px;border-radius:10px;background:#fff7ef;border:1px solid #ffe2cb;font-size:.72rem;font-weight:800;color:#a95521}
+.fire-chip.fire-blue{background:#eef7fd;border-color:#d7eaf8;color:#236b9c}
+.fire-chip.fire-grey{background:#f3f6f8;border-color:#e5edf2;color:#5f7789}
+.fire-chip.fire-red{background:#fdf0ef;border-color:#f6d7d3;color:#a83d33}
+.source-note{font-size:.68rem;color:#8ba0b0;line-height:1.6;margin:18px 2px 0}
+.source-note b{color:#647d90}
+
+/* ---------- footer / toast / modal ---------- */
+.footer{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:34px;padding:18px 4px 0;border-top:1px solid #e0e9f0;font-size:.68rem;color:#91a2b0}
+.footer strong{color:#5b7487}
+.toast{
+  position:fixed;left:50%;bottom:28px;z-index:300;transform:translate(-50%,18px);opacity:0;pointer-events:none;
+  display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:12px;
+  background:#0b2136;color:#fff;font-size:.8rem;font-weight:800;box-shadow:0 20px 40px -15px rgba(11,33,54,.65);
+  transition:.3s;border:1px solid rgba(255,255,255,.12);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .icon{width:17px;height:17px;color:#79dfd2}
+.toast.good .icon{color:#6ee7b7}
+.modal-backdrop{
+  position:fixed;inset:0;z-index:400;display:none;place-items:center;padding:20px;
+  background:rgba(5,18,31,.58);backdrop-filter:blur(5px);
+}
+.modal-backdrop.open{display:grid;animation:viewIn .2s ease both}
+.modal{width:100%;max-width:410px;background:#fff;border-radius:22px;padding:26px;box-shadow:0 30px 80px -20px rgba(0,0,0,.4)}
+.modal-icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:#fdf0ef;color:var(--red);margin-bottom:14px}
+.modal-icon .icon{width:24px;height:24px}
+.modal h3{font-size:1.15rem;margin-bottom:7px}
+.modal p{font-size:.82rem;line-height:1.6;color:var(--muted);margin-bottom:20px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.confetti{position:fixed;top:-18px;width:8px;height:14px;border-radius:2px;z-index:500;pointer-events:none;animation:confettiFall linear forwards}
+@keyframes confettiFall{to{transform:translate3d(var(--dx),108vh,0) rotate(760deg);opacity:.85}}
+
+/* ---------- responsive ---------- */
+@media(max-width:1080px){
+  .hero{grid-template-columns:minmax(0,1fr) 310px;padding:34px;gap:26px}
+  .levels-grid{grid-template-columns:1fr 1fr}
+  .quiz-layout,.signals-layout{grid-template-columns:minmax(0,1fr) 270px}
+  .main-nav .nav-link{padding:8px 10px;font-size:.76rem}
+}
+@media(max-width:900px){
+  .topbar{flex-wrap:wrap;gap:9px;padding:9px 11px}
+  .brand{order:1}.top-actions{order:2;margin-left:auto}.main-nav{order:3;width:100%;margin-left:0;overflow:auto;justify-content:flex-start}
+  .nav-link{flex:0 0 auto;text-align:center;padding:8px 11px;font-size:.73rem}
+  .hero{grid-template-columns:1fr;padding:30px}
+  .score-panel{max-width:380px;width:100%;justify-self:center}
+  .hero h1{font-size:clamp(2rem,7vw,3rem)}
+  .levels-grid,.dash-grid,.quiz-layout,.ppe-layout,.signals-layout,.memo-grid,.two-col-list{grid-template-columns:1fr}
+  .quiz-side,.signals-side{position:static}
+  .signal-legend{grid-column:auto}
+  .worker-stage{min-height:440px}
+  .worker-svg{width:min(250px,65%)}
+  .legend-grid{grid-template-columns:repeat(3,1fr)}
+  .dash-grid .tip-card{min-height:260px}
+}
+@media(max-width:620px){
+  .app{padding:10px 12px 34px}
+  .topbar{top:6px;border-radius:15px}
+  .brand-sub{display:none}
+  .score-pill{padding:7px 9px;font-size:.8rem}
+  .hero{padding:24px 19px;border-radius:24px;margin-top:12px}
+  .hero p{font-size:.88rem}
+  .hero-actions .btn{width:100%}
+  .hero-meta{gap:8px 12px;margin-top:20px}
+  .score-ring{width:158px;height:158px}
+  .ring-center strong{font-size:2.35rem}
+  .section-heading,.subpage-head{align-items:flex-start;flex-direction:column;gap:8px}
+  .section-heading .muted{font-size:.74rem}
+  .level-chip{align-self:flex-start}
+  .levels-grid{grid-template-columns:1fr}
+  .level-card p{min-height:0}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .panel,.quiz-main,.gear-panel,.memo-card,.signal-legend{padding:18px}
+  .start-card{padding:34px 18px}
+  .question{font-size:1.08rem}
+  .option{font-size:.81rem;padding:12px 13px;gap:10px}
+  .category-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-btn{min-height:58px;flex-direction:row;justify-content:flex-start;padding-left:13px}
+  .signal-picto{width:150px;height:150px}
+  .signal-picto svg{width:72px;height:72px}
+  .signal-picto.danger{padding-top:40px}
+  .signal-picto.danger svg{width:54px;height:54px}
+  .flash-card{padding:20px 15px;border-radius:22px}
+  .flash-top{font-size:.62rem}
+  .flash-question{font-size:.92rem}
+  .legend-grid{grid-template-columns:repeat(2,1fr)}
+  .fire-grid{grid-template-columns:1fr}
+  .gear-grid{grid-template-columns:1fr}
+  .worker-stage{min-height:390px;padding:15px}
+  .worker-svg{width:210px}
+  .stage-bottom{align-items:flex-start;flex-direction:column;gap:8px}
+  .footer{flex-direction:column;align-items:flex-start;gap:6px}
+  .hero-meta span{font-size:.65rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 4 5v6c0 5.2 3.4 9.6 8 11 4.6-1.4 8-5.8 8-11V5l-8-3Zm-1.1 14.6-3.5-3.5 1.4-1.4 2.1 2.1 4.7-4.7 1.4 1.4-6.1 6.1Z"/></symbol>
+  <symbol id="i-dashboard" viewBox="0 0 24 24"><path fill="currentColor" d="M4 13h7V4H4v9Zm0 7h7v-5H4v5Zm9 0h7v-9h-7v9Zm0-16v5h7V4h-7Z"/></symbol>
+  <symbol id="i-quiz" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm.1 14.2a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm1.9-5.3c-.8.6-1.1 1-1.1 2h-1.9c0-1.7.6-2.5 1.7-3.3.7-.5 1.1-.9 1.1-1.6 0-.8-.6-1.3-1.5-1.3s-1.5.5-1.6 1.5H9c.1-2 1.5-3.3 3.4-3.3 1.9 0 3.3 1.2 3.3 2.9 0 1.3-.6 2.2-1.7 3.1Z"/></symbol>
+  <symbol id="i-ppe" viewBox="0 0 24 24"><path fill="currentColor" d="M5 14a7 7 0 0 1 14 0v2H5v-2Z"/><rect x="3" y="16" width="18" height="3" rx="1.5" fill="currentColor"/><rect x="11" y="5" width="2" height="5" rx="1" fill="currentColor" opacity=".55"/></symbol>
+  <symbol id="i-signals" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 1 21h22L12 2Zm0 5.1L19.3 19H4.7L12 7.1Zm-1 3.4h2v5h-2v-5Zm0 6h2v2h-2v-2Z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path fill="currentColor" d="M4 3h7a3 3 0 0 1 3 3v15a4 4 0 0 0-2.5-1H4V3Zm16 0h-4a3 3 0 0 0-3 3v15a4 4 0 0 1 2.5-1H20V3Z"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path fill="currentColor" d="M7 3h10v3h4v3c0 2.8-2.2 5-5 5h-.4A5.5 5.5 0 0 1 13 16.9V19h4v2H7v-2h4v-2.1A5.5 5.5 0 0 1 8.4 14H8c-2.8 0-5-2.2-5-5V6h4V3Zm0 5H5v1c0 1.5 1.1 2.8 2.5 3L7 8Zm10 0v4c1.4-.2 2.5-1.5 2.5-3V8H17Z"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 5a7 7 0 1 1-6.7 9H3.2A9 9 0 1 0 5 6.3V3H3v6h6V7H6.9A7 7 0 0 1 12 5Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="currentColor" d="m13.2 4.6-1.4 1.4 5 5H3v2h13.8l-5 5 1.4 1.4L21 12l-7.8-7.4Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M9.2 16.6 4.6 12l-1.4 1.4 6 6L21 7.6 19.6 6.2 9.2 16.6Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3 1.4 1.4Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-13h-2v6l4.7 2.8 1-1.7-3.7-2.2V7Z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="m12 2 2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2Z"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm0 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 1 21h22L12 2Zm-1 6h2v7h-2V8Zm0 9h2v2h-2v-2Z"/></symbol>
+  <symbol id="i-fire" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 5 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-7-1 4 2 5 2 7 2-4 2-8 1-12Z"/></symbol>
+  <symbol id="i-casque" viewBox="0 0 24 24"><path fill="currentColor" d="M5 14a7 7 0 0 1 14 0v2H5v-2Z"/><rect x="3" y="16" width="18" height="3" rx="1.5" fill="currentColor"/></symbol>
+  <symbol id="i-gants" viewBox="0 0 24 24"><path fill="currentColor" d="M6 12V6.5a1.3 1.3 0 0 1 2.6 0V11h.8V5.2a1.3 1.3 0 0 1 2.6 0V11h.8V6.8a1.3 1.3 0 0 1 2.6 0V14c0 4-2.2 7-6.2 7C5.7 21 4 18.7 4 15.5V11a1.3 1.3 0 0 1 2 1.1V12Z"/></symbol>
+  <symbol id="i-chaussures" viewBox="0 0 24 24"><path fill="currentColor" d="M3 15h6l3.2 2H19a2 2 0 0 1 2 2v1H3v-5Z"/><rect x="5" y="8" width="6" height="7" rx="1" fill="currentColor"/><rect x="3" y="18" width="18" height="2" rx="1" fill="currentColor" opacity=".5"/></symbol>
+  <symbol id="i-lunettes" viewBox="0 0 24 24"><circle cx="7" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 13h2M3 12l2-2M21 12l-2-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-masque" viewBox="0 0 24 24"><path fill="currentColor" d="M5 9c4-2.2 10-2.2 14 0v5c0 4-3.2 6.5-7 6.5S5 18 5 14V9Z"/><path d="M5 10 2.5 8.5M19 10l2.5-1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-harnais" viewBox="0 0 24 24"><path d="m7 3 5 9 5-9M5 13h14M12 3v18M9 16h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="13" r="2" fill="currentColor"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><path d="M6 13a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="11" width="4" height="8" rx="2" fill="currentColor"/><rect x="16" y="11" width="4" height="8" rx="2" fill="currentColor"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18.5" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-cigarette" viewBox="0 0 24 24"><rect x="3" y="15" width="14" height="3" rx="1" fill="currentColor"/><rect x="18" y="15" width="4" height="3" rx="1" fill="currentColor"/><path d="M16 11c3-1 1-3 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 5 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-7-1 4 2 5 2 7 2-4 2-8 1-12Z"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z"/></symbol>
+  <symbol id="i-extincteur" viewBox="0 0 24 24"><rect x="10" y="8" width="7" height="13" rx="2" fill="currentColor"/><rect x="11" y="3" width="5" height="3" rx="1" fill="currentColor"/><path d="M10 11H6v7M6 18l-2-2m2 2 2-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-boyau" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M4 20h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-civiere" viewBox="0 0 24 24"><rect x="3" y="14" width="18" height="3" rx="1.5" fill="currentColor"/><path d="M7 14V8h10v6M12 4v4M10 6h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="20" r="2" fill="currentColor"/><circle cx="19" cy="20" r="2" fill="currentColor"/></symbol>
+</svg>
+
+<div class="app">
+  <header class="topbar">
+    <a href="#dashboard" class="brand" aria-label="Vigilance SST, tableau de bord">
+      <span class="brand-mark"><svg class="icon"><use href="#i-shield"></use></svg></span>
+      <span class="brand-text">Vigilance <span>SST</span><small class="brand-sub">Santé &amp; sécurité au travail</small></span>
+    </a>
+    <nav class="main-nav" aria-label="Navigation principale">
+      <a class="nav-link active" data-nav="dashboard" href="#dashboard">Tableau de bord</a>
+      <a class="nav-link" data-nav="quiz" href="#quiz">Niveau 1 · Quiz</a>
+      <a class="nav-link" data-nav="ppe" href="#ppe">Niveau 2 · EPI</a>
+      <a class="nav-link" data-nav="signals" href="#signals">Niveau 3 · Signaux</a>
+      <a class="nav-link" data-nav="memo" href="#memo">Mémo SST</a>
+    </nav>
+    <div class="top-actions">
+      <div class="score-pill" title="Points de Vigilance"><svg class="icon"><use href="#i-spark"></use></svg><span id="topScore">0</span><small>PV</small></div>
+      <button class="icon-btn" type="button" data-action="open-reset" aria-label="Réinitialiser la progression" title="Réinitialiser"><svg class="icon"><use href="#i-refresh"></use></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard" aria-labelledby="dashTitle">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="dot"></span> Serious game SST · 3 niveaux</span>
+          <h1 id="dashTitle">Votre vigilance<br><span>protège des vies.</span></h1>
+          <p>Révisez les fondamentaux, équipez un travailleur et décodez les signaux de sécurité. Chaque bonne réponse vous rapporte des Points de Vigilance.</p>
+          <div class="hero-actions">
+            <a class="btn btn-accent" href="#quiz"><svg class="icon"><use href="#i-quiz"></use></svg>Commencer le parcours</a>
+            <a class="btn btn-ghost-light" href="#memo"><svg class="icon"><use href="#i-book"></use></svg>Ouvrir le mémo SST</a>
+          </div>
+          <div class="hero-meta">
+            <span><svg class="icon"><use href="#i-target"></use></svg>290 PV à gagner</span>
+            <span><svg class="icon"><use href="#i-check"></use></svg>100 % hors-ligne</span>
+            <span><svg class="icon"><use href="#i-trophy"></use></svg>Progression sauvegardée</span>
+          </div>
+        </div>
+        <aside class="score-panel" aria-label="Points de Vigilance">
+          <span class="panel-label">Points de Vigilance</span>
+          <div class="score-ring">
+            <svg viewBox="0 0 140 140" aria-hidden="true">
+              <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb36b"></stop><stop offset="1" stop-color="#ff7a33"></stop></linearGradient></defs>
+              <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
+              <circle class="ring-fg" id="scoreRing" cx="70" cy="70" r="58"></circle>
+            </svg>
+            <div class="ring-center"><strong id="heroScore">0</strong><span>sur 290 PV</span></div>
+          </div>
+          <div class="rank-row"><span class="rank-label">Rang actuel</span><span class="rank-pill" id="heroRank">Observateur</span></div>
+          <div class="bar rank-bar"><span id="rankBar" style="width:0%"></span></div>
+          <p class="rank-next" id="rankNext">60 PV pour devenir Vigilant</p>
+        </aside>
+      </div>
+
+      <div class="section-heading">
+        <div><span class="eyebrow dark">Parcours</span><h2>Vos 3 niveaux de vigilance</h2></div>
+        <span class="muted">Progression sauvegardée sur cet appareil</span>
+      </div>
+
+      <div class="levels-grid">
+        <article class="level-card" style="--level:#0ea5a4">
+          <div class="level-top"><span class="level-num">NIVEAU 01</span><span class="level-state" data-status="quiz">À découvrir</span></div>
+          <div class="level-icon"><svg class="icon"><use href="#i-quiz"></use></svg></div>
+          <h3>Les fondamentaux</h3>
+          <p>Définitions, droits, obligations et notions essentielles sur le feu.</p>
+          <div class="level-score-row"><span><strong data-score="quiz">0</strong> / 100 PV</span><span data-sub="quiz">0/10 bonnes réponses</span></div>
+          <div class="bar"><span data-bar="quiz"></span></div>
+          <a class="btn btn-primary btn-small" href="#quiz">Jouer au quiz <svg class="icon"><use href="#i-arrow"></use></svg></a>
+        </article>
+        <article class="level-card" style="--level:#ff7a33">
+          <div class="level-top"><span class="level-num">NIVEAU 02</span><span class="level-state" data-status="ppe">À découvrir</span></div>
+          <div class="level-icon"><svg class="icon"><use href="#i-ppe"></use></svg></div>
+          <h3>Bien s'équiper</h3>
+          <p>Choisissez les EPI adaptés à trois situations de travail à risque.</p>
+          <div class="level-score-row"><span><strong data-score="ppe">0</strong> / 90 PV</span><span data-sub="ppe">0/3 scénarios</span></div>
+          <div class="bar"><span data-bar="ppe"></span></div>
+          <a class="btn btn-primary btn-small" href="#ppe">Équiper le travailleur <svg class="icon"><use href="#i-arrow"></use></svg></a>
+        </article>
+        <article class="level-card" style="--level:#1466d8">
+          <div class="level-top"><span class="level-num">NIVEAU 03</span><span class="level-state" data-status="signals">À découvrir</span></div>
+          <div class="level-icon"><svg class="icon"><use href="#i-signals"></use></svg></div>
+          <h3>L'œil du safety</h3>
+          <p>Reconnaissez en un flash les formes et couleurs des signaux SST.</p>
+          <div class="level-score-row"><span><strong data-score="signals">0</strong> / 100 PV</span><span data-sub="signals">0/10 signaux</span></div>
+          <div class="bar"><span data-bar="signals"></span></div>
+          <a class="btn btn-primary btn-small" href="#signals">Lancer le flash <svg class="icon"><use href="#i-arrow"></use></svg></a>
+        </article>
+      </div>
+
+      <div class="dash-grid">
+        <div class="panel">
+          <span class="eyebrow dark">Tableau de bord</span>
+          <h3>Votre progression d'ensemble</h3>
+          <p class="muted small" style="margin-bottom:0">Les meilleurs scores sont conservés. Rejouez pour améliorer votre total.</p>
+          <div class="stat-grid">
+            <div class="stat"><span>Niveaux terminés</span><strong id="levelsDone">0 / 3</strong></div>
+            <div class="stat"><span>Quiz maîtrisé</span><strong id="quizMastered">0 / 10</strong></div>
+            <div class="stat"><span>Scénarios EPI</span><strong id="ppeDone">0 / 3</strong></div>
+            <div class="stat"><span>Signaux reconnus</span><strong id="signalsMastered">0 / 10</strong></div>
+          </div>
+          <div class="badge-row" id="badgeRow"></div>
+        </div>
+        <div class="panel tip-card">
+          <span class="eyebrow dark">Réflexe SST</span>
+          <h3>Un feu, c'est 4 éléments.</h3>
+          <p>Oxygène, chaleur, combustible et chaîne de réaction. Retirez un seul de ces éléments : le feu s'éteint rapidement.</p>
+          <div class="tetra-chips"><span>Oxygène</span><span>Chaleur</span><span>Combustible</span><span>Chaîne de réaction</span></div>
+          <a href="#memo" class="text-link">Voir la fiche mémo <svg class="icon"><use href="#i-arrow"></use></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="view" id="view-quiz" aria-labelledby="quizTitle">
+      <div class="subpage-head">
+        <div><span class="eyebrow dark">Niveau 1 · Les fondamentaux</span><h1 id="quizTitle">Quiz SST</h1><p>10 questions sur les définitions, les droits et obligations, le feu et la prévention.</p></div>
+        <div class="level-chip"><b>01</b>100 PV possibles</div>
+      </div>
+      <div id="quizApp"></div>
+    </section>
+
+    <!-- PPE -->
+    <section class="view" id="view-ppe" aria-labelledby="ppeTitle">
+      <div class="subpage-head">
+        <div><span class="eyebrow dark">Niveau 2 · Bien s'équiper</span><h1 id="ppeTitle">Équipez le travailleur</h1><p>Analysez la situation, sélectionnez les EPI indispensables, puis validez votre choix.</p></div>
+        <div class="level-chip"><b>02</b>90 PV possibles</div>
+      </div>
+      <div id="ppeApp"></div>
+    </section>
+
+    <!-- SIGNALS -->
+    <section class="view" id="view-signals" aria-labelledby="signalsTitle">
+      <div class="subpage-head">
+        <div><span class="eyebrow dark">Niveau 3 · L'œil du safety</span><h1 id="signalsTitle">Reconnaissance des signaux</h1><p>Un signal apparaît. Identifiez sa famille avant la fin du chrono.</p></div>
+        <div class="level-chip"><b>03</b>100 PV possibles</div>
+      </div>
+      <div id="signalsApp"></div>
+    </section>
+
+    <!-- MEMO -->
+    <section class="view" id="view-memo" aria-labelledby="memoTitle">
+      <div class="subpage-head">
+        <div><span class="eyebrow dark">Fiche mémo</span><h1 id="memoTitle">L'essentiel SST</h1><p>Les notions clés extraites du support de formation, à garder sous la main.</p></div>
+        <div class="level-chip"><b>SST</b>À réviser</div>
+      </div>
+      <div class="memo-grid">
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-alert"></use></svg>Accident du travail</h3>
+          <p class="quote">Un événement imprévu et soudain, attribuable à toute cause, survenant à une personne par le fait ou à l'occasion de son travail et qui entraîne une lésion professionnelle.</p>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-clock"></use></svg>Maladie professionnelle</h3>
+          <p class="quote">Une maladie causée par le milieu et les conditions de travail, après de longues années d'exercice.</p>
+          <p style="margin-top:10px">Exemples : maladies de la peau, cancers, maux de dos, stress, atteintes oculaires.</p>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-shield"></use></svg>Droits et obligations du travailleur</h3>
+          <div class="two-col-list">
+            <div><h4>Droits</h4><ul><li>Conditions de travail sécuritaires</li><li>Programme de prévention</li><li>Formation et information SST</li><li>Services de santé préventifs et curatifs</li><li>Droit de refus justifié</li><li>Participation à l'élimination des risques</li></ul></div>
+            <div><h4>Obligations</h4><ul><li>Protéger sa santé, sa sécurité et son intégrité</li><li>Ne pas mettre les autres en danger</li><li>Respecter les consignes et porter ses EPI</li></ul></div>
+          </div>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-ppe"></use></svg>Droits de la personne accidentée</h3>
+          <ul><li><strong>Assistance médicale :</strong> secours, évacuation, soins d'urgence, traitements.</li><li><strong>Indemnisation :</strong> pourcentage du salaire, remboursement de l'assistance.</li><li><strong>Réadaptation :</strong> adaptation à un nouvel environnement après une lésion grave.</li><li><strong>Retour au travail :</strong> fourniture d'un travail convenable.</li></ul>
+          <p style="margin-top:10px">L'employeur doit aussi fournir gratuitement les EPI et assurer formation, entraînement et supervision.</p>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-fire"></use></svg>Le feu et ses agresseurs</h3>
+          <p>Quatre éléments sont nécessaires à un incendie. Si l'on en retire un, le feu s'éteint rapidement.</p>
+          <div class="fire-grid">
+            <div class="fire-chip fire-blue">Oxygène</div><div class="fire-chip">Chaleur</div>
+            <div class="fire-chip fire-grey">Combustible</div><div class="fire-chip fire-red">Chaîne de réaction</div>
+          </div>
+          <p style="margin-top:11px"><strong>Agresseurs :</strong> chaleur, fumée, flammes et gaz de combustion.</p>
+          <p style="margin-top:8px"><strong>Prévention :</strong> rangement des produits, ventilation, gestion des déchets, extincteurs contrôlés, éloignement des sources d'étincelles, protection individuelle.</p>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-bolt"></use></svg>Risque électrique</h3>
+          <ul><li>Toujours faire appel à un électricien.</li><li>Ne jamais surcharger une prise.</li><li>Éviter les rallonges trop longues et non protégées.</li><li>Ne jamais toucher une personne agrippée à un fil électrique.</li><li>Utiliser un fusible du calibre indiqué.</li></ul>
+        </article>
+        <article class="memo-card signal-legend">
+          <h3><svg class="icon"><use href="#i-signals"></use></svg>Les 5 familles de signaux</h3>
+          <p>La forme et la couleur donnent le niveau d'information : obligation, interdiction, danger, secours ou lutte incendie.</p>
+          <div class="legend-grid">
+            <div class="legend-item"><div class="legend-shape obligation"><svg><use href="#i-casque"></use></svg></div><strong>Obligation</strong><small>Rond bleu, inscription blanche</small></div>
+            <div class="legend-item"><div class="legend-shape interdiction"><svg><use href="#i-cigarette"></use></svg></div><strong>Interdiction</strong><small>Rond blanc, contour rouge, cercle barré</small></div>
+            <div class="legend-item"><div class="legend-shape danger"><svg><use href="#i-bolt"></use></svg></div><strong>Danger</strong><small>Triangle jaune, inscription noire</small></div>
+            <div class="legend-item"><div class="legend-shape secours"><svg><use href="#i-cross"></use></svg></div><strong>Secours</strong><small>Carré vert, inscription blanche</small></div>
+            <div class="legend-item"><div class="legend-shape incendie"><svg><use href="#i-extincteur"></use></svg></div><strong>Incendie</strong><small>Carré rouge, inscription blanche</small></div>
+          </div>
+        </article>
+      </div>
+      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b>. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span><strong>Vigilance SST</strong> · Serious game santé &amp; sécurité au travail</span>
+    <span>Fichier unique et autonome · fonctionne hors-ligne</span>
+    <span>Points de Vigilance : <strong id="footScore">0</strong> / 290</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><svg class="icon"><use href="#i-check"></use></svg><span id="toastText">+10 PV</span></div>
+
+<div class="modal-backdrop" id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="modal">
+    <div class="modal-icon"><svg class="icon"><use href="#i-refresh"></use></svg></div>
+    <h3 id="resetTitle">Réinitialiser la progression ?</h3>
+    <p>Tous vos Points de Vigilance et vos meilleurs scores seront effacés de cet appareil. Cette action est irréversible.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-small" type="button" data-action="close-reset">Annuler</button>
+      <button class="btn btn-accent btn-small" type="button" data-action="reset-confirm">Tout effacer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Contenu pédagogique (extrait de sst.pdf) ---------- */
+  const QUIZ = [
+    {
+      tag: 'Définition', q: "Qu'est-ce qu'un accident du travail ?",
+      options: [
+        "Une maladie causée par le milieu de travail après de longues années.",
+        "Un événement imprévu et soudain, survenant par le fait ou à l'occasion du travail et entraînant une lésion professionnelle.",
+        "Un incident sans conséquence survenu hors du travail.",
+        "Une blessure volontaire causée par un collègue."
+      ],
+      answer: 1,
+      explain: "C'est la définition du support : un événement imprévu et soudain, attribuable à toute cause, survenant par le fait ou à l'occasion du travail et qui entraîne une lésion professionnelle."
+    },
+    {
+      tag: 'Définition', q: "Comment définit-on une maladie professionnelle ?",
+      options: [
+        "Un accident soudain survenu sur la route.",
+        "Une maladie contagieuse attrapée en dehors du travail.",
+        "Une maladie causée par le milieu et les conditions de travail, après de longues années d'exercice.",
+        "Une blessure causée par un outil défectueux."
+      ],
+      answer: 2,
+      explain: "La maladie professionnelle est causée par le milieu et les conditions de travail, suite à de longues années d'exercice. Exemples : maladies de la peau, cancers, maux de dos, stress, atteintes oculaires."
+    },
+    {
+      tag: 'Droits', q: "Parmi ces propositions, laquelle est un droit du travailleur ?",
+      options: [
+        "Fournir gratuitement les EPI à ses collègues.",
+        "Travailler sans formation pour gagner du temps.",
+        "Bénéficier de conditions de travail sécuritaires.",
+        "Masquer les risques pour éviter les retards."
+      ],
+      answer: 2,
+      explain: "Le travailleur a notamment droit à des conditions de travail sécuritaires, à l'information et à la formation SST, à des services de santé et au droit de refus justifié."
+    },
+    {
+      tag: 'Obligations', q: "Quelle est une obligation du travailleur ?",
+      options: [
+        "Acheter lui-même tous ses EPI.",
+        "Veiller à ne pas mettre en danger la santé ou la sécurité des autres.",
+        "Refuser systématiquement toute consigne de sécurité.",
+        "Dissimuler un incident survenu au travail."
+      ],
+      answer: 1,
+      explain: "Le travailleur doit prendre les mesures pour protéger sa santé, sa sécurité et son intégrité physique, et veiller à ne pas mettre en danger les autres."
+    },
+    {
+      tag: 'Droits', q: "Le droit de refus au travail s'exerce…",
+      options: [
+        "uniquement après un accident grave.",
+        "pour refuser toute tâche, sans justification.",
+        "seulement si l'employeur est absent.",
+        "lorsque les conditions le justifient, face à un danger pour la santé ou la sécurité."
+      ],
+      answer: 3,
+      explain: "Le droit de refus est reconnu lorsque les conditions le justifient. Il ne s'agit pas d'un refus arbitraire : il doit être fondé sur un danger réel pour la santé ou la sécurité."
+    },
+    {
+      tag: 'Feu', q: "Quels sont les quatre éléments nécessaires à un incendie ?",
+      options: [
+        "Oxygène, chaleur, combustible et chaîne de réaction.",
+        "Eau, sable, mousse et poudre.",
+        "Fumée, flammes, gaz et chaleur.",
+        "Électricité, métal, bois et plastique."
+      ],
+      answer: 0,
+      explain: "Le feu a besoin d'oxygène, de chaleur, d'un combustible et de la chaîne de réaction. Les fumées, flammes et gaz sont des agresseurs, pas les éléments du triangle du feu."
+    },
+    {
+      tag: 'Feu', q: "Que se passe-t-il si l'on retire un des quatre éléments du feu ?",
+      options: [
+        "Le feu double de volume.",
+        "Le feu s'éteint rapidement.",
+        "Le feu devient inoffensif mais continue.",
+        "Rien, les quatre éléments sont indépendants."
+      ],
+      answer: 1,
+      explain: "Retirer un des quatre éléments coupe la réaction : le feu s'éteint rapidement. C'est le principe de base de la lutte contre l'incendie."
+    },
+    {
+      tag: 'Feu', q: "Lors d'un incendie, quels sont les principaux agresseurs pour la santé ?",
+      options: [
+        "L'oxygène, le combustible et la chaîne de réaction.",
+        "Le bruit, la poussière et les vibrations.",
+        "La chaleur, la fumée, les flammes et les gaz de combustion.",
+        "L'eau, la mousse et le sable."
+      ],
+      answer: 2,
+      explain: "Le support identifie quatre agresseurs : la chaleur, la fumée, les flammes et les gaz de combustion."
+    },
+    {
+      tag: 'Accidenté', q: "Parmi ces droits, lequel est reconnu à une personne accidentée ?",
+      options: [
+        "Le droit de ne plus jamais travailler.",
+        "Une indemnisation uniquement en cas d'accident bénin.",
+        "La prise en charge des seuls frais de transport.",
+        "L'assistance médicale, l'indemnisation, la réadaptation et le retour au travail."
+      ],
+      answer: 3,
+      explain: "La personne accidentée a droit à une assistance médicale, à une indemnisation, à une réadaptation et à un retour au travail convenable."
+    },
+    {
+      tag: 'Prévention', q: "Quelle mesure aide à prévenir un incendie ?",
+      options: [
+        "Stocker les produits sans ventilation.",
+        "Éloigner les sources d'étincelles et installer des extincteurs contrôlés.",
+        "Laisser les déchets s'accumuler.",
+        "Désactiver les détecteurs de fumée."
+      ],
+      answer: 1,
+      explain: "La prévention passe notamment par le rangement des produits, la ventilation, la gestion des déchets, des extincteurs entretenus et l'éloignement des sources d'étincelles."
+    }
+  ];
+
+  const GEAR = [
+    { id: 'casque', name: 'Casque', hint: 'Protège la tête', icon: 'i-casque' },
+    { id: 'gants', name: 'Gants', hint: 'Protègent les mains', icon: 'i-gants' },
+    { id: 'chaussures', name: 'Chaussures', hint: 'Protègent les pieds', icon: 'i-chaussures' },
+    { id: 'lunettes', name: 'Lunettes', hint: 'Protègent les yeux', icon: 'i-lunettes' },
+    { id: 'masque', name: 'Masque', hint: 'Protège les voies respiratoires', icon: 'i-masque' },
+    { id: 'harnais', name: 'Harnais', hint: 'Protège contre les chutes', icon: 'i-harnais' }
+  ];
+
+  const PPE_SCENARIOS = [
+    {
+      title: 'Chantier extérieur', subtitle: 'Déchargement de matériaux',
+      desc: "Vous déchargez des palettes et manipulez des matériaux coupants. Des objets peuvent tomber et les charges peuvent rouler sur vos pieds.",
+      risks: ["Chute d'objets", 'Coupures', 'Écrasement des pieds'],
+      correct: ['casque', 'gants', 'chaussures'],
+      explain: "Le casque protège des chutes d'objets, les gants des coupures et les chaussures de sécurité de l'écrasement des pieds."
+    },
+    {
+      title: 'Travail en hauteur', subtitle: 'Contrôle sur échafaudage',
+      desc: "Vous effectuez un contrôle visuel en haut d'un échafaudage. Le risque principal est la chute de hauteur, avec possible chute d'outils.",
+      risks: ['Chute de hauteur', "Chute d'outils", 'Perte d\'équilibre'],
+      correct: ['casque', 'chaussures', 'harnais'],
+      explain: "Le harnais antichute est indispensable en hauteur. Le casque protège des chocs et les chaussures assurent une bonne accroche et protègent les pieds."
+    },
+    {
+      title: 'Laboratoire', subtitle: 'Manipulation de produit chimique',
+      desc: "Vous préparez une solution irritante. Des projections peuvent atteindre les mains et le visage, et des vapeurs peuvent être inhalées.",
+      risks: ['Projections', 'Contact cutané', 'Vapeurs irritantes'],
+      correct: ['gants', 'lunettes', 'masque'],
+      explain: "Des gants adaptés aux produits chimiques, des lunettes de protection et un masque respiratoire filtrant protègent des projections et des vapeurs."
+    }
+  ];
+
+  const SIGNALS = [
+    { cat: 'obligation', icon: 'i-casque', label: 'Porter un casque', hint: 'Rond bleu, inscription blanche.',
+      picto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265" width="265" height="265" fill-rule="evenodd"><defs><clipPath id="A"><path d="M221.57 708.803c0-19.506 15.813-35.32 35.32-35.32h0c19.506 0 35.319 15.814 35.319 35.32h0c0 19.507-15.813 35.32-35.319 35.32h0c-19.507 0-35.32-15.813-35.32-35.32"/></clipPath><clipPath id="B"><path d="M221.57 708.803c0-19.506 15.813-35.32 35.32-35.32h0c19.506 0 35.319 15.814 35.319 35.32h0c0 19.507-15.813 35.32-35.319 35.32h0c-19.507 0-35.32-15.813-35.32-35.32"/></clipPath></defs><g clip-path="url(#A)" transform="matrix(3.949 0 0 -3.949 -881.94993 2931.5975)"><path d="M256.897 742.369c-18.479 0-33.554-15.07-33.554-33.545s15.076-33.561 33.554-33.561 33.554 15.087 33.554 33.561-15.075 33.545-33.554 33.545" fill="#005387" fill-rule="nonzero"/></g><path d="M81.254 122.622a8.46 8.46 0 0 1 8.459-8.459 8.46 8.46 0 0 1 8.459 8.459 8.46 8.46 0 0 1-8.459 8.459 8.46 8.46 0 0 1-8.459-8.459m-46.34-17.757h180.478C218.421 27.693 95.678-18.181 58.004 84.514c-1.809 4.453-2.35 7.051-8.055 8.679l-8.961 2.558c-4.167.997-6.191 4.033-6.074 9.114" fill="#fff" fill-rule="nonzero"/><g clip-path="url(#B)" transform="matrix(3.885 0 0 -3.885 -868.02569 2886.4491)"><path d="M275.302 714.069l.018-.786c0-1.882-.299-3.784-.89-5.653-.207-.656-.638-1.381-1.184-2.3-1.753-2.949-4.401-7.405-4.401-17.21v-1.343a1.87 1.87 0 0 0-1.866-1.865h-15.845c-1.029 0-1.865.836-1.865 1.865v5.709h-1.82c-3.678.001-4.989 2.708-4.989 5.241v4.764h-2.775c-.553 0-1.057.223-1.349.597-.419.539-.345 1.299-.208 1.841l2.306 9.14h-2.039l-2.184-8.656c-.443-1.757.063-2.895.565-3.54.664-.851 1.751-1.359 2.909-1.359h.798v-2.787c0-4.262 2.729-7.143 6.808-7.216v-3.734a3.85 3.85 0 0 1 3.843-3.843h15.845a3.85 3.85 0 0 1 3.843 3.843v1.343c0 9.262 2.481 13.437 4.123 16.2.588.987 1.095 1.84 1.371 2.714a20.75 20.75 0 0 1 .982 6.249 20.39 20.39 0 0 1-.017.786z" fill="#fff" fill-rule="nonzero"/></g></svg>`
+    },
+    { cat: 'interdiction', icon: 'i-cigarette', label: 'Interdiction de fumer', hint: 'Rond blanc, contour rouge et cercle barré.',
+      picto: `<svg viewBox="0 0 265 265" xmlns="http://www.w3.org/2000/svg" width="265" height="265"><defs><clipPath id="A"><path d="M42.144 346.161h56.694v56.693H42.144z"/></clipPath></defs><path d="M251.75 132.5c0-65.86-53.39-119.25-119.25-119.25S13.25 66.64 13.25 132.5 66.64 251.75 132.5 251.75s119.25-53.39 119.25-119.25" fill="#fff" fill-rule="evenodd"/><g fill="none" stroke="#000" stroke-miterlimit="2.613"><path d="M105.454 202.838l115.277-77.956-11.341-16.774-115.277 77.961" stroke-width="9.4"/><path d="M93.938 215.871l-16.36-24.19m25.271 18.165l-16.36-24.195" stroke-width="7.383"/></g><g clip-path="url(#A)" transform="matrix(4.699819 0 0 -4.699819 -198.8744 1892.7827)"><path d="M57.532 382.199c.653-.941.455-2.919-.486-3.507l-.617-.419c-2.249-1.367-1.34-3.733-.271-4.251.807-.39 1.409-.255 2.877-.15 1.631.116 2.158-.212 2.667-1.026.845-1.351.072-2.563-.988-3.695-.515-.548-.739-.87-.946-2.202-.137-.965-.047-2.022.738-3.137m-7.298 15.611c.641-.899.281-2.133-.556-2.862l-.544-.51c-2.005-1.703-.737-3.897.4-4.24.858-.259 1.308-.113 2.761.125 1.192.196 1.921-.166 2.429-.98.56-.899-.231-2.115-.42-3.536-.086-.65-.219-1.135-.048-1.875.066-.403.527-1.946 1.312-3.061" fill="none" stroke="#000" stroke-width="1.429" stroke-miterlimit="2.613"/></g><path d="M238.369 132.5c0-58.47-47.399-105.869-105.869-105.869a105.42 105.42 0 0 0-67.175 24.04l149.366 148.554c14.802-18.209 23.678-41.429 23.678-66.725zM50.309 65.775c-14.801 18.21-23.678 41.429-23.678 66.725 0 58.47 47.399 105.869 105.869 105.869 25.503 0 48.899-9.019 67.175-24.04zM265 132.5C265 59.322 205.678 0 132.5 0S0 59.322 0 132.5 59.322 265 132.5 265 265 205.678 265 132.5" fill="#b71f2e" fill-rule="evenodd"/></svg>`
+    },
+    { cat: 'danger', icon: 'i-bolt', label: 'Danger électrique', hint: 'Triangle jaune, inscription noire.',
+      picto: `<svg viewBox="0 0 600 524" xmlns="http://www.w3.org/2000/svg"><path d="m300 16 284 492h-568z" fill="#F9A800" stroke-width="32" stroke="#000" stroke-linejoin="round"/><path d="m278 164-50 177 77-41-19 119-16-22 15 72 41-61-23 14 45-164-80 43 59-137"/></svg>`
+    },
+    { cat: 'secours', icon: 'i-cross', label: 'Premiers secours', hint: 'Carré vert, inscription blanche.',
+      picto: `<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" height="400px" width="400px" viewBox="0 0 200 200" version="1.1">
+	<g style="stroke:none; fill-rule:nonzero;"> 
+		<rect style="fill:#ffffff;" y="0" x="0" height="200" width="200" />
+		<rect style="fill:#237F52;" y="5" x="5" height="190" width="190" />
+		<rect style="fill:#ffffff;" x="75" y="25" width="50" height="150" /> 
+		<rect style="fill:#ffffff;" x="25" y="75" width="150" height="50" /> 
+	</g>
+</svg>`
+    },
+    { cat: 'incendie', icon: 'i-extincteur', label: 'Extincteur', hint: 'Carré rouge, inscription blanche.',
+      picto: `<svg viewBox="0 0 200 200"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="200"
+   width="200"
+   version="1.0"
+   id="svg22"
+   sodipodi:docname="ISO_7010_F001.svg"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)">
+  <defs
+     id="defs26" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     id="namedview24"
+     showgrid="false"
+     inkscape:zoom="3.7186616"
+     inkscape:cx="100"
+     inkscape:cy="100"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg22" />
+  <metadata
+     id="metadata2">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     d="m5.4189,5.423,189.16,0,0,189.15-189.16,0,0-189.15z"
+     fill-rule="evenodd"
+     fill="#9B2423"
+     id="path6" />
+  <path
+     d="m50,50,0-12-5,0c-16.763,17.711-15,11-15.935,25.799l-6.388,0.02405c0.323-24.823-1.677-17.823,21.782-38.958l8.541,0.135v-5h16v6c4.5631,0.1005,8.964,0.60059,13,2v9c-3.0449,0.87653-6.8647,1.3052-11,2l-0.208,10.963c10.633,3.325,17.309,7.857,17.208,19.037l-1,111h-54v-111c1.982-15.259,9.445-18.737,17-19z"
+     fill="#ffffff"
+     id="path8" />
+  <path
+     d="M140.84,85.974c-6.68-14.582-5.84-27.467-15.84-33.587,22.31-2.387,22.11,14.733,34.2,34.732,6.1612,10.209,9.2957,12.113,19.261,19.134-10.883,1.1136-23.49,2.7543-37.621-20.278z"
+     fill="#ffffff"
+     id="path10" />
+  <path
+     d="m178.22,148.83c-10.099,8.9642-25.395,7.8304-35.73,0.12286-9.0844-9.1994-13.227-19.521-28.507-22.043,24.088-14.798,35.883,7.0306,42.401,12.638,8.5275,6.854,14.675,6.4324,21.836,9.2819z"
+     fill="#ffffff"
+     id="path12" />
+  <path
+     d="m178.54,116.43,0,22.555c-33.72-6.9045-47.46-29.05-47.786-53.98,18.753,20.208,21.384,26.81,47.786,31.426z"
+     fill="#ffffff"
+     id="path14" />
+  <path
+     d="m178.4,180.29c-28.332,0.93009-42.124-5.7542-47.35-30.64,22.613,15.749,29.453,12.343,46.581,10.089,0.73556,6.7642,0.76879,13.754,0.76879,20.551z"
+     fill="#ffffff"
+     id="path16" />
+  <path
+     d="m177.52,73.365,0.75669,21.609c-20.65-11.003-28.25-32.075-21.28-51.974,7.0102,16.483,7.1352,23.157,20.522,30.365z"
+     fill="#ffffff"
+     id="path18" />
+  <rect
+     style="enable-background:accumulate;color:#000000;"
+     height="25"
+     width="40"
+     y="80"
+     x="40"
+     fill="#9B2423"
+     id="rect20" />
+</svg>`
+    },
+    { cat: 'obligation', icon: 'i-ear', label: 'Protection auditive obligatoire', hint: 'Rond bleu, inscription blanche.',
+      picto: `<svg viewBox="0 0 265 265" xmlns="http://www.w3.org/2000/svg" width="265" height="265"><path d="M0 132.499C0 59.32 59.319 0 132.5 0S265 59.321 265 132.5c0 73.184-59.32 132.5-132.5 132.5S0 205.684 0 132.499" fill="#005387"/><path d="M60.661 103.084c-.22-44.264 22.049-70.009 61.147-70.009h10.69 10.691c39.102 0 61.375 25.745 61.151 70.009m-139.273 8.487c0-35.992 30.188-65.162 67.431-65.162s67.436 29.17 67.436 65.162c0 14.347-12.885 67.074-14.85 73.999-7.53 26.515-23.717 45.56-52.586 45.56-28.796 0-45.29-19.26-52.71-46.009-1.887-6.797-14.721-59.203-14.721-73.55z" fill="none" stroke="#fff" stroke-miterlimit="3.864" stroke-width="7.816"/><path d="M197.693 129.324c1.351-7.549 2.24-13.979 2.24-17.752 0-1.837-1.97-5.451-1.97-5.451v-21.29h12.738v18.633c18.18 6.431 24.678 16.993 21.514 32.36l-6.362 30.907c-2.556 12.413-12.148 18.793-26.373 18.793h-14.382c.898-3.174 3.948-15.399 7.054-29.232l-2.795-.889c-5.12-1.621-5.207-6.284-4.488-9.683l2.094-9.825c.691-3.252 2.72-7.791 7.928-6.994zm-124.84 26.964c3.083 13.732 6.096 25.805 6.935 28.833l.113.403H65.516c-14.222 0-23.813-6.38-26.369-18.792l-6.362-30.908c-3.165-15.367 3.334-25.929 21.514-32.36V84.832h12.737v21.288s-1.97 3.615-1.97 5.451c0 3.783.889 10.214 2.245 17.754l2.793-.422c5.213-.797 7.242 3.742 7.933 6.995l2.09 9.825c.723 3.398.636 8.061-4.49 9.683z" fill="#fff"/></svg>`
+    },
+    { cat: 'interdiction', icon: 'i-phone', label: 'Téléphone interdit', hint: 'Rond blanc, contour rouge et cercle barré.',
+      picto: `<svg viewBox="0 0 265 265" xmlns="http://www.w3.org/2000/svg" width="265" height="265" fill-rule="evenodd"><path d="M251.75 132.5c0-65.86-53.39-119.25-119.25-119.25S13.25 66.64 13.25 132.5 66.64 251.75 132.5 251.75s119.25-53.39 119.25-119.25" fill="#fff"/><path d="M122.945 102.511l3.621 2.054 11.055-19.488-.867-.492 7.423-13.086 6.937 3.935-7.423 13.085-.867-.492-11.055 19.488 30.338 17.21-55.593 98-39.162-22.216zm-28.938 89.364l6.243 3.542a3.71 3.71 0 0 1 1.392 5.041 3.71 3.71 0 0 1-5.041 1.392l-6.243-3.542a3.71 3.71 0 0 1-1.392-5.041 3.71 3.71 0 0 1 5.041-1.392zm23.462-47.583a3.56 3.56 0 1 0-6.197-3.515c-.97 1.712-.371 3.886 1.341 4.856s3.885.371 4.856-1.341zm9.176 5.205a3.56 3.56 0 0 0-1.341-4.856c-1.712-.97-3.886-.371-4.857 1.34s-.371 3.886 1.341 4.857 3.886.37 4.856-1.341zm9.176 5.205a3.56 3.56 0 0 0-1.341-4.856c-1.712-.97-3.886-.371-4.856 1.341s-.371 3.886 1.341 4.856 3.886.371 4.856-1.341zm-23.524-1.292a3.56 3.56 0 0 0-1.341-4.856c-1.712-.97-3.886-.371-4.856 1.341s-.371 3.886 1.341 4.856 3.886.371 4.856-1.341zm9.176 5.205c.971-1.711.37-3.886-1.341-4.857s-3.886-.37-4.857 1.341-.37 3.886 1.341 4.857 3.886.37 4.857-1.341zm9.176 5.205c.971-1.711.37-3.886-1.341-4.856s-3.886-.371-4.857 1.341-.37 3.886 1.341 4.856 3.886.371 4.857-1.341zm-23.524-1.293c.971-1.711.37-3.886-1.341-4.856s-3.886-.371-4.857 1.341-.37 3.886 1.341 4.857 3.886.371 4.857-1.341zm9.175 5.205a3.56 3.56 0 0 0-1.341-4.856c-1.712-.97-3.886-.371-4.856 1.341s-.371 3.886 1.341 4.856 3.886.371 4.856-1.341zm9.176 5.205c.971-1.711.371-3.886-1.341-4.857s-3.886-.37-4.856 1.341-.371 3.886 1.341 4.857 3.886.37 4.856-1.341zm-23.524-1.292c.971-1.712.371-3.886-1.341-4.857s-3.886-.37-4.856 1.341-.371 3.886 1.341 4.857 3.885.37 4.856-1.341zm9.175 5.205c.971-1.711.371-3.886-1.34-4.856s-3.886-.371-4.857 1.341a3.56 3.56 0 0 0 1.341 4.856c1.712.97 3.886.371 4.856-1.341zm9.176 5.205c.971-1.711.371-3.886-1.341-4.857s-3.886-.37-4.856 1.341-.371 3.886 1.341 4.857 3.886.37 4.856-1.341zm-19.925-11.303c.478-.842.183-1.912-.66-2.39a1.75 1.75 0 0 0-2.389.66c-.477.842-.183 1.912.659 2.389s1.912.182 2.389-.66zm18.351 10.41c.478-.842.183-1.912-.659-2.39a1.75 1.75 0 0 0-2.389.66c-.477.842-.183 1.912.66 2.39a1.75 1.75 0 0 0 2.389-.66m62.635-114.078l4.457-1.231c6.087 22.048-7.012 45.139-29.06 51.227l-1.23-4.457c19.599-5.411 31.245-25.94 25.833-45.539zm-45.539-25.833c-19.6 5.411-31.245 25.94-25.833 45.539l-4.457 1.231c-6.087-22.048 7.011-45.139 29.059-51.227zm34.007 29.017l4.457-1.231c4.339 15.715-4.997 32.172-20.712 36.511l-1.231-4.457c13.266-3.663 21.148-17.558 17.485-30.824zm-30.824-17.485c-13.266 3.663-21.148 17.558-17.485 30.824l-4.457 1.23c-4.339-15.714 4.997-32.172 20.712-36.511zm18.751 20.819l4.457-1.231c2.508 9.084-2.889 18.597-11.973 21.106l-1.231-4.457c6.636-1.832 10.578-8.783 8.746-15.418zm-15.418-8.746c-6.636 1.832-10.578 8.783-8.746 15.418l-4.457 1.231c-2.509-9.084 2.888-18.598 11.972-21.106z"/><path d="M238.369 132.5c0-58.47-47.399-105.869-105.869-105.869a105.42 105.42 0 0 0-67.175 24.04l149.366 148.554c14.802-18.209 23.678-41.429 23.678-66.725zM50.309 65.775c-14.801 18.21-23.678 41.429-23.678 66.725 0 58.47 47.399 105.869 105.869 105.869 25.503 0 48.899-9.019 67.175-24.04zM265 132.5C265 59.322 205.678 0 132.5 0S0 59.322 0 132.5 59.322 265 132.5 265 265 205.678 265 132.5" fill="#b71f2e"/></svg>`
+    },
+    { cat: 'danger', icon: 'i-flame', label: "Risque d'incendie", hint: 'Triangle jaune, inscription noire.',
+      picto: `<svg viewBox="0 0 600 525"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="600"
+   height="525"
+   id="svg3069"
+   sodipodi:docname="ISO_7010_W021.svg"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="1.416633"
+     inkscape:cx="300"
+     inkscape:cy="262.5"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3069" />
+  <metadata
+     id="metadata3085">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3073" />
+  <path
+     d="M 597.6,499.6 313.8,8 C 310.9,3 305.6,0 299.9,0 294.2,0 288.9,3.1 286,8 L 2.2,499.6 c -2.9,5 -2.9,11.1 0,16 2.9,5 8.2,8 13.9,8 h 567.6 c 5.7,0 11,-3.1 13.9,-8 2.9,-5 2.9,-11.1 0,-16 z"
+     id="sign_border" />
+  <polygon
+     points="43.875,491.5 299.875,48.2 555.875,491.5 "
+     transform="matrix(1,0,0,0.99591458,0.125,2.0332437)"
+     id="polygon7"
+     style="fill:#f9a800;fill-opacity:1;stroke:none;overflow:visible" />
+  <path
+     d="m 254.20599,412.70348 c -23.76019,-10.34209 -33.09455,-30.39188 -35.71706,-76.71863 -1.06141,-18.75 -1.13418,-34.09091 -0.16169,-34.09091 0.97249,0 4.29519,1.35243 7.38379,3.00539 4.98824,2.66964 5.99798,1.23079 9.03804,-12.87878 1.88233,-8.7363 4.23436,-21.75719 5.22673,-28.9353 l 1.80431,-13.05112 9.88246,9.57846 9.88247,9.57846 2.12479,-22.67469 c 1.16864,-12.47108 1.16355,-27.05119 -0.0112,-32.40024 -2.00776,-9.14129 -1.75819,-9.52331 4.15445,-6.35896 3.45979,1.85162 7.7334,6.06261 9.4969,9.35775 5.94987,11.11759 9.05366,6.09812 9.05366,-14.64178 0,-13.03057 1.58382,-22.79895 4.2985,-26.51149 4.12866,-5.64628 4.38304,-5.54174 6.43797,2.64577 1.17671,4.68838 8.03213,15.42775 15.23426,23.86526 7.20212,8.43751 13.64618,18.9181 14.32012,23.29019 l 1.22533,7.94926 0.45403,-8.33333 c 0.57982,-10.64199 4.12382,-10.5344 13.32837,0.4046 6.66394,7.91962 10.13451,17.48588 16.069,44.29237 1.93451,8.73845 2.1136,8.82656 4.61879,2.27273 3.3383,-8.7334 6.86421,-8.63774 11.65621,0.31623 4.67369,8.73288 5.39436,24.48257 2.30806,50.44134 -2.07621,17.46282 -1.84452,19.07567 2.04276,14.21936 4.04869,-5.05797 4.53933,-4.56179 6.4043,6.47691 2.55164,15.10294 -2.7687,35.42364 -12.71633,48.56921 -9.97903,13.18712 -34.5024,24.60594 -52.92676,24.6443 -17.95679,0.0373 -20.42284,-3.76866 -7.41467,-11.44366 11.92246,-7.03443 24.03985,-22.06988 30.77215,-38.18258 4.52855,-10.83827 4.49197,-11.358 -0.68324,-9.71542 -4.83224,1.53367 -5.35055,0.0658 -4.4593,-12.62848 l 1.00842,-14.36388 -7.91642,11.36363 c -10.00264,14.35834 -14.15034,14.55197 -10.26464,0.47915 3.75124,-13.58587 0.74797,-33.0383 -7.09173,-45.93369 -3.29306,-5.41667 -6.46488,-9.84849 -7.04853,-9.84849 -0.58364,0 -1.01554,11.25 -0.95978,25 0.0994,24.51621 -3.69021,41.66667 -9.20685,41.66667 -1.52966,0 -4.90224,-5.11364 -7.49462,-11.36364 l -4.71341,-11.36363 -0.46317,10.60606 c -0.25472,5.83333 -0.22051,15.03788 0.076,20.45454 0.29655,5.41667 -0.85159,9.84849 -2.55145,9.84849 -5.08631,0 -12.55008,-12.86679 -14.502,-25 -2.00506,-12.46355 -6.84316,-15.36643 -7.57568,-4.54546 -0.9802,14.47946 -1.44911,15.88549 -5.04602,15.13052 -8.24799,-1.73121 3.85695,30.08491 17.24971,45.33839 5.20849,5.93215 9.46999,11.62842 9.46999,12.65842 0,3.31249 -16.373,1.76328 -26.09704,-2.4693 z M 185,455 l 0,-25 230,0 0,25 z"
+     id="path3526"
+     style="fill:#000000" />
+</svg>`
+    },
+    { cat: 'secours', icon: 'i-civiere', label: 'Civière de premiers secours', hint: 'Carré vert, inscription blanche.',
+      picto: `<svg xmlns="http://w3.org" viewBox="0 0 100 100" width="100%" height="100%">
+  <rect width="100" height="100" fill="#2E7D32"/>
+  <!-- Petite croix de premiers secours dans le coin -->
+  <path d="M76,18 H82 V12 H86 V18 H92 V22 H86 V28 H82 V22 H76 Z" fill="#FFFFFF"/>
+  <!-- Les deux barres du brancard -->
+  <line x1="10" y1="52" x2="90" y2="52" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+  <line x1="10" y1="58" x2="90" y2="58" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+  <!-- Les pieds/supports du brancard -->
+  <path d="M25,58 L25,65 M75,58 L75,65" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+  <!-- Le corps du patient allongé au milieu -->
+  <circle cx="32" cy="42" r="5" fill="#FFFFFF"/>
+  <path d="M40,44 L72,44 C76,44 76,52 72,52 L40,52 Z" fill="#FFFFFF"/>
+</svg>`
+    },
+    { cat: 'incendie', icon: 'i-boyau', label: "Boyau d'incendie", hint: 'Carré rouge, inscription blanche.',
+      picto: `<svg
+   width="52.916664mm"
+   height="52.916664mm"
+   viewBox="0 0 52.916664 52.916664"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="Zeichnung.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.72426347"
+     inkscape:cx="-47.634599"
+     inkscape:cy="4.8324956"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-117.475,-147.10834)">
+    <path
+       d="m 118.79792,148.43124 h 50.27084 v 50.27084 h -50.27084 z"
+       fill-rule="evenodd"
+       fill="#9B2423"
+       id="path6"
+       style="fill:#9b2423;fill-opacity:1;stroke-width:0.264583"
+       inkscape:label="1" />
+    <path
+       id="path14553-3-5"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0365421px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 125.86852,154.82997 -0.95714,0.95719 v 24.74278 l 0.95714,0.95668 h 1.25302 v -26.65665 z m 16.68361,0 v 26.65665 h 1.253 l 0.95715,-0.95668 v -11.92393 h 0.68827 c 0.24447,1.49902 1.53851,2.60044 3.05726,2.60218 1.71287,6e-5 3.10144,-1.38858 3.10137,-3.10154 7e-5,-1.71297 -1.3885,-3.10161 -3.10137,-3.10155 -1.51875,0.002 -2.81279,1.10316 -3.05726,2.60218 h -0.68827 v -11.82012 l -0.95715,-0.95719 z m -13.66164,1.25255 c -0.56598,0 -1.02203,0.45556 -1.02203,1.02157 v 28.42777 h 2.04354 v -28.42777 c 0,-0.56601 -0.45553,-1.02157 -1.02151,-1.02157 z m 2.97317,0 c -0.56598,0 -1.02151,0.45556 -1.02151,1.02157 v 22.10841 c 0,0.56601 0.45553,1.02156 1.02151,1.02156 0.56598,0 1.02151,-0.45555 1.02151,-1.02156 v -22.10841 c 0,-0.56601 -0.45553,-1.02157 -1.02151,-1.02157 z m 2.97317,0 c -0.56598,0 -1.02151,0.45556 -1.02151,1.02157 v 22.10841 c 0,0.56601 0.45553,1.02156 1.02151,1.02156 0.56598,0 1.02151,-0.45555 1.02151,-1.02156 v -22.10841 c 0,-0.56601 -0.45553,-1.02157 -1.02151,-1.02157 z m 2.97317,0 c -0.56598,0 -1.02151,0.45556 -1.02151,1.02157 v 22.10841 c 0,0.56601 0.45553,1.02156 1.02151,1.02156 0.56598,0 1.02151,-0.45555 1.02151,-1.02156 v -22.10841 c 0,-0.56601 -0.45553,-1.02157 -1.02151,-1.02157 z m 2.97317,0 c -0.56598,0 -1.02151,0.45556 -1.02151,1.02157 v 22.10841 c 0,0.56601 0.45553,1.02156 1.02151,1.02156 0.56598,0 1.02203,-0.45555 1.02203,-1.02156 v -22.10841 c 0,-0.56601 -0.45605,-1.02157 -1.02203,-1.02157 z m 17.28623,3.86512 c -0.45304,1.71043 -0.58981,3.75566 -0.25954,5.50803 0.66564,2.49571 2.17535,4.43002 4.06216,6.0349 0.33296,0.29962 0.70927,0.50544 1.08328,0.69869 v -5.18671 c -1.12149,-0.17787 -1.96255,-1.18195 -2.56779,-2.06752 -1.01965,-1.57024 -1.66994,-3.28718 -2.31811,-4.98739 z m -6.46696,2.26011 c -0.25809,6.8e-4 -0.53279,0.01 -0.80766,0.0192 1.49056,1.14094 1.95508,2.8567 2.44581,4.47557 0.51166,1.77921 1.149,3.48529 2.15617,4.95675 1.88892,2.50683 4.75204,3.61288 7.55854,2.80722 -2.48282,-1.03311 -4.01109,-3.45188 -5.15426,-5.53034 -1.03631,-1.63828 -1.32962,-3.70902 -2.70949,-5.05487 -1.00982,-0.95777 -2.15742,-1.67596 -3.48911,-1.67353 z m -3.59397,3.59882 v 1.80071 h -1.80061 c 0.19716,-0.90033 0.90033,-1.60353 1.80061,-1.80071 z m 0.99919,5.3e-4 c 0.89994,0.19728 1.60283,0.90021 1.8001,1.80019 h -1.8001 z m -2.7998,2.79892 h 1.80061 v 1.80071 c -0.90028,-0.19718 -1.60345,-0.90038 -1.80061,-1.80071 z m 2.7998,0 h 1.8001 c -0.19727,0.89999 -0.90016,1.60292 -1.8001,1.80019 z m 2.99653,1.1015 c -0.17432,3.20265 0.90673,5.86631 2.84911,8.091 2.05645,2.40236 5.34247,3.62553 8.102,4.51086 v -5.18671 c -1.76536,-0.0346 -3.37342,-0.62088 -4.73019,-1.43787 -2.68185,-1.62696 -4.58614,-3.49442 -6.22092,-5.97728 z m -0.48947,8.80059 c -1.0209,-0.0478 -2.06238,0.28648 -3.22699,1.16587 2.50281,0.59607 3.67235,2.20675 5.06861,3.8864 1.1169,1.42612 2.59844,2.27397 4.23085,2.56221 2.0331,0.34221 3.96853,0.0254 5.36811,-1.47317 -3.25564,-0.57852 -5.16662,-2.58013 -7.38725,-4.40756 -1.46222,-0.97889 -2.74075,-1.67227 -4.05333,-1.73375 z m 0.47857,6.32611 c 0.29501,1.64233 0.81213,3.18555 1.74559,4.43871 2.56805,3.0273 5.90332,2.97126 9.21642,3.03043 v -5.18672 c -2.10258,0.49304 -4.67907,0.72755 -6.62735,0.25176 -1.77679,-0.36472 -3.11517,-1.41791 -4.33466,-2.53418 z m -24.1295,2.16926 0.53982,2.64838 0.48895,-0.007 0.48844,0.007 0.5393,-2.64838 h -0.0104 -2.03523 z"
+       sodipodi:nodetypes="cccccccccccccccccccccssccsssssssssssssssssssssssssssssscccccccsccccccssccccccccccccccccccccccscccccscccccccccccccc"
+       inkscape:label="1" />
+  </g>
+</svg>`
+    }
+  ];
+
+  const CATEGORIES = [
+    { id: 'obligation', label: 'Obligation' },
+    { id: 'interdiction', label: 'Interdiction' },
+    { id: 'danger', label: 'Danger' },
+    { id: 'secours', label: 'Secours' },
+    { id: 'incendie', label: 'Incendie' }
+  ];
+
+  const RANKS = [
+    { min: 0, name: 'Observateur' },
+    { min: 60, name: 'Vigilant' },
+    { min: 140, name: 'Gardien SST' },
+    { min: 220, name: 'Expert SST' },
+    { min: 290, name: 'Légende SST' }
+  ];
+
+  const MAX = QUIZ.length * 10 + PPE_SCENARIOS.length * 30 + SIGNALS.length * 10;
+  const STORAGE_KEY = 'vigilance_sst_v1';
+  const FLASH_SECONDS = 12;
+
+  /* ---------- État ---------- */
+  function defaultState() {
+    return {
+      version: 1,
+      quizBest: QUIZ.map(() => false),
+      ppeBest: PPE_SCENARIOS.map(() => 0),
+      ppePlayed: PPE_SCENARIOS.map(() => false),
+      signalBest: SIGNALS.map(() => 0),
+      completed: { quiz: false, ppe: false, signals: false }
+    };
+  }
+
+  function loadState() {
+    const d = defaultState();
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return d;
+      const s = JSON.parse(raw);
+      return {
+        version: 1,
+        quizBest: d.quizBest.map((_, i) => !!(s.quizBest && s.quizBest[i])),
+        ppeBest: d.ppeBest.map((_, i) => Math.max(0, Math.min(30, Number(s.ppeBest && s.ppeBest[i]) || 0))),
+        ppePlayed: d.ppePlayed.map((_, i) => !!(s.ppePlayed && (s.ppePlayed[i] || (s.ppeBest && s.ppeBest[i] > 0)))),
+        signalBest: d.signalBest.map((_, i) => (Number(s.signalBest && s.signalBest[i]) >= 10 ? 10 : 0)),
+        completed: {
+          quiz: !!(s.completed && s.completed.quiz),
+          ppe: !!(s.completed && s.completed.ppe),
+          signals: !!(s.completed && s.completed.signals)
+        }
+      };
+    } catch (e) {
+      return d;
+    }
+  }
+
+  let state = loadState();
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* stockage indisponible */ }
+  }
+
+  function sum(arr) { return arr.reduce((a, b) => a + b, 0); }
+  function quizScore() { return state.quizBest.filter(Boolean).length * 10; }
+  function ppeScore() { return sum(state.ppeBest); }
+  function signalScore() { return sum(state.signalBest); }
+  function totalScore() { return quizScore() + ppeScore() + signalScore(); }
+
+  function rankInfo(total) {
+    let idx = 0;
+    RANKS.forEach((r, i) => { if (total >= r.min) idx = i; });
+    const cur = RANKS[idx], next = RANKS[idx + 1] || null;
+    const pct = next ? Math.round(((total - cur.min) / (next.min - cur.min)) * 100) : 100;
+    return { current: cur, next, pct: Math.max(0, Math.min(100, pct)), remaining: next ? next.min - total : 0 };
+  }
+
+  const ui = {
+    view: 'dashboard',
+    quiz: { active: false, index: 0, selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 },
+    ppe: {
+      scenario: 0,
+      selections: PPE_SCENARIOS.map(() => []),
+      validated: PPE_SCENARIOS.map(() => false),
+      results: PPE_SCENARIOS.map(() => null)
+    },
+    signals: {
+      active: false, finished: false, index: 0, answered: false, lastAnswer: null,
+      lastCorrect: false, gained: 0, runCorrect: 0, runScore: 0,
+      remaining: FLASH_SECONDS, deadline: 0, timer: null
+    }
+  };
+
+  /* ---------- Utilitaires UI ---------- */
+  function icon(name, cls) {
+    return '<svg class="icon ' + (cls || '') + '" aria-hidden="true"><use href="#' + name + '"></use></svg>';
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function gearName(id) {
+    const g = GEAR.find(function (x) { return x.id === id; });
+    return g ? g.name : id;
+  }
+  function categoryLabel(id) {
+    const c = CATEGORIES.find(function (x) { return x.id === id; });
+    return c ? c.label : id;
+  }
+  function levelStats() {
+    return {
+      quiz: { score: quizScore(), max: QUIZ.length * 10, done: state.completed.quiz, sub: state.quizBest.filter(Boolean).length + '/' + QUIZ.length + ' bonnes réponses' },
+      ppe: { score: ppeScore(), max: PPE_SCENARIOS.length * 30, done: state.completed.ppe, sub: state.ppePlayed.filter(Boolean).length + '/' + PPE_SCENARIOS.length + ' scénarios' },
+      signals: { score: signalScore(), max: SIGNALS.length * 10, done: state.completed.signals, sub: state.signalBest.filter(function (x) { return x >= 10; }).length + '/' + SIGNALS.length + ' signaux' }
+    };
+  }
+
+  let toastTimer = null;
+  function toast(message, kind) {
+    const t = $('#toast');
+    if (!t) return;
+    $('#toastText').textContent = message;
+    t.className = 'toast show ' + (kind || '');
+    const ic = t.querySelector('use');
+    if (ic) ic.setAttribute('href', kind === 'bad' ? '#i-alert' : '#i-check');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.className = 'toast'; }, 2500);
+  }
+
+  function confetti(count) {
+    const colors = ['#ff7a33', '#0ea5a4', '#f5b82e', '#1466d8', '#1c9c63', '#ffb36b'];
+    const n = count || 80;
+    for (let i = 0; i < n; i++) {
+      const p = document.createElement('i');
+      p.className = 'confetti';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.animationDelay = (Math.random() * 0.55).toFixed(2) + 's';
+      p.style.animationDuration = (2.1 + Math.random() * 1.5).toFixed(2) + 's';
+      p.style.setProperty('--dx', (Math.random() * 220 - 110).toFixed(0) + 'px');
+      p.style.width = (5 + Math.random() * 6).toFixed(0) + 'px';
+      p.style.height = (9 + Math.random() * 8).toFixed(0) + 'px';
+      document.body.appendChild(p);
+      setTimeout(function () { p.remove(); }, 4200);
+    }
+  }
+
+  /* ---------- Score & dashboard ---------- */
+  function updateScoreUI(animate) {
+    const total = totalScore();
+    const ri = rankInfo(total);
+    const top = $('#topScore');
+    if (top) top.textContent = total;
+    const hero = $('#heroScore');
+    if (hero) hero.textContent = total;
+    const rank = $('#heroRank');
+    if (rank) rank.textContent = ri.current.name;
+    const bar = $('#rankBar');
+    if (bar) bar.style.width = ri.pct + '%';
+    const next = $('#rankNext');
+    if (next) next.textContent = ri.next ? ri.remaining + ' PV pour devenir ' + ri.next.name : 'Rang maximal atteint. Bravo !';
+    const ring = $('#scoreRing');
+    if (ring) {
+      const circ = 2 * Math.PI * 58;
+      ring.style.strokeDashoffset = String(circ * (1 - total / MAX));
+    }
+    const foot = $('#footScore');
+    if (foot) foot.textContent = total;
+
+    const stats = levelStats();
+    Object.keys(stats).forEach(function (key) {
+      const s = stats[key];
+      $$('[data-score="' + key + '"]').forEach(function (el) { el.textContent = s.score; });
+      $$('[data-sub="' + key + '"]').forEach(function (el) { el.textContent = s.sub; });
+      $$('[data-bar="' + key + '"]').forEach(function (el) { el.style.width = (s.score / s.max * 100) + '%'; });
+      $$('[data-status="' + key + '"]').forEach(function (el) {
+        el.textContent = s.done ? 'Terminé' : (s.score > 0 ? 'En cours' : 'À découvrir');
+        el.className = 'level-state ' + (s.done ? 'done' : (s.score > 0 ? 'started' : ''));
+      });
+    });
+
+    const levelsDone = Object.keys(state.completed).filter(function (k) { return state.completed[k]; }).length;
+    const setText = function (id, value) { const el = document.getElementById(id); if (el) el.textContent = value; };
+    setText('levelsDone', levelsDone + ' / 3');
+    setText('quizMastered', state.quizBest.filter(Boolean).length + ' / ' + QUIZ.length);
+    setText('ppeDone', state.ppePlayed.filter(Boolean).length + ' / ' + PPE_SCENARIOS.length);
+    setText('signalsMastered', state.signalBest.filter(function (x) { return x >= 10; }).length + ' / ' + SIGNALS.length);
+
+    const badges = [
+      { label: 'Premier pas', icon: 'i-spark', ok: total > 0 },
+      { label: 'Quiz terminé', icon: 'i-quiz', ok: state.completed.quiz },
+      { label: 'Bien équipé', icon: 'i-ppe', ok: state.completed.ppe },
+      { label: 'Œil de lynx', icon: 'i-signals', ok: state.completed.signals },
+      { label: 'Légende SST', icon: 'i-trophy', ok: total >= MAX }
+    ];
+    const row = $('#badgeRow');
+    if (row) {
+      row.innerHTML = badges.map(function (b) {
+        return '<span class="badge ' + (b.ok ? 'done' : 'locked') + '" title="' + (b.ok ? 'Badge débloqué' : 'Badge à débloquer') + '">' +
+          icon(b.ok ? 'i-check' : b.icon) + esc(b.label) + '</span>';
+      }).join('');
+    }
+
+    if (animate) {
+      const pill = $('.score-pill');
+      if (pill) {
+        pill.classList.add('bump');
+        setTimeout(function () { pill.classList.remove('bump'); }, 300);
+      }
+    }
+  }
+
+  /* ---------- Navigation ---------- */
+  const VIEWS = ['dashboard', 'quiz', 'ppe', 'signals', 'memo'];
+
+  function pauseSignalTimer() {
+    if (ui.signals.timer) {
+      clearInterval(ui.signals.timer);
+      ui.signals.timer = null;
+      if (ui.signals.deadline) {
+        ui.signals.remaining = Math.max(0, (ui.signals.deadline - Date.now()) / 1000);
+      }
+    }
+  }
+
+  function showView(view) {
+    if (VIEWS.indexOf(view) === -1) view = 'dashboard';
+    if (ui.view === 'signals' && view !== 'signals') pauseSignalTimer();
+    ui.view = view;
+    $$('.view').forEach(function (el) { el.classList.toggle('active', el.id === 'view-' + view); });
+    $$('[data-nav]').forEach(function (el) {
+      const active = el.getAttribute('data-nav') === view;
+      el.classList.toggle('active', active);
+      if (active) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+    });
+    if (view === 'dashboard') updateScoreUI();
+    if (view === 'quiz') renderQuiz();
+    if (view === 'ppe') renderPPE();
+    if (view === 'signals') renderSignals();
+    window.scrollTo(0, 0);
+  }
+
+  function currentHashView() {
+    const v = (location.hash || '#dashboard').replace('#', '');
+    return VIEWS.indexOf(v) !== -1 ? v : 'dashboard';
+  }
+
+  function scrollPageTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('a[href^="#"]');
+    if (link && !link.hasAttribute('data-action')) {
+      const view = link.getAttribute('href').slice(1);
+      if (VIEWS.indexOf(view) !== -1) {
+        e.preventDefault();
+        if (ui.view === view) showView(view);
+        else location.hash = view;
+      }
+    }
+  });
+
+  window.addEventListener('hashchange', function () { showView(currentHashView()); });
+
+  /* ---------- Reset ---------- */
+  function openReset() {
+    const m = $('#resetModal');
+    if (m) m.classList.add('open');
+    const btn = m && m.querySelector('[data-action="close-reset"]');
+    if (btn) btn.focus();
+  }
+  function closeReset() {
+    const m = $('#resetModal');
+    if (m) m.classList.remove('open');
+  }
+  function confirmReset() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    state = defaultState();
+    ui.quiz = { active: false, index: 0, selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 };
+    ui.ppe = {
+      scenario: 0,
+      selections: PPE_SCENARIOS.map(function () { return []; }),
+      validated: PPE_SCENARIOS.map(function () { return false; }),
+      results: PPE_SCENARIOS.map(function () { return null; })
+    };
+    pauseSignalTimer();
+    ui.signals = {
+      active: false, finished: false, index: 0, answered: false, lastAnswer: null,
+      lastCorrect: false, gained: 0, runCorrect: 0, runScore: 0,
+      remaining: FLASH_SECONDS, deadline: 0, timer: null
+    };
+    closeReset();
+    updateScoreUI();
+    showView('dashboard');
+    if (location.hash !== '#dashboard') history.replaceState(null, '', '#dashboard');
+    toast('Progression réinitialisée');
+  }
+
+  /* ---------- Niveau 1 : quiz ---------- */
+  function quizSideHTML() {
+    const best = quizScore();
+    const items = QUIZ.map(function (_, i) {
+      return '<li class="' + (state.quizBest[i] ? 'ok' : '') + '"><span class="check-dot">' + icon('i-check') + '</span>Question ' + (i + 1) + '</li>';
+    }).join('');
+    return '<aside class="quiz-side"><div class="panel coach-card">' +
+      '<span class="eyebrow dark">Votre progression</span>' +
+      '<div class="coach-score"><strong>' + best + '</strong><span>/ 100 PV</span></div>' +
+      '<div class="bar"><span style="width:' + best + '%"></span></div>' +
+      '<ul class="check-list">' + items + '</ul>' +
+      '<div class="mini-tip"><strong>Astuce :</strong> une mauvaise réponse ne fait pas perdre de points. Relisez l\'explication et retentez votre chance.</div>' +
+      '</div></aside>';
+  }
+
+  function quizStartHTML() {
+    return '<div class="quiz-layout"><div class="card quiz-main start-card">' +
+      '<div class="start-emblem">' + icon('i-quiz') + '</div>' +
+      '<span class="eyebrow dark">Prêt pour le niveau 1 ?</span>' +
+      '<h2>Testez vos fondamentaux SST</h2>' +
+      '<p>10 questions, 10 Points de Vigilance par bonne réponse. Les définitions, droits, obligations et notions sur le feu n\'auront plus de secrets pour vous.</p>' +
+      '<div class="start-facts"><span class="badge">' + icon('i-clock') + '5 à 8 minutes</span><span class="badge">' + icon('i-target') + '100 PV</span><span class="badge">' + icon('i-refresh') + 'Rejouable</span></div>' +
+      '<button class="btn btn-accent" type="button" data-action="quiz-start">' + icon('i-arrow') + 'Démarrer le quiz</button>' +
+      '</div>' + quizSideHTML() + '</div>';
+  }
+
+  function quizSummaryHTML() {
+    const runScore = ui.quiz.runCorrect * 10;
+    const best = quizScore();
+    const stars = Math.round(runScore / 25);
+    return '<div class="quiz-layout"><div class="card quiz-main result-card">' +
+      '<div class="result-icon">' + icon('i-trophy') + '</div>' +
+      '<span class="eyebrow dark">Niveau 1 terminé</span>' +
+      '<h2>' + runScore + '<small> / 100 PV</small></h2>' +
+      '<div class="stars">' + [0,1,2,3].map(function (i) { return '<span class="' + (i < stars ? '' : 'off') + '">★</span>'; }).join('') + '</div>' +
+      '<p>' + (runScore >= 80 ? 'Excellent réflexe SST ! Vous maîtrisez les fondamentaux.' : runScore >= 50 ? 'Bonne base ! Relisez les explications pour viser le sans-faute.' : 'Le risque, c\'est d\'improviser. Relisez le mémo puis retentez le quiz.') + '</p>' +
+      '<div class="result-stats"><div class="result-stat"><span>Bonnes réponses</span><strong>' + ui.quiz.runCorrect + ' / ' + QUIZ.length + '</strong></div><div class="result-stat"><span>Meilleur score</span><strong>' + best + ' PV</strong></div></div>' +
+      '<div class="hero-actions"><button class="btn btn-primary" type="button" data-action="quiz-restart">' + icon('i-refresh') + 'Rejouer</button><a class="btn btn-accent" href="#ppe">Passer au niveau 2' + icon('i-arrow') + '</a></div>' +
+      '</div>' + quizSideHTML() + '</div>';
+  }
+
+  function renderQuiz() {
+    const app = $('#quizApp');
+    if (!app) return;
+    if (!ui.quiz.active) { app.innerHTML = quizStartHTML(); return; }
+    if (ui.quiz.index >= QUIZ.length) { app.innerHTML = quizSummaryHTML(); return; }
+    const q = QUIZ[ui.quiz.index];
+    const letters = ['A', 'B', 'C', 'D'];
+    const answered = ui.quiz.answered;
+    const options = q.options.map(function (opt, i) {
+      let cls = 'option';
+      if (!answered && ui.quiz.selected === i) cls += ' selected';
+      if (answered) {
+        if (i === q.answer) cls += ' correct';
+        else if (i === ui.quiz.selected) cls += ' wrong';
+        else cls += ' dim';
+      }
+      return '<button class="' + cls + '" type="button" data-action="quiz-select" data-index="' + i + '"' + (answered ? ' disabled' : '') + '>' +
+        '<span class="key">' + letters[i] + '</span><span>' + esc(opt) + '</span></button>';
+    }).join('');
+    let feedback = '';
+    if (answered) {
+      const correct = ui.quiz.lastCorrect;
+      feedback = '<div class="feedback ' + (correct ? 'good' : 'bad') + '" role="status">' +
+        '<div class="feedback-head">' + icon(correct ? 'i-check' : 'i-x') + (correct ? 'Bonne réponse !' : 'Pas tout à fait…') + (ui.quiz.gained ? ' <span class="tag" style="margin-left:auto">+' + ui.quiz.gained + ' PV</span>' : '') + '</div>' +
+        '<p><strong>Réponse : ' + esc(q.options[q.answer]) + '</strong><br>' + esc(q.explain) + '</p></div>';
+    }
+    const actions = answered
+      ? '<div class="quiz-actions"><button class="btn btn-accent" type="button" data-action="quiz-next">' + (ui.quiz.index === QUIZ.length - 1 ? 'Voir mon résultat' : 'Question suivante') + icon('i-arrow') + '</button></div>'
+      : '<div class="quiz-actions"><button class="btn btn-primary" id="validateQuiz" type="button" data-action="quiz-validate"' + (ui.quiz.selected === null ? ' disabled' : '') + '>Valider ma réponse</button><span class="muted small">Une seule réponse possible.</span></div>';
+    app.innerHTML = '<div class="quiz-layout"><div class="card quiz-main">' +
+      '<div class="quiz-meta"><span class="tag">Question ' + (ui.quiz.index + 1) + ' / ' + QUIZ.length + '</span><span class="muted">' + esc(q.tag) + ' · ' + (state.quizBest[ui.quiz.index] ? 'déjà maîtrisée' : 'à valider') + '</span></div>' +
+      '<div class="bar quiz-progress"><span style="width:' + ((ui.quiz.index) / QUIZ.length * 100) + '%"></span></div>' +
+      '<h2 class="question">' + esc(q.q) + '</h2>' +
+      '<div class="options" id="quizOptions">' + options + '</div>' +
+      feedback + actions +
+      '</div>' + quizSideHTML() + '</div>';
+  }
+
+  function startQuiz() {
+    ui.quiz = { active: true, index: 0, selected: null, answered: false, lastCorrect: false, gained: 0, runCorrect: 0 };
+    renderQuiz();
+    scrollPageTop();
+  }
+
+  function validateQuiz() {
+    if (!ui.quiz.active || ui.quiz.answered || ui.quiz.selected === null) return;
+    const q = QUIZ[ui.quiz.index];
+    const correct = ui.quiz.selected === q.answer;
+    const already = state.quizBest[ui.quiz.index];
+    ui.quiz.answered = true;
+    ui.quiz.lastCorrect = correct;
+    ui.quiz.gained = 0;
+    if (correct) {
+      ui.quiz.runCorrect++;
+      if (!already) {
+        state.quizBest[ui.quiz.index] = true;
+        ui.quiz.gained = 10;
+        saveState();
+        updateScoreUI(true);
+        toast('+10 Points de Vigilance', 'good');
+      } else {
+        toast('Question déjà maîtrisée : 0 PV supplémentaires');
+      }
+    } else {
+      toast('Mauvaise réponse — lisez l\'explication', 'bad');
+    }
+    renderQuiz();
+  }
+
+  function nextQuiz() {
+    if (!ui.quiz.active || !ui.quiz.answered) return;
+    if (ui.quiz.index < QUIZ.length - 1) {
+      ui.quiz.index++;
+      ui.quiz.selected = null;
+      ui.quiz.answered = false;
+      ui.quiz.lastCorrect = false;
+      ui.quiz.gained = 0;
+      renderQuiz();
+      scrollPageTop();
+    } else {
+      ui.quiz.index = QUIZ.length;
+      state.completed.quiz = true;
+      saveState();
+      updateScoreUI();
+      renderQuiz();
+      const score = ui.quiz.runCorrect * 10;
+      if (score >= 80) confetti(95);
+      toast('Niveau 1 terminé !', 'good');
+    }
+  }
+
+  function restartQuiz() {
+    startQuiz();
+  }
+
+  /* ---------- Niveau 2 : EPI ---------- */
+  function workerSVG(selected) {
+    const on = function (id) { return selected.indexOf(id) !== -1 ? ' on' : ''; };
+    return '<svg class="worker-svg" viewBox="0 0 260 350" role="img" aria-label="Travailleur équipé de ' + selected.length + ' protection(s)">' +
+      '<defs>' +
+      '<linearGradient id="vestGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"></stop><stop offset="1" stop-color="#155e75"></stop></linearGradient>' +
+      '</defs>' +
+      '<ellipse cx="130" cy="334" rx="76" ry="12" fill="rgba(0,0,0,.28)"></ellipse>' +
+      '<path d="M92 166 C76 186 70 214 68 240" stroke="#2b5b74" stroke-width="22" stroke-linecap="round" fill="none"></path>' +
+      '<rect x="108" y="224" width="20" height="88" rx="8" fill="#1e3a4f"></rect>' +
+      '<rect x="132" y="224" width="20" height="88" rx="8" fill="#1e3a4f"></rect>' +
+      '<ellipse cx="112" cy="314" rx="15" ry="8" fill="#d9946b"></ellipse>' +
+      '<ellipse cx="148" cy="314" rx="15" ry="8" fill="#d9946b"></ellipse>' +
+      '<path d="M92 150 Q130 138 168 150 L174 224 Q130 236 86 224 Z" fill="url(#vestGrad)"></path>' +
+      '<rect x="94" y="184" width="72" height="8" rx="4" fill="#ffb347" opacity=".9"></rect>' +
+      '<rect x="94" y="202" width="72" height="8" rx="4" fill="#ffb347" opacity=".9"></rect>' +
+      '<path d="M168 166 C184 186 190 214 192 240" stroke="#2b5b74" stroke-width="22" stroke-linecap="round" fill="none"></path>' +
+      '<rect x="120" y="132" width="20" height="22" rx="8" fill="#e8a87c"></rect>' +
+      '<circle cx="130" cy="108" r="38" fill="#f2b78d"></circle>' +
+      '<circle cx="92" cy="112" r="7" fill="#e8a87c"></circle><circle cx="168" cy="112" r="7" fill="#e8a87c"></circle>' +
+      '<path d="M94 100 Q108 66 130 70 Q154 68 166 100 Q148 88 130 90 Q112 88 94 100Z" fill="#3b2a24"></path>' +
+      '<circle cx="116" cy="106" r="3" fill="#23303a"></circle><circle cx="144" cy="106" r="3" fill="#23303a"></circle>' +
+      '<path d="M108 98 Q116 94 123 98 M137 98 Q144 94 152 98" stroke="#6b4434" stroke-width="2" fill="none" stroke-linecap="round"></path>' +
+      '<path d="M122 126 Q130 131 138 126" stroke="#a65d48" stroke-width="2.5" fill="none" stroke-linecap="round"></path>' +
+
+      '<g class="gear' + on('harnais') + '" data-gear="harnais">' +
+      '<path d="M104 154 L122 223 M156 154 L138 223" stroke="#ff8a3d" stroke-width="8" stroke-linecap="round"></path>' +
+      '<path d="M112 156 H148" stroke="#ff8a3d" stroke-width="7" stroke-linecap="round"></path>' +
+      '<rect x="93" y="216" width="74" height="10" rx="5" fill="#ff8a3d"></rect>' +
+      '<rect x="124" y="214" width="12" height="14" rx="3" fill="#ffd166"></rect>' +
+      '</g>' +
+
+      '<g class="gear' + on('casque') + '" data-gear="casque">' +
+      '<path d="M88 102 A42 42 0 0 1 172 102 V112 H88 Z" fill="#f5b82e"></path>' +
+      '<rect x="76" y="106" width="108" height="12" rx="6" fill="#e0a51f"></rect>' +
+      '<rect x="125" y="58" width="10" height="24" rx="5" fill="#ffd166"></rect>' +
+      '<path d="M98 102 Q130 86 162 102" stroke="#fff4cc" stroke-width="4" fill="none" opacity=".75" stroke-linecap="round"></path>' +
+      '</g>' +
+
+      '<g class="gear' + on('lunettes') + '" data-gear="lunettes">' +
+      '<rect x="105" y="97" width="20" height="14" rx="4" fill="none" stroke="#1e3a5f" stroke-width="3"></rect>' +
+      '<rect x="135" y="97" width="20" height="14" rx="4" fill="none" stroke="#1e3a5f" stroke-width="3"></rect>' +
+      '<path d="M125 103 H135 M105 102 L95 99 M155 102 L165 99" stroke="#1e3a5f" stroke-width="3" fill="none" stroke-linecap="round"></path>' +
+      '</g>' +
+
+      '<g class="gear' + on('masque') + '" data-gear="masque">' +
+      '<path d="M108 117 Q130 128 152 117 L150 139 Q130 151 110 139 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"></path>' +
+      '<path d="M108 120 L96 114 M152 120 L164 114" stroke="#cbd5e1" stroke-width="2"></path>' +
+      '<path d="M117 128 H143 M118 134 H142" stroke="#e2e8f0" stroke-width="2"></path>' +
+      '</g>' +
+
+      '<g class="gear' + on('gants') + '" data-gear="gants">' +
+      '<path d="M60 230 Q47 238 51 250 Q54 259 65 257 L80 253 L84 233 Z" fill="#f97316"></path>' +
+      '<path d="M200 230 Q213 238 209 250 Q206 259 195 257 L180 253 L176 233 Z" fill="#f97316"></path>' +
+      '<rect x="53" y="224" width="23" height="9" rx="4" fill="#ea580c"></rect>' +
+      '<rect x="184" y="224" width="23" height="9" rx="4" fill="#ea580c"></rect>' +
+      '</g>' +
+
+      '<g class="gear' + on('chaussures') + '" data-gear="chaussures">' +
+      '<path d="M101 298 H128 V316 Q128 324 120 324 H91 Q84 324 84 317 Q84 311 91 308 Z" fill="#4a2f22"></path>' +
+      '<path d="M159 298 H132 V316 Q132 324 140 324 H169 Q176 324 176 317 Q176 311 169 308 Z" fill="#4a2f22"></path>' +
+      '<rect x="83" y="319" width="46" height="6" rx="3" fill="#2f1d15"></rect>' +
+      '<rect x="131" y="319" width="46" height="6" rx="3" fill="#2f1d15"></rect>' +
+      '</g>' +
+      '</svg>';
+  }
+
+  function renderPPE() {
+    const app = $('#ppeApp');
+    if (!app) return;
+    const i = ui.ppe.scenario;
+    const sc = PPE_SCENARIOS[i];
+    const selected = ui.ppe.selections[i];
+    const validated = ui.ppe.validated[i];
+    const result = ui.ppe.results[i];
+
+    const chips = PPE_SCENARIOS.map(function (s, idx) {
+      return '<button class="scenario-chip ' + (idx === i ? 'active' : '') + ' ' + (ui.ppe.validated[idx] || state.ppePlayed[idx] ? 'done' : '') + '" type="button" data-action="ppe-scenario" data-index="' + idx + '"><b>' + (idx + 1) + '</b>' + esc(s.title) + '</button>';
+    }).join('');
+
+    const gearCards = GEAR.map(function (g) {
+      const active = selected.indexOf(g.id) !== -1;
+      return '<button class="gear-card ' + (active ? 'active' : '') + '" type="button" data-action="ppe-select" data-gear="' + g.id + '"' + (validated ? ' disabled' : '') + ' aria-pressed="' + active + '">' +
+        '<span class="gear-icon">' + icon(g.icon) + '</span><span><strong>' + g.name + '</strong><small>' + g.hint + '</small></span><span class="gear-tick">✓</span></button>';
+    }).join('');
+
+    let actions = '';
+    let feedback = '';
+    if (!validated) {
+      actions = '<div class="gear-actions"><button class="btn btn-accent" type="button" data-action="ppe-validate"' + (selected.length === 0 ? ' disabled' : '') + '>' + icon('i-check') + 'Valider l\'équipement</button><span class="muted small">' + selected.length + ' EPI sélectionné' + (selected.length > 1 ? 's' : '') + '</span></div>';
+    } else if (result) {
+      const pts = result.pts;
+      const best = result.best;
+      const correctNames = sc.correct.map(gearName).join(', ');
+      const rows = [];
+      result.correct.forEach(function (id) { rows.push('<li class="ok">' + icon('i-check') + ' ' + gearName(id) + ' : pertinent' + '</li>'); });
+      result.missing.forEach(function (id) { rows.push('<li class="no">' + icon('i-x') + ' ' + gearName(id) + ' : manquant' + '</li>'); });
+      result.wrong.forEach(function (id) { rows.push('<li class="no">' + icon('i-x') + ' ' + gearName(id) + ' : non nécessaire ici' + '</li>'); });
+      feedback = '<div class="feedback ' + (pts >= 25 ? 'good' : 'bad') + '" role="status">' +
+        '<div class="feedback-head">' + icon(pts >= 25 ? 'i-check' : 'i-alert') + 'Score : ' + pts + ' / 30 PV' + (result.newRecord ? ' · nouveau record' : (best > pts ? ' · meilleur conservé : ' + best + ' PV' : '')) + '</div>' +
+        '<p>' + esc(sc.explain) + '<br><strong>Équipement attendu : ' + esc(correctNames) + '.</strong></p>' +
+        '<ul class="feedback-list">' + rows.join('') + '</ul></div>';
+      actions = '<div class="gear-actions"><button class="btn btn-primary btn-small" type="button" data-action="ppe-replay">' + icon('i-refresh') + 'Réessayer</button>' +
+        (i < PPE_SCENARIOS.length - 1 ? '<button class="btn btn-accent btn-small" type="button" data-action="ppe-next">Scénario suivant' + icon('i-arrow') + '</button>' : '<a class="btn btn-accent btn-small" href="#signals">Niveau 3 : signaux' + icon('i-arrow') + '</a>') +
+        '</div>';
+    }
+
+    const completeBanner = state.completed.ppe
+      ? '<div class="completion-banner">' + icon('i-trophy') + '<div><strong>Niveau 2 terminé !</strong><p>Vous avez validé les trois situations. Rejouez un scénario pour décrocher le sans-faute.</p></div></div>'
+      : '';
+
+    app.innerHTML = '<div class="scenario-nav">' + chips + '</div>' +
+      '<div class="situation"><div class="situation-icon">' + icon('i-alert') + '</div><div><h3>Scénario ' + (i + 1) + ' · ' + esc(sc.title) + ' — ' + esc(sc.subtitle) + '</h3><p>' + esc(sc.desc) + '</p><div class="risk-chips">' + sc.risks.map(function (r) { return '<span>' + esc(r) + '</span>'; }).join('') + '</div></div></div>' +
+      '<div class="ppe-layout"><div class="worker-stage"><div class="stage-top"><span>Atelier virtuel</span><span class="equip-count">' + selected.length + ' EPI sélectionné' + (selected.length > 1 ? 's' : '') + '</span></div>' +
+      '<div class="worker-wrap">' + workerSVG(selected) + '</div>' +
+      '<div class="stage-bottom"><p>Cliquez sur un EPI pour l\'ajouter ou le retirer.</p><span class="equip-count">' + (validated ? 'Scénario validé' : 'En cours') + '</span></div></div>' +
+      '<div class="card gear-panel"><h3>Choisissez les protections</h3><p>Sélectionnez uniquement les EPI adaptés aux risques de la situation.</p><div class="gear-grid">' + gearCards + '</div>' + actions + feedback + completeBanner + '<p class="ppe-note">Jeu pédagogique simplifié : en situation réelle, appliquez les consignes de votre entreprise et la fiche de poste.</p></div></div>';
+  }
+
+  function selectPPE(id) {
+    const i = ui.ppe.scenario;
+    if (ui.ppe.validated[i]) return;
+    const arr = ui.ppe.selections[i];
+    const pos = arr.indexOf(id);
+    if (pos === -1) arr.push(id); else arr.splice(pos, 1);
+    renderPPE();
+  }
+
+  function validatePPE() {
+    const i = ui.ppe.scenario;
+    if (ui.ppe.validated[i]) return;
+    const selected = ui.ppe.selections[i];
+    if (!selected.length) return;
+    const sc = PPE_SCENARIOS[i];
+    const correct = selected.filter(function (id) { return sc.correct.indexOf(id) !== -1; });
+    const wrong = selected.filter(function (id) { return sc.correct.indexOf(id) === -1; });
+    const missing = sc.correct.filter(function (id) { return selected.indexOf(id) === -1; });
+    const actual = Math.max(0, Math.min(30, correct.length * 10 - wrong.length * 5));
+    const prev = state.ppeBest[i];
+    const newRecord = actual > prev;
+    if (newRecord) state.ppeBest[i] = actual;
+    ui.ppe.validated[i] = true;
+    ui.ppe.results[i] = { pts: actual, best: state.ppeBest[i], correct: correct, wrong: wrong, missing: missing, newRecord: newRecord };
+    state.ppePlayed[i] = true;
+    const wasCompleted = state.completed.ppe;
+    if (state.ppePlayed.every(Boolean)) state.completed.ppe = true;
+    saveState();
+    updateScoreUI(true);
+    renderPPE();
+    if (newRecord && actual > 0) toast('+' + actual + ' Points de Vigilance', 'good');
+    else if (actual < prev) toast('Meilleur score conservé : ' + prev + ' PV');
+    if (!wasCompleted && state.completed.ppe) { confetti(85); toast('Niveau 2 terminé !', 'good'); }
+  }
+
+  function ppeReplay() {
+    const i = ui.ppe.scenario;
+    ui.ppe.selections[i] = [];
+    ui.ppe.validated[i] = false;
+    ui.ppe.results[i] = null;
+    renderPPE();
+  }
+
+  function ppeNext() {
+    if (ui.ppe.scenario < PPE_SCENARIOS.length - 1) {
+      ui.ppe.scenario++;
+      renderPPE();
+      scrollPageTop();
+    }
+  }
+
+  /* ---------- Niveau 3 : signaux ---------- */
+  function signalSideHTML() {
+    const best = signalScore();
+    const dots = SIGNALS.map(function (_, i) {
+      return '<i class="' + (state.signalBest[i] >= 10 ? 'ok' : '') + '"></i>';
+    }).join('');
+    return '<aside class="signals-side"><div class="panel coach-card">' +
+      '<span class="eyebrow dark">Votre score</span>' +
+      '<div class="coach-score"><strong>' + best + '</strong><span>/ 100 PV</span></div>' +
+      '<div class="bar"><span style="width:' + best + '%"></span></div>' +
+      '<div class="progress-dots">' + dots + '</div>' +
+      '<div class="mini-tip"><strong>Flash :</strong> 12 secondes par signal. Une erreur ne retire aucun point, mais seule une bonne réponse rapporte 10 PV.</div>' +
+      '</div><div class="panel signal-legend-card"><h3>Rappel express</h3><ul class="legend-list">' +
+      '<li><span class="mini obligation"></span><span>Obligation<small>Rond bleu</small></span></li>' +
+      '<li><span class="mini interdiction"></span><span>Interdiction<small>Rond blanc, contour rouge</small></span></li>' +
+      '<li><span class="mini danger"></span><span>Danger<small>Triangle jaune</small></span></li>' +
+      '<li><span class="mini secours"></span><span>Secours<small>Carré vert</small></span></li>' +
+      '<li><span class="mini incendie"></span><span>Incendie<small>Carré rouge</small></span></li>' +
+      '</ul></div></aside>';
+  }
+
+  function signalPictoHTML(q) {
+    const extra = q.picto ? ' official-picto' : '';
+    return '<div class="signal-picto ' + q.cat + extra + '" role="img" aria-label="Pictogramme de sécurité à identifier">' + (q.picto || icon(q.icon)) + '</div>';
+  }
+
+  function signalsStartHTML() {
+    return '<div class="signals-layout"><div class="flash-card signal-start"><div class="flash-inner">' +
+      '<div class="start-emblem">' + icon('i-signals') + '</div>' +
+      '<span class="eyebrow">Niveau 3 · Flash visuel</span>' +
+      '<h2 style="font-size:1.75rem;margin:8px 0 9px;color:#fff">Formes et couleurs sous pression</h2>' +
+      '<p style="max-width:440px;margin:0 auto 20px;color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.65">Dix signaux vont apparaître. Associez chacun à sa famille : obligation, interdiction, danger, secours ou incendie. Vous avez 12 secondes par carte.</p>' +
+      '<div class="start-facts" style="justify-content:center"><span class="badge" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8)">' + icon('i-clock') + '12 s / carte</span><span class="badge" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8)">' + icon('i-target') + '100 PV</span></div>' +
+      '<button class="btn btn-accent" type="button" data-action="signals-start">' + icon('i-arrow') + 'Lancer le flash</button>' +
+      '</div></div>' + signalSideHTML() + '</div>';
+  }
+
+  function signalsSummaryHTML() {
+    const run = ui.signals.runScore;
+    return '<div class="signals-layout"><div class="flash-card"><div class="flash-inner">' +
+      '<div class="start-emblem" style="background:linear-gradient(145deg,#ff9a50,#ff6b2c);box-shadow:0 20px 36px -18px rgba(255,107,44,.7)">' + icon('i-trophy') + '</div>' +
+      '<span class="eyebrow">Niveau 3 terminé</span>' +
+      '<h2 style="font-size:2.6rem;margin:6px 0 0;color:#fff">' + run + '<small style="font-size:.95rem;color:rgba(255,255,255,.55);letter-spacing:0"> / 100 PV</small></h2>' +
+      '<div class="stars">' + [0,1,2,3].map(function (i) { return '<span class="' + (i < Math.round(run / 25) ? '' : 'off') + '">★</span>'; }).join('') + '</div>' +
+      '<p style="max-width:440px;margin:0 auto 20px;color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.65">' + (run >= 80 ? 'Œil de lynx confirmé ! Les formes et couleurs ne vous échappent plus.' : run >= 50 ? 'Bonne reconnaissance. Un nouveau passage vous rapprochera du sans-faute.' : 'La couleur et la forme sont des réflexes : appuyez-vous sur le mémo pour les ancrer.') + '</p>' +
+      '<div class="hero-actions" style="justify-content:center"><button class="btn btn-ghost-light" type="button" data-action="signals-restart">' + icon('i-refresh') + 'Rejouer</button><a class="btn btn-accent" href="#dashboard">Retour au tableau de bord' + icon('i-arrow') + '</a></div>' +
+      '</div></div>' + signalSideHTML() + '</div>';
+  }
+
+  function renderSignals() {
+    const app = $('#signalsApp');
+    if (!app) return;
+    if (!ui.signals.active && !ui.signals.finished) { app.innerHTML = signalsStartHTML(); return; }
+    if (!ui.signals.active && ui.signals.finished) { app.innerHTML = signalsSummaryHTML(); return; }
+    const q = SIGNALS[ui.signals.index];
+    const answered = ui.signals.answered;
+    const cats = CATEGORIES.map(function (c) {
+      let cls = 'cat-btn';
+      if (answered) {
+        if (c.id === q.cat) cls += ' correct';
+        else if (c.id === ui.signals.lastAnswer) cls += ' wrong';
+      }
+      return '<button class="' + cls + '" type="button" data-action="signals-answer" data-cat="' + c.id + '"' + (answered ? ' disabled' : '') + '><span class="mini ' + c.id + '"></span>' + c.label + '</button>';
+    }).join('');
+    let feedback = '';
+    if (answered) {
+      const ok = ui.signals.lastCorrect;
+      feedback = '<div class="flash-feedback ' + (ok ? 'good' : 'bad') + '" role="status"><span class="pts">' + (ui.signals.gained ? '+' + ui.signals.gained + ' PV' : '0 PV') + '</span><strong>' + (ok ? 'Bien vu !' : (ui.signals.lastAnswer === null ? 'Temps écoulé !' : 'Ce n\'est pas la bonne famille.')) + '</strong><p><strong>' + esc(q.label) + '</strong> — ' + esc(q.hint) + '</p></div>';
+    }
+    const next = answered ? '<div class="flash-actions"><button class="btn btn-accent" type="button" data-action="signals-next">' + (ui.signals.index === SIGNALS.length - 1 ? 'Voir le résultat' : 'Signal suivant') + icon('i-arrow') + '</button></div>' : '';
+    app.innerHTML = '<div class="signals-layout"><div class="flash-card"><div class="flash-top"><span>Signal ' + (ui.signals.index + 1) + ' / ' + SIGNALS.length + '</span><span class="timer">' + icon('i-clock') + '<b id="timerSeconds">' + Math.ceil(ui.signals.remaining) + '</b> s</span></div>' +
+      '<div class="timer-bar"><span id="timerBar" style="width:' + Math.max(0, Math.min(100, ui.signals.remaining / FLASH_SECONDS * 100)) + '%"></span></div>' +
+      '<div class="flash-inner"><div class="signal-stage">' + signalPictoHTML(q) + '</div><p class="flash-question">À quelle famille appartient ce signal ?</p>' +
+      '<div class="category-grid">' + cats + '</div>' + feedback + next + '</div></div>' + signalSideHTML() + '</div>';
+    if (!answered) resumeSignalTimer();
+    else updateTimerUI();
+  }
+
+  function updateTimerUI() {
+    const bar = $('#timerBar');
+    const num = $('#timerSeconds');
+    if (bar) {
+      const pct = Math.max(0, Math.min(100, (ui.signals.remaining / FLASH_SECONDS) * 100));
+      bar.style.width = pct + '%';
+      bar.classList.toggle('urgent', ui.signals.remaining <= 4);
+    }
+    if (num) num.textContent = Math.max(0, Math.ceil(ui.signals.remaining));
+  }
+
+  function resumeSignalTimer() {
+    if (!ui.signals.active || ui.signals.answered || ui.view !== 'signals') return;
+    if (ui.signals.remaining <= 0) { answerSignal(null); return; }
+    if (ui.signals.timer) return;
+    ui.signals.deadline = Date.now() + ui.signals.remaining * 1000;
+    ui.signals.timer = setInterval(function () {
+      ui.signals.remaining = Math.max(0, (ui.signals.deadline - Date.now()) / 1000);
+      updateTimerUI();
+      if (ui.signals.remaining <= 0) {
+        pauseSignalTimer();
+        answerSignal(null);
+      }
+    }, 100);
+    updateTimerUI();
+  }
+
+  function startSignals() {
+    pauseSignalTimer();
+    ui.signals = {
+      active: true, finished: false, index: 0, answered: false, lastAnswer: null,
+      lastCorrect: false, gained: 0, runCorrect: 0, runScore: 0,
+      remaining: FLASH_SECONDS, deadline: 0, timer: null
+    };
+    renderSignals();
+    scrollPageTop();
+  }
+
+  function answerSignal(cat) {
+    if (!ui.signals.active || ui.signals.answered) return;
+    pauseSignalTimer();
+    const q = SIGNALS[ui.signals.index];
+    const ok = cat === q.cat;
+    ui.signals.answered = true;
+    ui.signals.lastAnswer = cat;
+    ui.signals.lastCorrect = ok;
+    ui.signals.gained = 0;
+    if (ok) {
+      ui.signals.runCorrect++;
+      ui.signals.runScore += 10;
+      if (state.signalBest[ui.signals.index] < 10) {
+        state.signalBest[ui.signals.index] = 10;
+        ui.signals.gained = 10;
+        saveState();
+        updateScoreUI(true);
+        toast('+10 Points de Vigilance', 'good');
+      }
+    } else {
+      toast(cat === null ? 'Temps écoulé !' : 'Mauvaise famille — observez la forme et la couleur', 'bad');
+    }
+    renderSignals();
+  }
+
+  function nextSignal() {
+    if (!ui.signals.active || !ui.signals.answered) return;
+    if (ui.signals.index < SIGNALS.length - 1) {
+      ui.signals.index++;
+      ui.signals.answered = false;
+      ui.signals.lastAnswer = null;
+      ui.signals.lastCorrect = false;
+      ui.signals.gained = 0;
+      ui.signals.remaining = FLASH_SECONDS;
+      renderSignals();
+      scrollPageTop();
+    } else {
+      ui.signals.active = false;
+      ui.signals.finished = true;
+      state.completed.signals = true;
+      saveState();
+      updateScoreUI();
+      renderSignals();
+      if (ui.signals.runScore >= 70) confetti(90);
+      toast('Niveau 3 terminé !', 'good');
+    }
+  }
+
+  /* ---------- Actions ---------- */
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.getAttribute('data-action');
+    switch (action) {
+      case 'open-reset': openReset(); break;
+      case 'close-reset': closeReset(); break;
+      case 'reset-confirm': confirmReset(); break;
+      case 'quiz-start': startQuiz(); break;
+      case 'quiz-select':
+        if (!ui.quiz.answered) {
+          ui.quiz.selected = Number(btn.getAttribute('data-index'));
+          renderQuiz();
+        }
+        break;
+      case 'quiz-validate': validateQuiz(); break;
+      case 'quiz-next': nextQuiz(); break;
+      case 'quiz-restart': restartQuiz(); break;
+      case 'ppe-scenario':
+        ui.ppe.scenario = Number(btn.getAttribute('data-index'));
+        renderPPE();
+        break;
+      case 'ppe-select': selectPPE(btn.getAttribute('data-gear')); break;
+      case 'ppe-validate': validatePPE(); break;
+      case 'ppe-replay': ppeReplay(); break;
+      case 'ppe-next': ppeNext(); break;
+      case 'signals-start': startSignals(); break;
+      case 'signals-answer': answerSignal(btn.getAttribute('data-cat')); break;
+      case 'signals-next': nextSignal(); break;
+      case 'signals-restart': startSignals(); break;
+      default: break;
+    }
+  });
+
+  const resetModal = $('#resetModal');
+  if (resetModal) {
+    resetModal.addEventListener('click', function (e) {
+      if (e.target === resetModal) closeReset();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeReset();
+  });
+
+  updateScoreUI();
+  showView(currentHashView());
+
+  // Petit délai pour laisser l'anneau de score s'animer au chargement.
+  setTimeout(function () { updateScoreUI(); }, 120);
+})();
+</script>
+</body>
+</html>
