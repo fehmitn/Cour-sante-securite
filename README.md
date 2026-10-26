@@ -13,6 +13,7 @@
   <img alt="Zéro dépendance" src="https://img.shields.io/badge/z%C3%A9ro_d%C3%A9pendance-0ea5a4?style=flat-square">
   <img alt="Sauvegarde locale" src="https://img.shields.io/badge/progression-localStorage-1466d8?style=flat-square">
   <img alt="Dépôt" src="https://img.shields.io/badge/GitHub-Cour--sante--securite-181717?style=flat-square&logo=github&logoColor=white">
+  <img alt="Licence MIT" src="https://img.shields.io/badge/licence-MIT-2ea44f?style=flat-square">
 </p>
 
 > **Vigilance SST** est une application web de gamification qui transforme les règles de santé et de
@@ -20,6 +21,18 @@
 > d'équipement EPI et un jeu de reconnaissance des signaux ISO 7010.
 >
 > Un seul fichier, aucun serveur, aucune installation : **double-cliquez, jouez, progressez.**
+>
+> 📴 **L'application fonctionne entièrement hors-ligne** : une fois `index.html` téléchargé, elle
+> s'exécute sans connexion Internet, sans serveur et sans aucune dépendance externe. Les seules
+> ressources réseau de ce dépôt sont les **badges** ci-dessus, purement décoratifs — le jeu, lui,
+> n'effectue aucune requête.
+
+### 📴 Mode hors-ligne natif
+
+`index.html` est un fichier **autonome** : HTML, CSS, JavaScript et pictogrammes SVG sont embarqués
+dans le même document. Aucun CDN, aucune police distante, aucun appel réseau au chargement ni
+pendant le jeu. Il suffit du fichier sur une clé USB pour animer une session de sensibilisation en
+salle, sur un poste isolé ou sans Wi-Fi. La progression reste sur l'appareil (`localStorage`).
 
 ---
 
@@ -161,6 +174,7 @@ après confirmation dans une boîte de dialogue accessible.
 Cour-sante-securite/
 ├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes inline
 ├── README.md                     # Ce document
+├── LICENSE                       # Licence MIT (code) + note sur les contenus et pictogrammes
 ├── s01.svg                       # Civière de premiers secours
 ├── Boyau d'incendie.svg          # Signal incendie
 ├── Danger électrique.svg         # Signal danger
@@ -265,13 +279,36 @@ Dépôt : <https://github.com/fehmitn/Cour-sante-securite>
 
 ## 📄 Licence et crédits
 
-- **Application** : projet pédagogique, code et contenus rédigés pour la sensibilisation SST.
-  Contactez l'auteur pour toute réutilisation en dehors d'un cadre de formation.
-- **Pictogrammes ISO 7010** : symboles normalisés, repris des fichiers SVG fournis dans ce dépôt
-  (`sante securite.zip`). La norme ISO 7010 reste la propriété de l'ISO ; ces visuels sont utilisés
-  à des fins illustratives et pédagogiques.
-- **Source documentaire** : `sst.pdf`, support de formation interne (module M02).
+Le code de l'application est publié sous **licence MIT** — voir le fichier [LICENSE](LICENSE).
+
+```text
+MIT License · Copyright (c) 2026 fehmitn
+```
+
+En résumé : utilisation, modification, distribution et usage commercial autorisés, à condition de
+conserver la mention de copyright et le texte de la licence. Le logiciel est fourni « en l'état »,
+sans garantie.
+
+**Ce que couvre la MIT** : `index.html` (HTML, CSS, JavaScript), la structure du document et le
+code de ce dépôt.
+
+**Ce qu'elle ne couvre pas** :
+
+- **Pictogrammes ISO 7010** — fichiers SVG fournis à la racine et dans `sante securite.zip` :
+  symboles normalisés, inclus à des fins pédagogiques et illustratives. La norme ISO 7010 reste la
+  propriété de l'ISO ; ils ne constituent pas des marqueurs de sécurité officiels.
+- **Support de formation** `sst.pdf` (module M02) : document source, repris à titre documentaire.
+
+Le contenu pédagogique (questions, scénarios, fiches mémo) est librement réutilisable dans un cadre
+de formation, avec mention du projet. Pour un usage commercial ou une redistribution des
+pictogrammes, vérifiez les conditions applicables auprès de l'ISO et de l'auteur du support.
+
+**Attribution suggérée** :
+
+```text
+Vigilance SST — https://github.com/fehmitn/Cour-sante-securite — MIT License
+```
 
 <p align="center">
-  <sub>🛡️ <strong>Vigilance SST</strong> — parce que la vigilance s'entraîne aussi. · Fait avec HTML, CSS, JS et beaucoup de pictogrammes.</sub>
+  <sub>🛡️ <strong>Vigilance SST</strong> — parce que la vigilance s'entraîne aussi. · Fait avec HTML, CSS, JS et beaucoup de pictogrammes. · <a href="LICENSE">Licence MIT</a></sub>
 </p>
