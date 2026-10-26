@@ -1612,7 +1612,10 @@ h1,h2,h3{letter-spacing:-.025em}
   const EXAM_QUIZ_COUNT = 10;
   const EXAM_PPE_COUNT = 3;
   const EXAM_SIGNAL_COUNT = 10;
-  const EXAM_TOTAL_POINTS = EXAM_QUIZ_COUNT + EXAM_PPE_COUNT * 3 + EXAM_SIGNAL_COUNT;
+  const EXAM_QUIZ_POINTS = 4;
+  const EXAM_PPE_POINTS = 10;
+  const EXAM_SIGNAL_POINTS = 3;
+  const EXAM_TOTAL_POINTS = EXAM_QUIZ_COUNT * EXAM_QUIZ_POINTS + EXAM_PPE_COUNT * EXAM_PPE_POINTS + EXAM_SIGNAL_COUNT * EXAM_SIGNAL_POINTS;
   const EXAM_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
   /* ---------- État ---------- */
@@ -2556,7 +2559,7 @@ h1,h2,h3{letter-spacing:-.025em}
       '<div class="exam-key-block"><h2>Partie 1 · Questions</h2><ul class="exam-key-list">' + quiz + '</ul></div>' +
       '<div class="exam-key-block"><h2>Partie 2 · EPI indispensables</h2><ul class="exam-key-list">' + ppe + '</ul></div>' +
       '<div class="exam-key-block"><h2>Partie 3 · Familles de signaux</h2><ul class="exam-key-list">' + signals + '</ul></div>' +
-      '<p class="exam-key-note">Barème indicatif : 1 point par question, 1 point par EPI correct, 1 point par signal — soit ' + EXAM_TOTAL_POINTS + ' points. Le corrigé peut être détaché avant distribution.</p>' +
+      '<p class="exam-key-note">Barème indicatif : ' + EXAM_QUIZ_POINTS + ' points par question, ' + EXAM_PPE_POINTS + ' points par scénario EPI (3 EPI corrects), ' + EXAM_SIGNAL_POINTS + ' points par signal — soit ' + EXAM_TOTAL_POINTS + ' points. Le corrigé peut être détaché avant distribution.</p>' +
     '</section>';
   }
 
@@ -2567,9 +2570,9 @@ h1,h2,h3{letter-spacing:-.025em}
     const legend = CATEGORIES.map(function (c, i) { return EXAM_LETTERS[i] + ' ' + esc(c.label); }).join(' · ');
     return '<div class="exam-paper">' +
       examDocHeadHTML() +
-      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">1</span><div><h2>Les fondamentaux</h2><p>' + EXAM_QUIZ_COUNT + ' questions · 1 point par bonne réponse</p></div></div>' + quiz + '</section>' +
-      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">2</span><div><h2>Bien s\'équiper</h2><p>' + EXAM_PPE_COUNT + ' scénarios · 3 EPI à cocher par scénario</p></div></div>' + ppe + '</section>' +
-      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">3</span><div><h2>Reconnaissance des signaux</h2><p>' + EXAM_SIGNAL_COUNT + ' signaux · 1 point par bonne famille</p></div></div><div class="exam-family-legend"><b>Familles :</b> ' + legend + '</div><div class="exam-signal-grid">' + signals + '</div></section>' +
+      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">1</span><div><h2>Les fondamentaux</h2><p>' + EXAM_QUIZ_COUNT + ' questions · ' + EXAM_QUIZ_POINTS + ' points par bonne réponse</p></div></div>' + quiz + '</section>' +
+      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">2</span><div><h2>Bien s\'équiper</h2><p>' + EXAM_PPE_COUNT + ' scénarios · 3 EPI à cocher par scénario · ' + EXAM_PPE_POINTS + ' points par scénario (3 EPI corrects)</p></div></div>' + ppe + '</section>' +
+      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">3</span><div><h2>Reconnaissance des signaux</h2><p>' + EXAM_SIGNAL_COUNT + ' signaux · ' + EXAM_SIGNAL_POINTS + ' points par bonne famille</p></div></div><div class="exam-family-legend"><b>Familles :</b> ' + legend + '</div><div class="exam-signal-grid">' + signals + '</div></section>' +
       examKeyHTML() +
     '</div>';
   }

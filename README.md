@@ -147,10 +147,10 @@ quitter l'application et sans connexion réseau.
 
 | Partie | Tirage | Barème indicatif |
 | :-- | :-- | :-: |
-| Niveau 1 · fondamentaux | 10 questions tirées parmi 20, 4 choix par question | 10 pts |
-| Niveau 2 · EPI | 3 scénarios tirés parmi 4, 3 EPI à cocher par scénario | 9 pts |
-| Niveau 3 · signaux | 10 pictogrammes tirés parmi 20, 1 famille à cocher | 10 pts |
-| | **Total** | **29 pts** |
+| Niveau 1 · fondamentaux | 10 questions tirées parmi 20, 4 choix par question, 4 pts par bonne réponse | 40 pts |
+| Niveau 2 · EPI | 3 scénarios tirés parmi 4, 3 EPI à cocher par scénario, 10 pts par scénario correct | 30 pts |
+| Niveau 3 · signaux | 10 pictogrammes tirés parmi 20, 1 famille à cocher, 3 pts par bonne famille | 30 pts |
+| | **Total** | **100 pts** |
 
 - **Tirage aléatoire sans répétition** à l'intérieur de chaque partie, avec un code de sujet
   (`EX-AAAAMMJJ-NN`) et une date de génération.
