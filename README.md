@@ -268,7 +268,6 @@ après confirmation dans une boîte de dialogue accessible.
 Cour-sante-securite/
 ├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes + logo + lib QR inline
 ├── decode.html                   # Déchiffreur autonome du corrigé QR (fonctionne aussi sur GitHub Pages)
-├── logo.svg                      # Logo du centre (source, embarqué dans index.html)
 ├── README.md                     # Ce document
 ├── LICENSE                       # Licence MIT (code) + note sur les contenus et pictogrammes
 └── sst.pdf                       # Support de formation M02 (source pédagogique)
@@ -346,7 +345,7 @@ rechargement automatique à chaque sauvegarde.
   (notions de sécurité, feu-électricité-environnement) et onglet « Équipements & pictogrammes »
   (EPI au style « obligation » ISO 7010, 5 familles de signaux, pictogrammes de manutention).
 - **Entête institutionnelle** : « Centre Sectoriel de Formation aux Métiers industriels khnis »
-  avec le logo du centre (`logo.svg` vectorisé puis embarqué comme `<symbol id="csfmi-logo">`)
+  avec le logo du centre (vectorisé puis embarqué comme `<symbol id="csfmi-logo">`)
   affichée en haut de l'application, et reprise en tête du **sujet d'examen imprimable**.
 - **Parti pris** : contenus reformulés et situations EPI simplifiées à des fins pédagogiques.
   Ce jeu **ne remplace pas** une formation réglementaire, un plan de prévention ou l'avis d'un
