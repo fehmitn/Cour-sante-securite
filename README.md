@@ -170,6 +170,8 @@ quitter l'application et sans connexion réseau.
   chiffres, générés aléatoirement, encodent un chiffre attendu par rang (le rang 0 des éléments de
   `TAB1`, le rang 1 de `TAB2`, etc.) et le code compare chaque chiffre saisi aux éléments des
   tableaux du rang correspondant. Protection simple, adaptée à un usage en classe.
+  **Le mot de passe n'est pas partagé ici : demandez-le au créateur du fichier**
+  (Fehmi Ben Njima — fehmitn@gmail.com).
 - Le mode examen est **indépendant de la progression** : il ne modifie ni les scores, ni les badges,
   ni les meilleurs résultats.
 - Astuce : choisir « Enregistrer au format PDF » dans la boîte d'impression pour archiver un sujet.
