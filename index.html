@@ -1949,7 +1949,26 @@ h1,h2,h3{letter-spacing:-.025em}
   const EXAM_SIGNAL_POINTS = 3;
   const EXAM_TOTAL_POINTS = EXAM_QUIZ_COUNT * EXAM_QUIZ_POINTS + EXAM_PPE_COUNT * EXAM_PPE_POINTS + EXAM_SIGNAL_COUNT * EXAM_SIGNAL_POINTS;
   const EXAM_LETTERS = ['A', 'B', 'C', 'D', 'E'];
-  const EXAM_PASSWORD = '1234';
+  /* Nous : mot de passe décomposé par rangs — chaque tableau contient des nombres à 4 chiffres
+  générés aléatoirement ; le chiffre attendu par rang est unique dans chaque tableau. */
+  const EXAM_PASSWORD_TAB1 = ['1980', '1500', '1630', '1535', '1260', '1005', '1919', '1950', '1207', '1977'];
+  const EXAM_PASSWORD_TAB2 = ['3268', '9268', '1226', '3281', '4245', '8228', '1254', '2265', '9227', '9267'];
+  const EXAM_PASSWORD_TAB3 = ['3131', '7533', '2937', '4636', '9733', '1932', '4737', '0935', '4539', '8934'];
+  const EXAM_PASSWORD_TAB4 = ['9364', '9474', '6044', '2424', '0214', '5814', '8674', '7074', '7054', '4434'];
+  const EXAM_PASSWORD_TABS = [EXAM_PASSWORD_TAB1, EXAM_PASSWORD_TAB2, EXAM_PASSWORD_TAB3, EXAM_PASSWORD_TAB4];
+
+  function checkExamPassword(input) {
+    const digits = String(input).replace(/\D/g, '');
+    if (digits.length !== 4) return false;
+    // le chiffre saisi au rang p doit correspondre au chiffre du rang p de TOUS les éléments du tableau p
+    for (let p = 0; p < EXAM_PASSWORD_TABS.length; p++) {
+      const tab = EXAM_PASSWORD_TABS[p];
+      for (let k = 0; k < tab.length; k++) {
+        if (tab[k].charAt(p) !== digits.charAt(p)) return false;
+      }
+    }
+    return true;
+  }
 
   /* ---------- État ---------- */
   function defaultState() {
@@ -2264,7 +2283,7 @@ h1,h2,h3{letter-spacing:-.025em}
     const input = $('#examGateInput');
     const err = $('#examGateError');
     if (!input) return;
-    if (input.value.trim() === EXAM_PASSWORD) {
+    if (checkExamPassword(input.value)) {
       ui.exam.unlocked = true;
       closeExamGate();
       toast('Mode examen déverrouillé', 'good');

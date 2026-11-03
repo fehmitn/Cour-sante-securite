@@ -165,6 +165,11 @@ quitter l'application et sans connexion réseau.
 - **Lisible en noir & blanc** : dans la partie 3, la couleur de chaque pictogramme est indiquée
   entre parenthèses — ex. « (Couleur : jaune) » — avant la ligne de réponses A–E ; les panneaux
   d'interdiction précisent « (Couleur : cercle et barre rouge) ».
+- **Accès protégé par déverrouillage** : le mode examen demande un mot de passe (modale dédiée).
+  La vérification ne stocke jamais le mot de passe en clair : quatre tableaux de nombres à quatre
+  chiffres, générés aléatoirement, encodent un chiffre attendu par rang (le rang 0 des éléments de
+  `TAB1`, le rang 1 de `TAB2`, etc.) et le code compare chaque chiffre saisi aux éléments des
+  tableaux du rang correspondant. Protection simple, adaptée à un usage en classe.
 - Le mode examen est **indépendant de la progression** : il ne modifie ni les scores, ni les badges,
   ni les meilleurs résultats.
 - Astuce : choisir « Enregistrer au format PDF » dans la boîte d'impression pour archiver un sujet.
