@@ -684,6 +684,12 @@ h1,h2,h3{letter-spacing:-.025em}
 }
 .modal-backdrop.open{display:grid;animation:viewIn .2s ease both}
 .exam-gate-row{margin:12px 0 2px}
+.exam-print-modes{display:flex;flex-direction:column;gap:8px;margin:12px 0 0;text-align:left;font-size:.78rem;line-height:1.45;color:#2e4a60}
+.exam-print-modes label{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:7px 9px;border:1px solid #e3ecf3;border-radius:10px;background:#f8fbfc}
+.exam-print-modes label:hover{border-color:#b9cfd9}
+.exam-print-modes input{margin-top:2px;accent-color:var(--teal);flex:0 0 auto}
+.exam-print-modes b{color:var(--teal-d)}
+.exam-pin-label{display:block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#456177;margin-bottom:6px}
 .exam-gate-row input{
   width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;
   font-size:1.05rem;font-weight:800;text-align:center;letter-spacing:.4em;background:#f8fbfc;
@@ -1339,15 +1345,21 @@ h1,h2,h3{letter-spacing:-.025em}
 <div class="modal-backdrop" id="examPinModal" role="dialog" aria-modal="true" aria-labelledby="examPinTitle">
   <div class="modal">
     <div class="modal-icon"><svg class="icon"><use href="#i-lock"></use></svg></div>
-    <h3 id="examPinTitle">PIN du QR corrigé</h3>
-    <p>Les QR imprimés contiennent les réponses chiffrées. Choisissez un code PIN numérique (4 à 8 chiffres) : il sera demandé sur la page de déchiffrement pour lire le corrigé.</p>
-    <div class="exam-gate-row">
+    <h3 id="examPinTitle">Imprimer le corrigé</h3>
+    <p>Choisissez ce que l'impression contient. Les QR encodent les réponses <b>chiffrées</b> : sans le PIN (4 à 8 chiffres, choisi à chaque impression), le corrigé reste illisible sur la page de déchiffrement.</p>
+    <div class="exam-print-modes" role="radiogroup" aria-label="Contenu à imprimer">
+      <label><input type="radio" id="examPinModeBoth" name="examPrintMode" value="both" checked><span><b>QR + corrigé</b> — QR dans le sujet et page corrigé (par défaut)</span></label>
+      <label><input type="radio" name="examPrintMode" value="qr"><span><b>QR seulement</b> — le sujet garde ses QR, sans la page corrigé</span></label>
+      <label><input type="radio" name="examPrintMode" value="key"><span><b>Corrigé seulement</b> — la page corrigé seule, sans QR (pas de PIN demandé)</span></label>
+    </div>
+    <div class="exam-gate-row" id="examPinRow">
+      <span class="exam-pin-label">Code PIN du corrigé</span>
       <input id="examPinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="4–8 chiffres" aria-label="Code PIN du corrigé">
       <p class="exam-gate-error" id="examPinError" hidden>Saisissez un code PIN numérique de 4 à 8 chiffres.</p>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost btn-small" type="button" data-action="close-exam-pin">Annuler</button>
-      <button class="btn btn-accent btn-small" type="button" data-action="exam-pin-submit">Imprimer avec les QR</button>
+      <button class="btn btn-accent btn-small" type="button" data-action="exam-pin-submit">Imprimer</button>
     </div>
   </div>
 </div>
@@ -3478,16 +3490,37 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     doPrintExam();
   }
 
-  function doPrintExam() {
+  /* Layout d'impression selon le mode choisi dans la modale corrigé :
+     'both' = QR + page corrigé · 'qr' = QR sans page corrigé · 'key' = page corrigé sans QR */
+  function applyPrintLayout(mode) {
+    const key = $('#examAnswerKey');
+    if (key && mode) key.hidden = (mode === 'qr');
+    $$('[data-exam-qr]').forEach(function (el) { el.hidden = (mode === 'key'); });
+  }
+  function doPrintExam(mode) {
     document.body.classList.add('exam-active');
     document.body.classList.add('exam-ready');
+    applyPrintLayout(mode);
+    const restore = function () {
+      toggleExamKey(ui.exam.includeKey);
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
     window.print();
   }
 
-  /* ---------- Impression : PIN du QR corrigé ---------- */
+  /* ---------- Impression : QR / corrigé / les deux + PIN ---------- */
+  function examPinMode() {
+    const r = document.querySelector('input[name="examPrintMode"]:checked');
+    return r ? r.value : 'both';
+  }
   function openExamPinModal() {
     const m = $('#examPinModal');
     if (!m) { doPrintExam(); return; }
+    const mode = document.getElementById('examPinModeBoth');
+    if (mode) mode.checked = true;
+    const row = $('#examPinRow');
+    if (row) row.hidden = false;
     m.classList.add('open');
     const err = $('#examPinError');
     if (err) err.hidden = true;
@@ -3502,19 +3535,23 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     const input = $('#examPinInput');
     const err = $('#examPinError');
     if (!input) { doPrintExam(); return; }
-    const pin = input.value.replace(/\D/g, '');
-    if (pin.length < 4 || pin.length > 8) {
-      if (err) err.hidden = false;
-      input.classList.add('shake');
-      setTimeout(function () { input.classList.remove('shake'); }, 400);
-      input.value = '';
-      input.focus();
-      return;
+    const mode = examPinMode();
+    const pinRow = $('#examPinRow');
+    if (mode !== 'key' && !pinRow.hidden) {
+      const pin = input.value.replace(/\D/g, '');
+      if (pin.length < 4 || pin.length > 8) {
+        if (err) err.hidden = false;
+        input.classList.add('shake');
+        setTimeout(function () { input.classList.remove('shake'); }, 400);
+        input.value = '';
+        input.focus();
+        return;
+      }
+      renderExamQRs(pin);
+      toast('QR corrigé chiffrés avec le PIN', 'good');
     }
-    renderExamQRs(pin);
     closeExamPinModal();
-    toast('QR corrigé chiffrés avec le PIN', 'good');
-    doPrintExam();
+    doPrintExam(mode);
   }
 
   /* ---------- Actions ---------- */
@@ -3593,6 +3630,12 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
       if (e.key === 'Enter') { e.preventDefault(); submitExamPin(); }
     });
   }
+  $$('input[name="examPrintMode"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      const row = $('#examPinRow');
+      if (row) row.hidden = (examPinMode() === 'key');
+    });
+  });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { closeReset(); closeExamGate(); closeExamPinModal(); }
   });

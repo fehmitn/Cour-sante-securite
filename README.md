@@ -157,8 +157,10 @@ quitter l'application et sans connexion réseau.
 - **Tirage aléatoire sans répétition** à l'intérieur de chaque partie, avec un code de sujet
   (`EX-AAAAMMJJ-NN`) et une date de génération.
 - Document **A4** avec en-tête, champs nom/prénom/date, consignes, cases à cocher et barème.
-- **Corrigé optionnel** : la case « Inclure le corrigé » ajoute une page séparée, détachable avant
-  distribution.
+- **Corrigé optionnel** : la case « Inclure le corrigé » active le corrigé ; à l'impression, une
+  modale permet de choisir : **QR + corrigé** (défaut), **QR seulement** — le sujet garde ses QR
+  mais la page corrigé n'est pas imprimée (à distribuer aux stagiaires) — ou **corrigé seulement**
+  (sans QR, sans PIN demandé).
 - **QR corrigé chiffrés par PIN** : quand le corrigé est activé, trois QR code sont imprimés dans le
   sujet lui-même (un par page). Qui scannent un QR arrivent sur le déchiffreur en ligne —
   **[fehmitn.github.io/Cour-sante-securite/decode.html](https://fehmitn.github.io/Cour-sante-securite/decode.html)** —
@@ -196,7 +198,7 @@ réponses : le mot de passe du mode examen côté formateur, et un **code PIN** 
 
 | Étape | Où | Ce qui se passe |
 | :-: | :-- | :-- |
-| 1 | `index.html` | Au clic sur **Imprimer** (corrigé activé), une modale demande un **PIN numérique de 4 à 8 chiffres**. Il n'est **jamais stocké** : il sert uniquement à dériver la clé de chiffrement. |
+| 1 | `index.html` | Au clic sur **Imprimer** (corrigé activé), une modale propose **3 modes d'impression** : `QR + corrigé` (défaut), `QR seulement` (le sujet garde ses QR, sans la page corrigé) ou `Corrigé seul`. Pour les deux premiers, un **PIN numérique de 4 à 8 chiffres** est demandé ; il n'est **jamais stocké**, il sert uniquement à dériver la clé de chiffrement. |
 | 2 | Sujet imprimé | Chacune des **3 pages** du sujet porte un **QR code** encodant une URL du déchiffreur avec le corrigé de la page **chiffré** : `https://fehmitn.github.io/Cour-sante-securite/decode.html?text=SST1…` |
 | 3 | Puzzle papier | Les réponses sont réparties : page 1 = questions 1–6 · page 2 = questions 7–10 + scénarios 1–2 · page 3 = scénario 3 + familles des signaux. Il faut donc les **trois pages** pour disposer du corrigé complet. |
 | 4 | `decode.html` | Le scanneur ouvre l'URL (pré-remplie). Il saisit le **PIN choisi par le formateur** : le corrigé s'affiche, déchiffré **100 % localement** dans le navigateur. |
