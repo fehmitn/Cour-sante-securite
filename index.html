@@ -1872,7 +1872,7 @@ h1,h2,h3{letter-spacing:-.025em}
 
   const CATEGORIES = [
     { id: 'obligation', label: 'Obligation', color: 'bleu' },
-    { id: 'interdiction', label: 'Interdiction', color: 'rouge' },
+    { id: 'interdiction', label: 'Interdiction', color: 'rouge', hint: 'cercle et barre rouge' },
     { id: 'danger', label: 'Danger', color: 'jaune' },
     { id: 'secours', label: 'Secours', color: 'vert' },
     { id: 'incendie', label: 'Incendie', color: 'rouge' }
@@ -2861,7 +2861,7 @@ h1,h2,h3{letter-spacing:-.025em}
       return '<span><span class="exam-check" aria-hidden="true"></span><b>' + EXAM_LETTERS[i] + '</b></span>';
     }).join('');
     const cat = CATEGORIES.find(function (c) { return c.id === q.cat; });
-    const colorHint = cat ? '(Couleur : ' + esc(cat.color) + ')' : '';
+    const colorHint = cat ? '(Couleur : ' + esc(cat.hint || cat.color) + ')' : '';
     return '<article class="exam-signal">' +
       signalPictoHTML(q) +
       '<div class="exam-signal-body"><div class="exam-signal-head"><span>Signal <b>' + (idx + 1) + '</b></span><span>Réponse</span></div>' +
