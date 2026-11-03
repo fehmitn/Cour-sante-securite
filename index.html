@@ -559,14 +559,14 @@ h1,h2,h3{letter-spacing:-.025em}
 .exam-page-line b{color:var(--teal-d)}
 .exam-doc-row{display:flex;align-items:flex-start;gap:10px;margin-top:10px}
 .exam-doc-row .exam-instructions{flex:1;min-width:0}
-.exam-qr-row{display:flex;justify-content:flex-end;margin-top:8px}
-.exam-qr-row[hidden]{display:none!important}
+.exam-qr-head-row{display:flex;align-items:flex-start;gap:12px}
+.exam-qr-head-row .exam-part-head{flex:1;min-width:0}
 .exam-qr{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;width:20mm}
 .exam-qr[hidden]{display:none!important}
 .exam-qr-code{width:20mm;height:20mm;background:#fff;border:1px solid #d7e2eb;border-radius:3px;padding:2px;display:grid;place-items:center;overflow:hidden}
 .exam-qr-code svg{display:block;width:100%;height:100%}
 .exam-qr-wait{font-size:.48rem;text-align:center;line-height:1.35;color:#7a8fa1;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
-.exam-qr-cap{font-size:.52rem;font-weight:800;color:#5f788d;text-align:center;text-transform:uppercase;letter-spacing:.05em}
+.exam-qr-cap{font-size:.52rem;font-weight:800;color:#5f788d;text-align:center;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 .exam-doc-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#5f788d}
 .exam-doc-top b{color:var(--teal-d)}
 .exam-doc-head h1{font-size:1.75rem;margin:10px 0 4px;letter-spacing:-.03em;color:#10283d}
@@ -813,13 +813,11 @@ h1,h2,h3{letter-spacing:-.025em}
   body.exam-active.exam-ready .exam-answer-key{break-before:page;page-break-before:always;margin-top:0;padding-top:0;border-top:0}
   body.exam-active.exam-ready .exam-page-head{break-before:page;page-break-before:always}
   body.exam-active.exam-ready .exam-qr,
-  body.exam-active.exam-ready .exam-qr-row,
+  body.exam-active.exam-ready .exam-qr-head-row,
   body.exam-active.exam-ready .exam-doc-row{break-inside:avoid;page-break-inside:avoid}
-  body.exam-active.exam-ready .exam-qr-row{margin-top:6px}
   body.exam-active.exam-ready .exam-doc-row{margin-top:8px;gap:8px}
   body.exam-active.exam-ready .exam-qr{width:18mm}
-  body.exam-active.exam-ready .exam-qr[hidden],
-  body.exam-active.exam-ready .exam-qr-row[hidden]{display:none!important}
+  body.exam-active.exam-ready .exam-qr[hidden]{display:none!important}
   body.exam-active.exam-ready .exam-answer-key[hidden]{display:none!important}
   body.exam-active.exam-ready .exam-question,
   body.exam-active.exam-ready .exam-scenario,
@@ -2711,7 +2709,7 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
   function qrBlockHTML(page) {
     return '<div class="exam-qr" data-exam-qr="' + page + '"' + (ui.exam.includeKey ? '' : ' hidden') + '>' +
       '<div class="exam-qr-code"><span class="exam-qr-wait">QR corrigé<br>généré à l\'impression</span></div>' +
-      '<span class="exam-qr-cap">Corrigé · page ' + page.slice(1) + '</span>' +
+      '<span class="exam-qr-cap">Corrigé · p.' + page.slice(1) + '</span>' +
     '</div>';
   }
 
@@ -3456,9 +3454,9 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     return '<div class="exam-paper">' +
       examDocHeadHTML() +
       '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">1</span><div><h2>Les fondamentaux</h2><p>' + EXAM_QUIZ_COUNT + ' questions · ' + EXAM_QUIZ_POINTS + ' points par bonne réponse</p></div></div>' + quiz + '</section>' +
-      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">2</span><div><h2>Bien s\'équiper</h2><p>' + EXAM_PPE_COUNT + ' scénarios · 3 EPI à cocher par scénario · ' + EXAM_PPE_POINTS + ' points par scénario (3 EPI corrects)</p></div></div>' +
+      '<section class="exam-part">' +
+        '<div class="exam-qr-head-row"><div class="exam-part-head"><span class="exam-part-num">2</span><div><h2>Bien s\'équiper</h2><p>' + EXAM_PPE_COUNT + ' scénarios · 3 EPI à cocher par scénario · ' + EXAM_PPE_POINTS + ' points par scénario (3 EPI corrects)</p></div></div>' + qrBlockHTML('p2') + '</div>' +
         ppeCards.slice(0, EXAM_PPE_COUNT - 1).join('') +
-        '<div class="exam-qr-row">' + qrBlockHTML('p2') + '</div>' +
         examPageHeadHTML() +
         ppeCards.slice(EXAM_PPE_COUNT - 1).join('') +
       '</section>' +
