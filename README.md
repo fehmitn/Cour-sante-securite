@@ -25,7 +25,8 @@
 > 📴 **L'application fonctionne entièrement hors-ligne** : une fois `index.html` téléchargé, elle
 > s'exécute sans connexion Internet, sans serveur et sans aucune dépendance externe. Les seules
 > ressources réseau de ce dépôt sont les **badges** ci-dessus, purement décoratifs — le jeu, lui,
-> n'effectue aucune requête.
+> n'effectue aucune requête. La seule URL embarquée volontairement est celle du **déchiffreur du
+> corrigé** (`decode.html`, hébergé sur GitHub Pages) encodée dans les QR du mode examen.
 
 ### 📴 Mode hors-ligne natif
 
@@ -42,6 +43,7 @@ salle, sur un poste isolé ou sans Wi-Fi. La progression reste sur l'appareil (`
 - [✨ Fonctionnalités](#-fonctionnalités)
 - [🎮 Le parcours en 3 niveaux](#-le-parcours-en-3-niveaux)
 - [🖨️ Mode examen](#-mode-examen)
+- [🔓 QR du corrigé chiffrés par PIN](#-qr-du-corrigé-chiffrés-par-pin)
 - [🏅 Score, rangs et badges](#-score-rangs-et-badges)
 - [🧱 Technologies utilisées](#-technologies-utilisées)
 - [📁 Arborescence](#-arborescence)
@@ -157,6 +159,11 @@ quitter l'application et sans connexion réseau.
 - Document **A4** avec en-tête, champs nom/prénom/date, consignes, cases à cocher et barème.
 - **Corrigé optionnel** : la case « Inclure le corrigé » ajoute une page séparée, détachable avant
   distribution.
+- **QR corrigé chiffrés par PIN** : quand le corrigé est activé, trois QR code sont imprimés dans le
+  sujet lui-même (un par page). Qui scannent un QR arrivent sur le déchiffreur en ligne —
+  **[fehmitn.github.io/Cour-sante-securite/decode.html](https://fehmitn.github.io/Cour-sante-securite/decode.html)** —
+  avec le corrigé **chiffré** dans l'URL : la page des réponses n'est pas accessible sans le PIN.
+  Voir [🔓 QR du corrigé](#-qr-du-corrigé-chiffrés-par-pin) ci-dessous.
 - Impression par le bouton **Imprimer** ou par `Ctrl+P` / `Cmd+P` ; seule l'épreuve est imprimée,
   sans la navigation de l'application.
 - **3 pages fixes** : page 1 = entête + partie 1, page 2 = suite de la partie 1 + partie 2
@@ -177,6 +184,43 @@ quitter l'application et sans connexion réseau.
 - Astuce : choisir « Enregistrer au format PDF » dans la boîte d'impression pour archiver un sujet.
 
 Accès direct : `index.html#exam`.
+
+---
+
+## 🔓 QR du corrigé chiffrés par PIN
+
+Quand « Inclure le corrigé » est cochée, deux protections empêchent les apprenants d'accéder aux
+réponses : le mot de passe du mode examen côté formateur, et un **code PIN** côté sujet imprimé.
+
+### Comment ça marche
+
+| Étape | Où | Ce qui se passe |
+| :-: | :-- | :-- |
+| 1 | `index.html` | Au clic sur **Imprimer** (corrigé activé), une modale demande un **PIN numérique de 4 à 8 chiffres**. Il n'est **jamais stocké** : il sert uniquement à dériver la clé de chiffrement. |
+| 2 | Sujet imprimé | Chacune des **3 pages** du sujet porte un **QR code** encodant une URL du déchiffreur avec le corrigé de la page **chiffré** : `https://fehmitn.github.io/Cour-sante-securite/decode.html?text=SST1…` |
+| 3 | Puzzle papier | Les réponses sont réparties : page 1 = questions 1–6 · page 2 = questions 7–10 + scénarios 1–2 · page 3 = scénario 3 + familles des signaux. Il faut donc les **trois pages** pour disposer du corrigé complet. |
+| 4 | `decode.html` | Le scanneur ouvre l'URL (pré-remplie). Il saisit le **PIN choisi par le formateur** : le corrigé s'affiche, déchiffré **100 % localement** dans le navigateur. |
+| 5 | Mauvais PIN | Le déchiffreur affiche « PIN incorrect ou contenu illisible » — **jamais** le corrigé, même partiellement. |
+
+### Chiffrement (fait maison, sans dépendance)
+
+- Clé = **SHA-256** du PIN (implémentation SHA-256 écrite à la main, ~64 constantes, aucune API
+  navigateur requise).
+- Chiffrement par **XOR en flux** : chaque bloc de 32 octets est masqué par le condensé SHA-256 de
+  `sst-qr|clé|numéro-de-bloc`.
+- Un **checksum FNV-16** est préfixé au texte clair : un mauvais PIN donne un contrôle échoué, donc
+  une erreur — jamais de corrigé aléatoire.
+- Le tout est encodé en **Base32** (alphabet sans `+` ni `=`, sûr dans une URL) avec le préfixe `SST1`.
+
+Le fichier `decode.html` du dépôt **est** le déchiffreur : autonome (~12 Ko, aucune dépendance), il
+fonctionne aussi localement en `file://`, et depuis GitHub Pages à l'adresse
+<https://fehmitn.github.io/Cour-sante-securite/decode.html>. La page dépend d'Internet uniquement
+parce que le QR encode une URL en ligne — le chiffrement, lui, reste 100 % local.
+
+> 🔐 **Limites honnêtes** : ce chiffrement protège un corrigé papier contre la curiosité immédiate.
+> Ce n'est pas du chiffrement certifié (pas d'AES, pas de HMAC) ; un PIN numérique de 4 chiffres
+> reste trouvables par force brute si quelqu'un recopie le contenu du QR. Choisissez un PIN de
+> 6 à 8 chiffres pour un cours sérieux.
 
 ---
 
@@ -207,11 +251,14 @@ après confirmation dans une boîte de dialogue accessible.
 | **HTML5 sémantique** | Structure `header`/`nav`/`main`/`section`/`footer`, landmarks ARIA, `lang="fr"`, meta description |
 | **CSS3 pur** | Variables `:root`, CSS Grid, Flexbox, `clamp()`, dégradés radiaux, animations et media queries — *aucun framework CSS* |
 | **JavaScript ES6+ (vanilla)** | État applicatif, routage par hash, rendu par templates, `localStorage`, timers — *aucune bibliothèque, aucun build* |
+| **SHA-256 & chiffrement maison** | Vérification du mot de passe examen par rangs et chiffrement du corrigé QR (XOR par flux de condensés SHA-256, checksum FNV-16, Base32) — implémentation manuscrite, sans API Web Crypto ni bibliothèque |
+| [**qrcode-generator 1.4.4**](https://www.npmjs.com/package/qrcode-generator) | Génération des QR codes du corrigé — *Copyright (c) 2009 Kazuhiko Arase*, licence **MIT**, bibliothèque minifiée (~24 Ko) et **embarquée inline** dans `index.html` |
 | **SVG** | Pictogrammes **ISO 7010** aux `viewBox` variés (265×265, 600×525, 200×200, 100×100, 52,9×52,9), sprite `<symbol>` inline, travailleur et jauges animés, **logo de l'établissement** (`#csfmi-logo`, 1241×1241) |
 | **localStorage** | Persistance `vigilance_sst_v1` : meilleurs scores, niveaux terminés, réinitialisation |
 
 > 🧊 **Zéro dépendance, zéro requête réseau.** Pas de CDN, pas de police distante, pas de
-> `npm install` : l'application est un unique fichier `index.html` autonome (~265 Ko).
+> `npm install` : l'application est un `index.html` autonome (~305 Ko, avec la bibliothèque QR
+> embarquée) et un `decode.html` autonome — les deux fonctionnent en `file://`.
 
 ---
 
@@ -219,7 +266,8 @@ après confirmation dans une boîte de dialogue accessible.
 
 ```text
 Cour-sante-securite/
-├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes + logo inline
+├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes + logo + lib QR inline
+├── decode.html                   # Déchiffreur autonome du corrigé QR (fonctionne aussi sur GitHub Pages)
 ├── logo.svg                      # Logo du centre (source, embarqué dans index.html)
 ├── README.md                     # Ce document
 ├── LICENSE                       # Licence MIT (code) + note sur les contenus et pictogrammes
@@ -228,7 +276,9 @@ Cour-sante-securite/
 
 Tous les pictogrammes sont **embarqués en SVG inline** dans `index.html` : le dépôt ne contient aucun
 fichier SVG séparé. Aucun chargement de fichier externe n'est effectué, donc aucun problème de
-`file://` — et l'application se distribue en un seul fichier.
+`file://` — l'application se distribue en deux fichiers : `index.html` (le jeu et le mode examen) et
+`decode.html` (le déchiffreur du corrigé QR, hébergé aussi sur
+[GitHub Pages](https://fehmitn.github.io/Cour-sante-securite/decode.html)).
 
 ---
 
@@ -313,7 +363,9 @@ rechargement automatique à chaque sauvegarde.
 - Respect de `prefers-reduced-motion` (animations désactivées si l'utilisateur le demande).
 - Responsive sans débordement horizontal, cibles tactiles confortables.
 - Mode examen : corrigé masqué par défaut, consignes explicites et impression A4 sur une page
-  distincte pour la correction.
+  distincte pour la correction ; les QR du corrigé s'accompagnent d'une légende « Corrigé · page n ».
+- Déchiffreur `decode.html` : formulaire étiqueté, message d'erreur explicite sans jamais fuiter le
+  corrigé, résultat annoncé via `aria-live`.
 - Code sans dépendance : surface d'attaque minimale, aucune donnée envoyée à un serveur.
 
 ---
@@ -347,8 +399,10 @@ En résumé : utilisation, modification, distribution et usage commercial autori
 conserver la mention de copyright et le texte de la licence. Le logiciel est fourni « en l'état »,
 sans garantie.
 
-**Ce que couvre la MIT** : `index.html` (HTML, CSS, JavaScript), la structure du document et le
-code de ce dépôt.
+**Ce que couvre la MIT** : `index.html` (HTML, CSS, JavaScript), `decode.html`, la structure du
+document et le code de ce dépôt — à l'exception de la bibliothèque `qrcode-generator` embarquée,
+soumise à sa propre licence **MIT** (Copyright (c) 2009 Kazuhiko Arase, mention conservée en tête
+du script inline).
 
 **Ce qu'elle ne couvre pas** :
 

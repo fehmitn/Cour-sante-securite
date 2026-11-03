@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Déchiffrer le corrigé — Vigilance SST</title>
+<!--
+  decode.html — Vigilance SST (Mode examen)
+  Page autonome (aucune dépendance, fonctionne hors-ligne et sur GitHub Pages).
+  Le sujet d'examen imprime des QR contenant une URL de cette page avec le corrigé
+  CHIFFRÉ (?text=SST1…). Le formateur saisit le PIN choisi à l'impression pour lire
+  les réponses. Sans PIN : message d'erreur, jamais le corrigé.
+  Chiffrement : clé SHA-256(PIN), XOR par flux de blocs SHA-256, contrôle FNV-16, Base32.
+-->
+<style>
+  :root{--teal:#0a7d7a;--teal-d:#0a6b70;--line:#dbe5ee;--muted:#5f788d}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:#eff4f8;color:#172b3d}
+  .wrap{max-width:640px;margin:0 auto;padding:26px 16px 60px}
+  .card{background:#fff;border:1px solid #d7e2eb;border-radius:18px;padding:26px 24px;box-shadow:0 24px 60px -40px rgba(11,33,54,.55)}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-d)}
+  .eyebrow:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal)}
+  h1{font-size:1.5rem;letter-spacing:-.03em;margin:10px 0 8px}
+  p.lead{font-size:.88rem;line-height:1.6;color:#4c667b;margin:0 0 4px}
+  label{display:block;font-size:.72rem;font-weight:800;color:#456177;margin:16px 0 6px;letter-spacing:.02em}
+  textarea{width:100%;min-height:88px;padding:12px 13px;border:1px solid var(--line);border-radius:12px;font-family:Consolas,monospace;font-size:.8rem;resize:vertical;background:#f8fbfc;color:#172b3d}
+  input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:1rem;font-weight:800;text-align:center;letter-spacing:.35em;background:#f8fbfc}
+  input:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:-1px;border-color:transparent}
+  .row{display:flex;gap:10px;align-items:center;margin-top:18px}
+  button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;font-size:.86rem;cursor:pointer;background:linear-gradient(145deg,var(--teal),#0a6b70);color:#fff;box-shadow:0 12px 26px -14px rgba(8,127,126,.9)}
+  button:hover{filter:brightness(1.07)}
+  .error{display:none;margin:14px 0 0;padding:11px 13px;border-radius:10px;background:#fdf1ef;border:1px solid #f3d7d1;color:#b03a2e;font-size:.78rem;font-weight:700}
+  .error.show{display:block}
+  #result{margin-top:22px;display:none;border-top:2px solid #172b3d;padding-top:16px}
+  #result h2{font-size:1.02rem;margin:0 0 10px}
+  #result .block{margin-bottom:14px}
+  #result .block h3{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 6px}
+  #result .block p{margin:0;font-size:.82rem;line-height:1.7;color:#172b3d}
+  #result .block p b{display:inline-block;min-width:24px;color:#2e4a60}
+  code{background:#f2f7fa;padding:1px 6px;border-radius:6px;font-size:.75rem}
+  .foot{margin-top:22px;font-size:.68rem;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <span class="eyebrow">Mode examen · corrigé chiffré</span>
+    <h1>Déchiffrer les réponses</h1>
+    <p class="lead">Ce déchiffreur lit le contenu chiffré des <b>QR du corrigé</b> imprimés dans le sujet d'examen.
+    Saisissez le code PIN choisi par le formateur à l'impression. Sans PIN, le contenu reste illisible.</p>
+
+    <label for="cipher">Contenu du QR (l'URL qui commence par « …decode.html?text=SST1… »)</label>
+    <textarea id="cipher" spellcheck="false" placeholder="Collez ici l'URL ou la partie SST1…"></textarea>
+
+    <label for="pin">Code PIN du corrigé</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="••••">
+
+    <div class="row">
+      <button id="decodeBtn" type="button">Déchiffrer le corrigé</button>
+    </div>
+    <p class="error" id="error">PIN incorrect ou contenu illisible. Vérifiez le PIN utilisé à l'impression et le contenu exact du QR.</p>
+
+    <section id="result" aria-live="polite"></section>
+  </div>
+  <p class="foot">Vigilance SST — Centre Sectoriel de Formation aux Métiers industriels khnis — déchiffrement 100 % local, rien n'est envoyé.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- primitives identiques à index.html ---------- */
+  var K93 = '428a2f98,71374491,b5c0fbcf,e9b5dba5,3956c25b,59f111f1,923f82a4,ab1c5ed5,d807aa98,12835b01,243185be,550c7dc3,72be5d74,80deb1fe,9bdc06a7,c19bf174,e49b69c1,efbe4786,0fc19dc6,240ca1cc,2de92c6f,4a7484aa,5cb0a9dc,76f988da,983e5152,a831c66d,b00327c8,bf597fc7,c6e00bf3,d5a79147,06ca6351,14292967,27b70a85,2e1b2138,4d2c6dfc,53380d13,650a7354,766a0abb,81c2c92e,92722c85,a2bfe8a1,a81a664b,c24b8b70,c76c51a3,d192e819,d6990624,f40e3585,106aa070,19a4c116,1e376c08,2748774c,34b0bcb5,391c0cb3,4ed8aa4a,5b9cca4f,682e6ff3,748f82ee,78a5636f,84c87814,8cc70208,90befffa,a4506ceb,bef9a3f7,c67178f2'.split(',');
+  var H93 = '6a09e667,bb67ae85,3c6ef372,a54ff53a,510e527f,9b05688c,1f83d9ab,5be0cd19'.split(',');
+
+  function sha256Bytes(msg) {
+    function rotr(x, n) { return (x >>> n) | (x << (32 - n)); }
+    var bytes = [];
+    for (var i = 0; i < msg.length; i++) bytes.push(msg.charCodeAt(i) & 0xff);
+    var bitLen = bytes.length * 8;
+    bytes.push(0x80);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    var hiLen = (bitLen / 0x100000000) >>> 0;
+    var loLen = bitLen >>> 0;
+    var lens = [(hiLen >>> 24) & 255, (hiLen >>> 16) & 255, (hiLen >>> 8) & 255, hiLen & 255,
+      (loLen >>> 24) & 255, (loLen >>> 16) & 255, (loLen >>> 8) & 255, loLen & 255];
+    for (var z = 0; z < lens.length; z++) bytes.push(lens[z]);
+    var h = H93.map(function (x) { return parseInt(x, 16); });
+    var w = [];
+    for (var b = 0; b < bytes.length; b += 64) {
+      for (var t = 0; t < 16; t++) w[t] = ((bytes[b + t * 4] << 24) | (bytes[b + t * 4 + 1] << 16) | (bytes[b + t * 4 + 2] << 8) | bytes[b + t * 4 + 3]) >>> 0;
+      for (var u = 16; u < 64; u++) {
+        var s0 = (rotr(w[u - 15], 7) ^ rotr(w[u - 15], 18) ^ (w[u - 15] >>> 3)) >>> 0;
+        var s1 = (rotr(w[u - 2], 17) ^ rotr(w[u - 2], 19) ^ (w[u - 2] >>> 10)) >>> 0;
+        w[u] = (w[u - 16] + s0 + w[u - 7] + s1) >>> 0;
+      }
+      var a = h[0], bb = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], hh = h[7];
+      for (var k = 0; k < 64; k++) {
+        var S1 = (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) >>> 0;
+        var ch = ((e & f) ^ (~e & g)) >>> 0;
+        var t1 = (hh + S1 + ch + parseInt(K93[k], 16) + w[k]) >>> 0;
+        var S0 = (rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) >>> 0;
+        var maj = ((a & bb) ^ (a & c) ^ (bb & c)) >>> 0;
+        var t2 = (S0 + maj) >>> 0;
+        hh = g; g = f; f = e;
+        e = (d + t1) >>> 0;
+        d = c; c = bb; bb = a;
+        a = (t1 + t2) >>> 0;
+      }
+      h[0] = (h[0] + a) >>> 0; h[1] = (h[1] + bb) >>> 0; h[2] = (h[2] + c) >>> 0; h[3] = (h[3] + d) >>> 0;
+      h[4] = (h[4] + e) >>> 0; h[5] = (h[5] + f) >>> 0; h[6] = (h[6] + g) >>> 0; h[7] = (h[7] + hh) >>> 0;
+    }
+    var out = [];
+    for (var j = 0; j < 8; j++) { out.push((h[j] >>> 24) & 255, (h[j] >>> 16) & 255, (h[j] >>> 8) & 255, h[j] & 255); }
+    return out;
+  }
+
+  var B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  function b32decode(str) {
+    var bytes = [], value = 0, bits = 0;
+    for (var i = 0; i < str.length; i++) {
+      var c = B32.indexOf(str.charAt(i).toUpperCase());
+      if (c === -1) return null;
+      value = (value << 5) | c;
+      bits += 5;
+      if (bits >= 8) { bytes.push((value >>> (bits - 8)) & 255); bits -= 8; }
+    }
+    return bytes;
+  }
+
+  function xorKeyBytes(keyHex, data) {
+    var blocks = [];
+    return data.map(function (b, i) {
+      var bi = i >> 5;
+      if (!blocks[bi]) blocks[bi] = sha256Bytes('sst-qr|' + keyHex + '|' + bi);
+      return b ^ blocks[bi][i & 31];
+    });
+  }
+
+  function fnv16(bytes) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < bytes.length; i++) { h = (h ^ bytes[i]) >>> 0; h = (h * 0x01000193) >>> 0; }
+    return h & 0xffff;
+  }
+
+  function hexOf(bytes) { return bytes.map(function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
+
+  function decryptQRPayload(text, pin) {
+    var t = String(text || '').replace(/^.*?((?:SST1)[A-Z2-7]+).*$/i, '$1').toUpperCase();
+    if (t.slice(0, 4) !== 'SST1') return null;
+    var enc = b32decode(t.slice(4));
+    if (!enc || enc.length < 3) return null;
+    var keyHex = hexOf(sha256Bytes('pin|' + pin));
+    var data = xorKeyBytes(keyHex, enc);
+    var stored = ((data[0] << 8) | data[1]);
+    if (stored !== fnv16(data.slice(2))) return null;
+    var out = '';
+    for (var i = 2; i < data.length; i++) out += String.fromCharCode(data[i]);
+    return out;
+  }
+
+  /* ---------- corrigé lisible ---------- */
+  var GEAR_NAMES = ['Casque', 'Gants', 'Chaussures', 'Lunettes', 'Masque', 'Harnais', 'Protections auditives'];
+  var FAMILIES = ['Obligation', 'Interdiction', 'Danger', 'Secours', 'Incendie'];
+  var LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+  function quizHTML(label, letters, startQ) {
+    var items = letters.split('').map(function (l, i) { return '<b>' + (startQ + i) + '.</b> ' + l; });
+    return '<div class="block"><h3>' + label + '</h3><p>' + items.join(' · ') + '</p></div>';
+  }
+  function epiHTML(label, digits) {
+    var items = digits.split('').map(function (d) {
+      var g = GEAR_NAMES[parseInt(d, 10)];
+      return g ? g : 'code ' + d;
+    });
+    return '<div class="block"><h3>' + label + '</h3><p>✔ ' + items.join(' · ') + '</p></div>';
+  }
+  function signalsHTML(letters) {
+    return '<div class="block"><h3>Partie 3 · Familles des signaux</h3><p>' + letters.split('').map(function (l, i) {
+      var idx = LETTERS.indexOf(l);
+      return '<b>' + (i + 1) + '.</b> ' + (idx >= 0 ? FAMILIES[idx] + ' (' + l + ')' : l);
+    }).join('<br>') + '</p></div>';
+  }
+
+  function renderCorrige(plain) {
+    var out = '';
+    plain.split('|').forEach(function (seg) {
+      var key = seg.slice(0, seg.indexOf(':'));
+      var val = seg.slice(seg.indexOf(':') + 1);
+      if (key === 'Q1') out += quizHTML('Partie 1 · Questions 1–' + (val.length), val, 1);
+      else if (key === 'Q7') out += quizHTML('Partie 1 (suite) · Questions 7–' + (6 + val.length), val, 7);
+      else if (key === 'E1') out += epiHTML('Partie 2 · Scénario 1 — EPI corrects', val);
+      else if (key === 'E2') out += epiHTML('Partie 2 · Scénario 2 — EPI corrects', val);
+      else if (key === 'E3') out += epiHTML('Partie 2 (page 3) · Scénario 3 — EPI corrects', val);
+      else if (key === 'S') out += signalsHTML(val);
+    });
+    document.getElementById('result').innerHTML = '<h2>Corrigé déchiffré</h2>' + out;
+    document.getElementById('result').style.display = 'block';
+  }
+
+  function showError() {
+    var e = document.getElementById('error');
+    e.classList.add('show');
+    document.getElementById('result').style.display = 'none';
+  }
+
+  function run() {
+    var cipherEl = document.getElementById('cipher');
+    var pinEl = document.getElementById('pin');
+    var errEl = document.getElementById('error');
+    errEl.classList.remove('show');
+    var pin = (pinEl.value || '').replace(/\D/g, '');
+    var raw = (cipherEl.value || '').trim();
+    if (!/^\d{4,8}$/.test(pin) || raw.length < 8) { showError(); return; }
+    var plain = decryptQRPayload(raw, pin);
+    if (!plain) { showError(); return; }
+    renderCorrige(plain);
+  }
+
+  // pré-remplissage depuis ?text= ou #text=
+  var params = new URLSearchParams((location.search || '').slice(1));
+  var hashText = (location.hash || '').slice(1);
+  var prefill = params.get('text') || (hashText.indexOf('text=') === 0 ? hashText.slice(5) : '');
+  if (prefill) document.getElementById('cipher').value = decodeURIComponent(prefill.replace(/\+/g, '%20'));
+  document.getElementById('decodeBtn').addEventListener('click', run);
+  document.getElementById('pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+})();
+</script>
+</body>
+</html>
