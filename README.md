@@ -1,6 +1,6 @@
 # 🛡️ Vigilance SST
 
-### Serious game **Santé & Sécurité au Travail** — 3 niveaux, mode examen, 520 points de vigilance, 100 % hors-ligne
+### Serious game **Santé & Sécurité au Travail** — 3 niveaux, mode examen, 570 points de vigilance, 100 % hors-ligne
 
 <p>
   <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
@@ -60,11 +60,11 @@ Les formations SST sont souvent descendantes : un support, des slides, un questi
 
 | Objectif | Réponse apportée |
 | :-- | :-- |
-| Ancrer les définitions (accident, maladie professionnelle, feu, EPI) | 🔍 Quiz de 10 questions tirées d'une banque de 20, avec explication systématique |
+| Ancrer les définitions (accident, maladie professionnelle, feu, EPI) | 🔍 Quiz de 10 questions tirées d'une banque de 25, avec explication systématique |
 | Faire le lien entre risque et protection | 🧰 4 situations de travail à équiper correctement |
 | Reconnaître les familles de signaux d'un coup d'œil | ⚡ Flash de 12 s sur 20 pictogrammes ISO 7010 |
 | Évaluer les acquis sur papier | 🖨️ Examen A4 de 10 questions, 3 scénarios EPI et 10 signaux, corrigé optionnel |
-| Donner envie de rejouer | 🏆 520 PV, 5 rangs, 5 badges, meilleurs scores conservés et tirage aléatoire |
+| Donner envie de rejouer | 🏆 570 PV, 5 rangs, 5 badges, meilleurs scores conservés et tirage aléatoire |
 | Rester utilisable en salle, sans réseau | 📴 Fichier local, aucune dépendance externe |
 
 Public visé : nouveaux arrivants, sensibilisation annuelle, ateliers de prévention, étudiants en
@@ -76,7 +76,7 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 
 - 🧭 **Tableau de bord unifié** — score global, anneau de progression, rang courant et état des 3 niveaux.
 - 🎯 **Parcours progressif** — les niveaux s'enchaînent, mais restent accessibles librement (navigation par onglets).
-- 🎲 **Quiz aléatoire** — 10 questions tirées parmi 20 à chaque tentative, sans reprendre exactement la même sélection.
+- 🎲 **Quiz aléatoire** — 10 questions tirées parmi 25 à chaque tentative (dont au moins 2 de manutention), sans reprendre exactement la même sélection.
 - 💾 **Progression persistante** — meilleurs scores sauvegardés dans `localStorage` (clé `vigilance_sst_v1`), appareil par appareil.
 - 🔁 **Rejouabilité** — chaque tentative peut améliorer le record ; le score total ne régresse jamais.
 - 🧾 **Feedback pédagogique** — chaque réponse est expliquée (bonne ou mauvaise), sans jamais laisser l'apprenant deviner.
@@ -86,8 +86,8 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 - 🧯 **Pictogrammes officiels** — 20 signaux ISO 7010 intégrés en SVG inline, sans chargement réseau.
 - 📱 **Responsive** — grilles fluides du mobile au grand écran, barre supérieure collante.
 - ♿ **Accessible** — HTML sémantique, `aria-live` sur les retours, `aria-modal`, focus visibles, `prefers-reduced-motion`.
-- 🖨️ **Mémo imprimable** — fiche de révision « L'essentiel SST » consultable à tout moment.
-- 🧾 **Mode examen** — 10 questions du niveau 1, 3 scénarios EPI et 10 signaux tirés au hasard, document A4 avec corrigé optionnel sur une page séparée.
+- 🖨️ **Mémo en 3 sous-pages** — pages 1–6 (fondamentaux), pages 8–16 (notions de sécurité) et onglet équipements : EPI, familles de signaux et pictogrammes de manutention normalisés en SVG.
+- 🧾 **Mode examen** — 10 questions du niveau 1 (dont au moins 2 de manutention), 3 scénarios EPI et 10 signaux tirés au hasard, document A4 avec corrigé optionnel sur une page séparée.
 - 🔗 **Routes par ancre** — `#dashboard`, `#quiz`, `#ppe`, `#signals`, `#exam`, `#memo` : chaque écran est partageable.
 
 ---
@@ -96,18 +96,18 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 
 | # | Niveau | Mécanique | Contenu | Barème |
 | :-: | :-- | :-- | :-- | :-- |
-| **01** | 🔍 **Les fondamentaux** | Quiz à choix unique, correction expliquée | Banque de 20 questions, 10 tirées au hasard par session | 10 PV / bonne réponse → **100 PV par session** (200 PV banque complète) |
+| **01** | 🔍 **Les fondamentaux** | Quiz à choix unique, correction expliquée | Banque de 25 questions, 10 tirées au hasard par session (≥ 2 de manutention) | 10 PV / bonne réponse → **100 PV par session** (250 PV banque complète) |
 | **02** | 🧰 **Bien s'équiper** | Sélection multiple d'EPI sur 4 situations | Chantier extérieur · Travail en hauteur · Laboratoire · Atelier de meulage | 10 PV / EPI correct, −5 PV / EPI inutile → **120 PV** |
 | **03** | ⚡ **L'œil du safety** | Reconnaissance de famille sous contrainte de temps | 20 pictogrammes, 5 familles ISO 7010 | 10 PV / signal en moins de 12 s → **200 PV** |
-| | | | **Total** | **520 PV** |
+| | | | **Total** | **570 PV** |
 
 ### 01 · 🔍 Quiz SST — « Les fondamentaux »
 
-- **20 questions en banque**, dont **10 tirées au hasard** à chaque session : deux parties ne proposent pas le même parcours.
+- **25 questions en banque**, dont **10 tirées au hasard** à chaque session avec un minimum garanti de **2 questions de manutention** (pictogrammes de colis, techniques de levage) : deux parties ne proposent pas le même parcours.
 - Une seule bonne réponse, validation puis correction immédiate.
 - Chaque question est accompagnée d'une **explication courte** issue du support de formation.
-- Panneau latéral : les 20 questions de la banque avec ✓ pour celles déjà maîtrisées ; la maîtrise est conservée d'une session à l'autre.
-- Écran de fin : bonnes réponses sur 10, meilleur score global sur 200, message adapté (≥ 80 %, ≥ 50 %, sinon révision du mémo).
+- Panneau latéral : les 25 questions de la banque avec ✓ pour celles déjà maîtrisées ; la maîtrise est conservée d'une session à l'autre.
+- Écran de fin : bonnes réponses sur 10, meilleur score global sur 250, message adapté (≥ 80 %, ≥ 50 %, sinon révision du mémo).
 
 ### 02 · 🧰 Équipez le travailleur
 
@@ -147,7 +147,7 @@ quitter l'application et sans connexion réseau.
 
 | Partie | Tirage | Barème indicatif |
 | :-- | :-- | :-: |
-| Niveau 1 · fondamentaux | 10 questions tirées parmi 20, 4 choix par question, 4 pts par bonne réponse | 40 pts |
+| Niveau 1 · fondamentaux | 10 questions tirées parmi 25, dont au moins 2 de manutention, 4 choix par question, 4 pts par bonne réponse | 40 pts |
 | Niveau 2 · EPI | 3 scénarios tirés parmi 4, 3 EPI à cocher par scénario, 10 pts par scénario correct | 30 pts |
 | Niveau 3 · signaux | 10 pictogrammes tirés parmi 20, 1 famille à cocher, 3 pts par bonne famille | 30 pts |
 | | **Total** | **100 pts** |
@@ -169,15 +169,15 @@ Accès direct : `index.html#exam`.
 
 ## 🏅 Score, rangs et badges
 
-**Points de Vigilance (PV)** : 520 au maximum, affichés en permanence dans la barre supérieure et le pied de page.
+**Points de Vigilance (PV)** : 570 au maximum, affichés en permanence dans la barre supérieure et le pied de page.
 
 | Rang | Seuil | Message |
 | :-- | :-: | :-- |
 | 👀 Observateur | 0 PV | Le point de départ de toute vigilance |
 | 🟢 Vigilant | 110 PV | Les réflexes commencent à s'installer |
-| 🛡️ Gardien SST | 250 PV | Vous savez reconnaître et prévenir |
-| 🎓 Expert SST | 390 PV | Les fondamentaux sont solides |
-| 🏆 Légende SST | 520 PV | Parcours complet, sans faute |
+| 🛡️ Gardien SST | 270 PV | Vous savez reconnaître et prévenir |
+| 🎓 Expert SST | 420 PV | Les fondamentaux sont solides |
+| 🏆 Légende SST | 570 PV | Parcours complet, sans faute |
 
 Badges débloqués en cours de route : **Premier pas** · **Quiz terminé** · **Bien équipé** ·
 **Œil de lynx** · **Légende SST**.
@@ -198,7 +198,7 @@ après confirmation dans une boîte de dialogue accessible.
 | **localStorage** | Persistance `vigilance_sst_v1` : meilleurs scores, niveaux terminés, réinitialisation |
 
 > 🧊 **Zéro dépendance, zéro requête réseau.** Pas de CDN, pas de police distante, pas de
-> `npm install` : l'application est un unique fichier `index.html` autonome (~190 Ko).
+> `npm install` : l'application est un unique fichier `index.html` autonome (~210 Ko).
 
 ---
 
@@ -274,6 +274,13 @@ rechargement automatique à chaque sauvegarde.
 - **Pictogrammes complémentaires** : SVG issus de **Wikimedia Commons** (M004, M009, P003, P010,
   W001, W016, E007, E011, F003, F005), nettoyés puis intégrés directement dans `index.html` — le
   dépôt ne distribue aucun fichier SVG séparé.
+- **Pictogrammes de manutention** (pages 44–48 du support) : marques sur les colis (fragile, haut,
+  limite de température, empilage, crochets, pinces, diable, chariot à fourches) redessinées en
+  SVG inline dans le style normalisé (glyphe noir sur fond clair), et mobilisées dans le quiz
+  (banque de 25 questions).
+- **Mémo en 3 sous-pages** : `index.html#memo` — pages 1–6 du support (fondamentaux), pages 8–16
+  (notions de sécurité, feu-électricité-environnement) et onglet « Équipements & pictogrammes »
+  (EPI au style « obligation » ISO 7010, 5 familles de signaux, pictogrammes de manutention).
 - **Parti pris** : contenus reformulés et situations EPI simplifiées à des fins pédagogiques.
   Ce jeu **ne remplace pas** une formation réglementaire, un plan de prévention ou l'avis d'un
   préventeur : il sert à sensibiliser et à réviser.

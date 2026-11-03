@@ -459,6 +459,26 @@ h1,h2,h3{letter-spacing:-.025em}
 .memo-card ul{margin:11px 0 0;padding-left:18px;font-size:.78rem;line-height:1.65;color:#516b80}
 .memo-card li{margin-bottom:6px}
 .memo-card li::marker{color:var(--teal)}
+/* ---------- memo : sous-pages ---------- */
+.memo-tabs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px}
+.memo-tab{font:inherit;font-size:.84rem;font-weight:600;padding:10px 16px;border-radius:999px;border:1px solid #d5e2ec;background:#fff;color:#516b80;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.memo-tab:hover{border-color:var(--teal);color:var(--teal-d)}
+.memo-tab.active{background:linear-gradient(135deg,#0f3b57,#0a7778);border-color:transparent;color:#fff}
+.memo-pane{display:none}
+.memo-pane.active{display:block}
+.memo-subhead{display:flex;align-items:center;gap:9px;margin:26px 0 6px;font-size:1rem;color:#20455e}
+.memo-pane .memo-subhead:first-child{margin-top:0}
+.memo-subhead .icon{width:20px;height:20px;color:var(--teal-d)}
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:12px;margin:14px 0 8px}
+.equip-card{background:#fff;border:1px solid #e2ebf2;border-radius:16px;padding:14px 8px;text-align:center}
+.equip-card svg{width:78px;height:78px;display:block;margin:0 auto}
+.equip-card strong{display:block;margin-top:9px;font-size:.78rem;color:#20455e}
+.equip-card small{display:block;margin-top:3px;font-size:.66rem;line-height:1.45;color:#7a8ea0}
+.picto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:14px 0 8px}
+.picto-card{background:#fff;border:1px solid #e2ebf2;border-radius:16px;padding:14px 10px;text-align:center}
+.picto-card svg{width:88px;height:88px;display:block;margin:0 auto}
+.picto-card strong{display:block;margin-top:8px;font-size:.78rem;color:#20455e}
+.picto-card small{display:block;margin-top:3px;font-size:.66rem;line-height:1.45;color:#7a8ea0}
 .two-col-list{display:grid;grid-template-columns:1fr 1fr;gap:17px}
 .two-col-list h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;margin:0 0 7px;color:var(--teal-d)}
 .two-col-list ul{margin:0;padding-left:16px}
@@ -815,7 +835,7 @@ h1,h2,h3{letter-spacing:-.025em}
             <a class="btn btn-ghost-light" href="#memo"><svg class="icon"><use href="#i-book"></use></svg>Ouvrir le mémo SST</a>
           </div>
           <div class="hero-meta">
-            <span><svg class="icon"><use href="#i-target"></use></svg>520 PV à gagner</span>
+            <span><svg class="icon"><use href="#i-target"></use></svg><span id="goalMaxPv">520 PV à gagner</span></span>
             <span><svg class="icon"><use href="#i-check"></use></svg>100 % hors-ligne</span>
             <span><svg class="icon"><use href="#i-trophy"></use></svg>Progression sauvegardée</span>
           </div>
@@ -828,7 +848,7 @@ h1,h2,h3{letter-spacing:-.025em}
               <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
               <circle class="ring-fg" id="scoreRing" cx="70" cy="70" r="58"></circle>
             </svg>
-            <div class="ring-center"><strong id="heroScore">0</strong><span>sur 520 PV</span></div>
+            <div class="ring-center"><strong id="heroScore">0</strong><span id="heroMaxPx">sur 520 PV</span></div>
           </div>
           <div class="rank-row"><span class="rank-label">Rang actuel</span><span class="rank-pill" id="heroRank">Observateur</span></div>
           <div class="bar rank-bar"><span id="rankBar" style="width:0%"></span></div>
@@ -847,7 +867,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <div class="level-icon"><svg class="icon"><use href="#i-quiz"></use></svg></div>
           <h3>Les fondamentaux</h3>
           <p>Définitions, droits, obligations et notions essentielles sur le feu.</p>
-          <div class="level-score-row"><span><strong data-score="quiz">0</strong> / 200 PV</span><span data-sub="quiz">0/20 questions maîtrisées</span></div>
+          <div class="level-score-row"><span><strong data-score="quiz">0</strong> / <span id="cardQuizMax">200</span> PV</span><span data-sub="quiz">0/20 questions maîtrisées</span></div>
           <div class="bar"><span data-bar="quiz"></span></div>
           <a class="btn btn-primary btn-small" href="#quiz">Jouer au quiz <svg class="icon"><use href="#i-arrow"></use></svg></a>
         </article>
@@ -856,7 +876,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <div class="level-icon"><svg class="icon"><use href="#i-ppe"></use></svg></div>
           <h3>Bien s'équiper</h3>
           <p>Choisissez les EPI adaptés à quatre situations de travail à risque.</p>
-          <div class="level-score-row"><span><strong data-score="ppe">0</strong> / 120 PV</span><span data-sub="ppe">0/4 scénarios</span></div>
+          <div class="level-score-row"><span><strong data-score="ppe">0</strong> / <span id="cardPpeMax">120</span> PV</span><span data-sub="ppe">0/4 scénarios</span></div>
           <div class="bar"><span data-bar="ppe"></span></div>
           <a class="btn btn-primary btn-small" href="#ppe">Équiper le travailleur <svg class="icon"><use href="#i-arrow"></use></svg></a>
         </article>
@@ -865,7 +885,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <div class="level-icon"><svg class="icon"><use href="#i-signals"></use></svg></div>
           <h3>L'œil du safety</h3>
           <p>Reconnaissez en un flash les formes et couleurs des signaux SST.</p>
-          <div class="level-score-row"><span><strong data-score="signals">0</strong> / 200 PV</span><span data-sub="signals">0/20 signaux</span></div>
+          <div class="level-score-row"><span><strong data-score="signals">0</strong> / <span id="cardSignalsMax">200</span> PV</span><span data-sub="signals">0/10 signaux</span></div>
           <div class="bar"><span data-bar="signals"></span></div>
           <a class="btn btn-primary btn-small" href="#signals">Lancer le flash <svg class="icon"><use href="#i-arrow"></use></svg></a>
         </article>
@@ -876,7 +896,7 @@ h1,h2,h3{letter-spacing:-.025em}
         <div>
           <span class="eyebrow dark">Mode examen</span>
           <h3>Générer une épreuve imprimable</h3>
-          <p>10 questions du niveau 1, 3 scénarios EPI et 10 signaux tirés au hasard. Aperçu A4, corrigé optionnel sur une page séparée.</p>
+          <p>10 questions du niveau 1 (dont au moins 2 de manutention), 3 scénarios EPI et 10 signaux tirés au hasard. Aperçu A4, corrigé optionnel sur une page séparée.</p>
         </div>
         <a class="btn btn-primary" href="#exam">Créer l'examen <svg class="icon"><use href="#i-arrow"></use></svg></a>
       </article>
@@ -888,9 +908,9 @@ h1,h2,h3{letter-spacing:-.025em}
           <p class="muted small" style="margin-bottom:0">Les meilleurs scores sont conservés. Rejouez pour améliorer votre total.</p>
           <div class="stat-grid">
             <div class="stat"><span>Niveaux terminés</span><strong id="levelsDone">0 / 3</strong></div>
-            <div class="stat"><span>Quiz maîtrisé</span><strong id="quizMastered">0 / 20</strong></div>
+            <div class="stat"><span>Quiz maîtrisé</span><strong id="quizMastered">0 / 25</strong></div>
             <div class="stat"><span>Scénarios EPI</span><strong id="ppeDone">0 / 4</strong></div>
-            <div class="stat"><span>Signaux reconnus</span><strong id="signalsMastered">0 / 20</strong></div>
+            <div class="stat"><span>Signaux reconnus</span><strong id="signalsMastered">0 / 10</strong></div>
           </div>
           <div class="badge-row" id="badgeRow"></div>
         </div>
@@ -907,8 +927,8 @@ h1,h2,h3{letter-spacing:-.025em}
     <!-- QUIZ -->
     <section class="view" id="view-quiz" aria-labelledby="quizTitle">
       <div class="subpage-head">
-        <div><span class="eyebrow dark">Niveau 1 · Les fondamentaux</span><h1 id="quizTitle">Quiz SST</h1><p>10 questions tirées au hasard parmi une banque de 20 : définitions, droits et obligations, feu, électricité et prévention.</p></div>
-        <div class="level-chip"><b>01</b>200 PV à maîtriser</div>
+        <div><span class="eyebrow dark">Niveau 1 · Les fondamentaux</span><h1 id="quizTitle">Quiz SST</h1><p>10 questions tirées au hasard parmi une banque de 25 : définitions, droits et obligations, feu, électricité, prévention et manutention. Au moins 2 questions de manutention à chaque tirage.</p></div>
+        <div class="level-chip"><b>01</b><span id="quizChipMax">200</span> PV à maîtriser</div>
       </div>
       <div id="quizApp"></div>
     </section>
@@ -926,7 +946,7 @@ h1,h2,h3{letter-spacing:-.025em}
     <section class="view" id="view-signals" aria-labelledby="signalsTitle">
       <div class="subpage-head">
         <div><span class="eyebrow dark">Niveau 3 · L'œil du safety</span><h1 id="signalsTitle">Reconnaissance des signaux</h1><p>Un signal apparaît. Identifiez sa famille avant la fin du chrono.</p></div>
-        <div class="level-chip"><b>03</b>200 PV possibles</div>
+        <div class="level-chip"><b>03</b><span id="signalsChipMax">200</span> PV possibles</div>
       </div>
       <div id="signalsApp"></div>
     </section>
@@ -934,7 +954,7 @@ h1,h2,h3{letter-spacing:-.025em}
     <!-- EXAMEN -->
     <section class="view" id="view-exam" aria-labelledby="examTitle">
       <div class="subpage-head">
-        <div><span class="eyebrow dark">Mode examen</span><h1 id="examTitle">Épreuve imprimable</h1><p>Composez un sujet unique : 10 questions du niveau 1, 3 scénarios EPI du niveau 2 et 10 signaux du niveau 3, tirés au hasard.</p></div>
+        <div><span class="eyebrow dark">Mode examen</span><h1 id="examTitle">Épreuve imprimable</h1><p>Composez un sujet unique : 10 questions du niveau 1 (dont au moins 2 de manutention), 3 scénarios EPI du niveau 2 et 10 signaux du niveau 3, tirés au hasard.</p></div>
         <div class="level-chip"><b>EX</b>A4 · corrigé optionnel</div>
       </div>
       <div id="examApp"></div>
@@ -943,13 +963,22 @@ h1,h2,h3{letter-spacing:-.025em}
     <!-- MEMO -->
     <section class="view" id="view-memo" aria-labelledby="memoTitle">
       <div class="subpage-head">
-        <div><span class="eyebrow dark">Fiche mémo</span><h1 id="memoTitle">L'essentiel SST</h1><p>Les notions clés extraites du support de formation, à garder sous la main.</p></div>
+        <div><span class="eyebrow dark">Fiche mémo</span><h1 id="memoTitle">L'essentiel SST</h1><p>Les notions clés extraites du support de formation, à garder sous la main : fondamentaux, notions de sécurité et équipements.</p></div>
         <div class="level-chip"><b>SST</b>À réviser</div>
       </div>
+      <nav class="memo-tabs" aria-label="Sous-pages du mémo">
+        <button type="button" class="memo-tab active" data-memo-tab="fondamentaux" aria-selected="true">Pages 1–6 · Fondamentaux</button>
+        <button type="button" class="memo-tab" data-memo-tab="risques" aria-selected="false">Pages 8–16 · Notions de sécurité</button>
+        <button type="button" class="memo-tab" data-memo-tab="equipements" aria-selected="false">Équipements &amp; pictogrammes</button>
+      </nav>
+
+      <!-- Mémo 1 : pages 1-6 -->
+      <div class="memo-pane active" data-memo-pane="fondamentaux">
       <div class="memo-grid">
         <article class="memo-card">
           <h3><svg class="icon"><use href="#i-alert"></use></svg>Accident du travail</h3>
           <p class="quote">Un événement imprévu et soudain, attribuable à toute cause, survenant à une personne par le fait ou à l'occasion de son travail et qui entraîne une lésion professionnelle.</p>
+          <p style="margin-top:10px">Trois critères : il est <strong>imprévu</strong>, lié au <strong>fait ou à l'occasion du travail</strong>, et il provoque une <strong>lésion professionnelle</strong>.</p>
         </article>
         <article class="memo-card">
           <h3><svg class="icon"><use href="#i-clock"></use></svg>Maladie professionnelle</h3>
@@ -957,33 +986,103 @@ h1,h2,h3{letter-spacing:-.025em}
           <p style="margin-top:10px">Exemples : maladies de la peau, cancers, maux de dos, stress, atteintes oculaires.</p>
         </article>
         <article class="memo-card">
-          <h3><svg class="icon"><use href="#i-shield"></use></svg>Droits et obligations du travailleur</h3>
-          <div class="two-col-list">
-            <div><h4>Droits</h4><ul><li>Conditions de travail sécuritaires</li><li>Programme de prévention</li><li>Formation et information SST</li><li>Services de santé préventifs et curatifs</li><li>Droit de refus justifié</li><li>Participation à l'élimination des risques</li></ul></div>
-            <div><h4>Obligations</h4><ul><li>Protéger sa santé, sa sécurité et son intégrité</li><li>Ne pas mettre les autres en danger</li><li>Respecter les consignes et porter ses EPI</li></ul></div>
-          </div>
+          <h3><svg class="icon"><use href="#i-shield"></use></svg>Droits du travailleur</h3>
+          <ul><li>Bénéficier de conditions de travail sécuritaires.</li><li>Prendre connaissance du programme de prévention.</li><li>Recevoir la formation, l'information et les conseils nécessaires en SST.</li><li>Profiter de services de santé préventifs et curatifs.</li><li>Droit de refus au travail lorsque les conditions le justifient.</li><li>Participer à l'identification et à l'élimination des risques dans son milieu de travail.</li></ul>
         </article>
         <article class="memo-card">
-          <h3><svg class="icon"><use href="#i-ppe"></use></svg>Droits de la personne accidentée</h3>
-          <ul><li><strong>Assistance médicale :</strong> secours, évacuation, soins d'urgence, traitements.</li><li><strong>Indemnisation :</strong> pourcentage du salaire, remboursement de l'assistance.</li><li><strong>Réadaptation :</strong> adaptation à un nouvel environnement après une lésion grave.</li><li><strong>Retour au travail :</strong> fourniture d'un travail convenable.</li></ul>
-          <p style="margin-top:10px">L'employeur doit aussi fournir gratuitement les EPI et assurer formation, entraînement et supervision.</p>
+          <h3><svg class="icon"><use href="#i-shield"></use></svg>Obligations du travailleur</h3>
+          <ul><li>Prendre les mesures pour protéger sa santé, sa sécurité et son intégrité physique.</li><li>Veiller à ne pas mettre en danger la santé, la sécurité ou l'intégrité physique des autres.</li><li>Respecter les consignes et porter les EPI fournis.</li></ul>
         </article>
         <article class="memo-card">
-          <h3><svg class="icon"><use href="#i-fire"></use></svg>Le feu et ses agresseurs</h3>
-          <p>Quatre éléments sont nécessaires à un incendie. Si l'on en retire un, le feu s'éteint rapidement.</p>
+          <h3><svg class="icon"><use href="#i-ppe"></use></svg>Obligations de l'employeur</h3>
+          <ul><li>S'assurer que le travailleur reçoit la formation, l'entraînement et la supervision nécessaires pour accomplir son travail en sécurité.</li><li>Fournir gratuitement les équipements et les moyens de protection individuels.</li></ul>
+          <p style="margin-top:10px">La prévention des risques commence à la source : les protections individuelles sont le complément, pas la seule barrière.</p>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-cross"></use></svg>Droits de la personne accidentée</h3>
+          <ul><li><strong>Assistance médicale :</strong> secours, évacuation, soins d'urgence, traitements et médicaments.</li><li><strong>Indemnisation :</strong> pourcentage du salaire, remboursement de l'assistance en cas d'accident grave ou mortel.</li><li><strong>Réadaptation :</strong> adaptation de l'accidenté à un nouvel environnement pour le préparer à un nouveau travail après une lésion grave.</li><li><strong>Retour au travail :</strong> la société doit fournir un travail convenable, quelles que soient les lésions physiques ou psychologiques.</li></ul>
+        </article>
+      </div>
+      </div>
+
+      <!-- Mémo 2 : pages 8-16 -->
+      <div class="memo-pane" data-memo-pane="risques" hidden>
+      <div class="memo-grid">
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-fire"></use></svg>Les risques d'incendie</h3>
+          <p>Quatre éléments sont nécessaires à un incendie. Si l'on en retire un seul, le feu s'éteint rapidement.</p>
           <div class="fire-grid">
             <div class="fire-chip fire-blue">Oxygène</div><div class="fire-chip">Chaleur</div>
             <div class="fire-chip fire-grey">Combustible</div><div class="fire-chip fire-red">Chaîne de réaction</div>
           </div>
-          <p style="margin-top:11px"><strong>Agresseurs :</strong> chaleur, fumée, flammes et gaz de combustion.</p>
-          <p style="margin-top:8px"><strong>Prévention :</strong> rangement des produits, ventilation, gestion des déchets, extincteurs contrôlés, éloignement des sources d'étincelles, protection individuelle.</p>
+          <p style="margin-top:11px"><strong>Effets sur la santé :</strong> lors d'un incendie, quatre agresseurs peuvent attaquer les individus de différentes façons — chaleur, fumée, flammes et gaz de combustion.</p>
         </article>
         <article class="memo-card">
-          <h3><svg class="icon"><use href="#i-bolt"></use></svg>Risque électrique</h3>
-          <ul><li>Toujours faire appel à un électricien.</li><li>Ne jamais surcharger une prise.</li><li>Éviter les rallonges trop longues et non protégées.</li><li>Ne jamais toucher une personne agrippée à un fil électrique.</li><li>Utiliser un fusible du calibre indiqué.</li></ul>
+          <h3><svg class="icon"><use href="#i-shield"></use></svg>Mesures de prévention incendie</h3>
+          <ul><li>Emplacement des produits.</li><li>Ventilation des lieux.</li><li>Gestion des déchets.</li><li>Installation d'extincteurs.</li><li>Éloignement des sources d'étincelles.</li><li>Protection individuelle.</li></ul>
         </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-ear"></use></svg>Matériels de lutte contre l'incendie</h3>
+          <ul><li><strong>Avertisseur détecteur de fumée :</strong> bien installé et bien entretenu en quantité suffisante, il permet aux victimes de quitter les lieux avant d'être emprisonnées par les flammes.</li><li><strong>Extincteurs :</strong> contrôlés et entretenus, ils attaquent le foyer d'incendie à son stade de commencement en attendant l'arrivée du service de protection incendie.</li><li><strong>Boyaux d'incendie :</strong> fixés dans des endroits stratégiques, indiqués pour les feux de matières sèches.</li></ul>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-bolt"></use></svg>Installations électriques : dangers et accidents</h3>
+          <p><strong>Dangers :</strong> court-circuit, installation électrique mal faite, utilisation du courant et des matériels sans précaution, fils de rallonge mal installés et non protégés.</p>
+          <p style="margin-top:8px"><strong>Pour la personne :</strong> chocs électriques, brûlures et la mort. <strong>Pour l'environnement :</strong> incendie et explosion.</p>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-bolt"></use></svg>Risque électrique : mesures préventives</h3>
+          <ul><li>Quel que soit le problème électrique, toujours faire appel à un électricien.</li><li>Ne jamais surcharger une prise de courant.</li><li>Ne jamais employer une échelle comportant des pièces métalliques près d'une ligne électrique.</li><li>Ne jamais toucher une personne agrippée à un fil.</li><li>Éviter d'utiliser des fils de rallonge trop longs.</li><li>Ne jamais employer un fusible de calibre supérieur à celui indiqué.</li></ul>
+        </article>
+        <article class="memo-card">
+          <h3><svg class="icon"><use href="#i-alert"></use></svg>Environnement physique : dangers liés à l'aménagement</h3>
+          <ul><li>Mauvaise position de l'appareillage (matériels suspendus trop bas, etc.).</li><li>Trop grande concentration de personnes dans un même endroit.</li><li>Rangement désordonné de matériaux ou d'outils.</li></ul>
+        </article>
+      </div>
+      </div>
+
+      <!-- Mémo 3 : équipements et pictogrammes -->
+      <div class="memo-pane" data-memo-pane="equipements" hidden>
+        <h3 class="memo-subhead"><svg class="icon"><use href="#i-ppe"></use></svg>Les équipements de protection individuelle (pages 16–17)</h3>
+        <p class="muted small">L'employeur fournit gratuitement les EPI. Voici les équipements clés, dessinés dans le style normalisé « obligation » : rond bleu, inscription blanche.</p>
+        <div class="equip-grid">
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Casque"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M28 58a22 22 0 0 1 44 0Z" fill="#fff"/><rect x="21" y="58" width="58" height="7" rx="3.5" fill="#fff"/></svg>
+            <strong>Casque</strong><small>Protège la tête</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gants"><circle cx="50" cy="50" r="48" fill="#1466d8"/><g fill="#fff"><rect x="38" y="22" width="9" height="36" rx="4.5"/><rect x="49" y="18" width="9" height="40" rx="4.5"/><rect x="60" y="24" width="9" height="34" rx="4.5"/><path d="M36 48h33v18a9 9 0 0 1-9 9H45a9 9 0 0 1-9-9Z"/><path d="M28 44a6 6 0 0 1 6 6v8h-6a7 7 0 0 1 0-14Z"/></g><rect x="37" y="76" width="31" height="8" rx="4" fill="#fff"/></svg>
+            <strong>Gants</strong><small>Protègent les mains</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chaussures de sécurité"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M32 22h16v28c12 0 24 3 27 11 2 6-2 12-9 12H36c-3 0-4-2-4-5Z" fill="#fff"/><rect x="28" y="66" width="50" height="6" rx="3" fill="#fff"/></svg>
+            <strong>Chaussures</strong><small>Protègent les pieds</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lunettes de protection"><circle cx="50" cy="50" r="48" fill="#1466d8"/><g fill="#fff"><circle cx="36" cy="54" r="13"/><circle cx="64" cy="54" r="13"/><rect x="41" y="52" width="18" height="5" rx="2.5"/><path d="M24 48l-8-6 3-5 12 8Z"/><path d="M76 48l8-6-3-5-12 8Z"/></g></svg>
+            <strong>Lunettes</strong><small>Protègent les yeux</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Masque"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M32 42h36v14a18 18 0 0 1-36 0Z" fill="#fff"/><g stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M33 50 18 44"/><path d="M67 50l15-6"/></g><rect x="43" y="72" width="14" height="6" rx="3" fill="#fff"/></svg>
+            <strong>Masque</strong><small>Protège les voies respiratoires</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Harnais antichute"><circle cx="50" cy="50" r="48" fill="#1466d8"/><circle cx="50" cy="30" r="8" fill="#fff"/><g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"><path d="M32 46h36"/><path d="M32 46 50 70 68 46"/></g><rect x="43" y="66" width="14" height="18" rx="5" fill="#fff"/></svg>
+            <strong>Harnais</strong><small>Protège contre les chutes</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Protections auditives"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M28 60v-8a22 22 0 0 1 44 0v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><rect x="23" y="58" width="13" height="20" rx="6.5" fill="#fff"/><rect x="64" y="58" width="13" height="20" rx="6.5" fill="#fff"/></svg>
+            <strong>Protections auditives</strong><small>Protègent du bruit</small>
+          </div>
+          <div class="equip-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vêtements de travail"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M37 24h9a4 4 0 0 0 8 0h9l9 9-7 6v37H36V39l-7-6Z" fill="#fff"/></svg>
+            <strong>Vêtements</strong><small>Protègent le corps</small>
+          </div>
+        </div>
+
+        <h3 class="memo-subhead"><svg class="icon"><use href="#i-signals"></use></svg>Les 5 familles de signaux</h3>
         <article class="memo-card signal-legend">
-          <h3><svg class="icon"><use href="#i-signals"></use></svg>Les 5 familles de signaux</h3>
+          <h3><svg class="icon"><use href="#i-signals"></use></svg>Savoir reconnaître au premier regard</h3>
           <p>La forme et la couleur donnent le niveau d'information : obligation, interdiction, danger, secours ou lutte incendie.</p>
           <div class="legend-grid">
             <div class="legend-item"><div class="legend-shape obligation"><svg><use href="#i-casque"></use></svg></div><strong>Obligation</strong><small>Rond bleu, inscription blanche</small></div>
@@ -993,8 +1092,55 @@ h1,h2,h3{letter-spacing:-.025em}
             <div class="legend-item"><div class="legend-shape incendie"><svg><use href="#i-extincteur"></use></svg></div><strong>Incendie</strong><small>Carré rouge, inscription blanche</small></div>
           </div>
         </article>
+
+        <h3 class="memo-subhead"><svg class="icon"><use href="#i-arrow"></use></svg>Pictogrammes de manutention (pages 44–48)</h3>
+        <p class="muted small">Marques apposées sur les colis pour préciser les précautions de transport et d'empilage. Dessins normalisés : glyphe noir sur fond clair.</p>
+        <div class="picto-grid">
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fragile"><path d="M27 10h46v22a23 23 0 0 1-16 21.9V68h14v10H29V68h14V53.9A23 23 0 0 1 27 32Z" fill="#1a1a1a"/></svg>
+            <strong>Fragile</strong><small>Charge sensible aux chocs</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Haut"><g fill="#1a1a1a"><path d="M50 6 70 32H57v28H43V32H30Z"/><rect x="28" y="70" width="44" height="10"/></g></svg>
+            <strong>Haut</strong><small>Ce côté vers le haut, ne pas retourner</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Limite de température"><g fill="#1a1a1a"><circle cx="50" cy="64" r="17"/><path d="M45 10a5 5 0 0 1 10 0v46H45Z"/></g><path d="M24 78 78 22" stroke="#fff" stroke-width="11"/><path d="M24 78 78 22" stroke="#1a1a1a" stroke-width="5"/></svg>
+            <strong>Limite de température</strong><small>Respecter les températures indiquées</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ne pas empiler"><g stroke="#1a1a1a" stroke-width="5" fill="none"><rect x="30" y="10" width="40" height="26"/><path d="M22 8 64 40M64 8 22 40"/></g><rect x="30" y="62" width="40" height="26" fill="#1a1a1a"/></svg>
+            <strong>Ne pas empiler</strong><small>Aucun colis ne doit être posé au-dessus</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Limite de gerbage en nombre"><g stroke="#1a1a1a" stroke-width="5" fill="none"><rect x="30" y="6" width="40" height="24"/><rect x="30" y="60" width="40" height="24"/></g><rect x="30" y="36" width="40" height="18" fill="#1a1a1a"/><path d="M20 42 80 60M80 36 20 66" stroke="#1a1a1a" stroke-width="5"/></svg>
+            <strong>Limite de gerbage en nombre</strong><small>Nombre maximum de colis empilés</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ne pas utiliser de crochets"><path d="M26 62C12 52 14 30 32 26l30-8" fill="none" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/><path d="M18 30 84 68M84 30 18 68" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/></svg>
+            <strong>Ne pas utiliser de crochets</strong><small>Soulèvement interdit par crochets</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prise latérale par pinces interdite"><g stroke="#1a1a1a" stroke-width="5" fill="none"><rect x="32" y="34" width="36" height="32"/><path d="M34 36 66 64M66 36 34 64"/></g><g fill="#1a1a1a"><path d="M24 41v18L12 50Z"/><path d="M76 41v18l12-9Z"/><path d="M26 42v16M74 42v16" stroke="#1a1a1a" stroke-width="4"/></g></svg>
+            <strong>Prise latérale par pinces interdite</strong><small>Ne pas saisir le colis sur les côtés</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diable interdit"><g fill="none" stroke="#1a1a1a" stroke-linecap="round"><path d="M30 18l24 62" stroke-width="7"/><path d="M26 84h32" stroke-width="6"/></g><circle cx="41" cy="76" r="8" fill="#1a1a1a"/><path d="M16 24 88 78M88 24 16 78" stroke="#1a1a1a" stroke-width="7" stroke-linecap="round"/></svg>
+            <strong>Diable interdit</strong><small>Déplacement au diable interdit</small>
+          </div>
+          <div class="picto-card">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chariot à fourches interdit"><rect x="24" y="46" width="26" height="18" rx="2" fill="#1a1a1a"/><circle cx="33" cy="72" r="5" fill="#1a1a1a"/><circle cx="45" cy="72" r="5" fill="#1a1a1a"/><path d="M50 44l12 24h24v6h-30" fill="none" stroke="#1a1a1a" stroke-width="5"/><path d="M14 26 86 74M86 26 14 74" stroke="#1a1a1a" stroke-width="7" stroke-linecap="round"/></svg>
+            <strong>Chariot à fourches interdit</strong><small>Ne pas soulever avec un chariot</small>
+          </div>
+        </div>
+
+        <article class="memo-card" style="margin-top:18px">
+          <h3><svg class="icon"><use href="#i-shield"></use></svg>La bonne façon de soulever une charge</h3>
+          <ul><li>Se placer face à la charge, pieds écartés et bien appuyés.</li><li>Plier les genoux et garder la charge le plus près du corps.</li><li>Garder le dos plat : la force doit venir des jambes, pas du dos.</li><li>Ne jamais tordre le tronc pendant le soulèvement ou le dépôt.</li></ul>
+          <p style="margin-top:10px">Le support compare la mauvaise technique (dos rond, effort sur la colonne) à la bonne (dos plat, genoux pliés) : le dos rond est la cause n°1 des maux de dos au travail.</p>
+        </article>
       </div>
-      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b>. Pictogrammes ISO 7010 issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
+      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Pictogrammes de manutention et dessins d'équipements redessinés en SVG conforme au style normalisé. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
     </section>
   </main>
 
@@ -1002,7 +1148,7 @@ h1,h2,h3{letter-spacing:-.025em}
     <span><strong>Vigilance SST</strong> · Serious game santé &amp; sécurité au travail</span>
     <span>Fait par <strong>Fehmi Ben Njima</strong> · <a href="mailto:fehmitn@gmail.com">fehmitn@gmail.com</a></span>
     <span>Fichier unique et autonome · fonctionne hors-ligne</span>
-    <span>Points de Vigilance : <strong id="footScore">0</strong> / 520</span>
+    <span>Points de Vigilance : <strong id="footScore">0</strong> / <span id="footMax">520</span></span>
   </footer>
 </div>
 
@@ -1245,8 +1391,67 @@ h1,h2,h3{letter-spacing:-.025em}
       ],
       answer: 0,
       explain: "L'employeur doit fournir gratuitement les équipements et moyens de protection individuels, et s'assurer que le travailleur reçoit la formation, l'entraînement et la supervision nécessaires."
+    },
+    {
+      tag: 'Manutention', q: "Sur un colis, quel pictogramme indique que la charge est fragile ?",
+      options: [
+        "Deux flèches verticales pointant vers le haut.",
+        "Un verre qui pourrait se casser.",
+        "Un parapluie avec des gouttes d'eau.",
+        "Un thermomètre barré d'une ligne."
+      ],
+      answer: 1,
+      explain: "Le pictogramme « Fragile » est représenté par un verre : la charge supporte mal les chocs et doit être manipulée avec précaution."
+    },
+    {
+      tag: 'Manutention', q: "Que signifie le pictogramme « Haut » (flèches noires pointant vers le haut) ?",
+      options: [
+        "La charge doit être soulevée par deux personnes.",
+        "L'empilement est limité à deux colis.",
+        "Le colis doit rester en position verticale, ce côté toujours orienté vers le haut.",
+        "La charge doit être stockée à l'étage."
+      ],
+      answer: 2,
+      explain: "Les flèches vers le haut indiquent le sens de présentation du colis : il ne doit jamais être retourné ni couché sur le côté."
+    },
+    {
+      tag: 'Manutention', q: "Quelle est la bonne technique pour soulever une charge manuellement ?",
+      options: [
+        "Dos rond, jambes tendues, charge loin du corps.",
+        "Dos plat, genoux pliés, charge près du corps.",
+        "Dos plat, jambes tendues, en portant la charge à bout de bras.",
+        "En tordant le dos au moment de déposer la charge."
+      ],
+      answer: 1,
+      explain: "La bonne technique : dos plat, genoux pliés, charge près du corps. Le dos rond avec un effort sur la colonne est la cause n°1 des maux de dos au travail."
+    },
+    {
+      tag: 'Manutention', q: "Le pictogramme d'un colis posé sur un autre, barré d'une croix, signifie :",
+      options: [
+        "Une limite de gerbage en nombre de colis.",
+        "Une limite de gerbage en kilogrammes.",
+        "Ne pas empiler cette charge sur une autre.",
+        "Une prise latérale autorisée par pinces."
+      ],
+      answer: 2,
+      explain: "Le colis barré posé sur un autre interdit l'empilement : « Ne pas empiler ». Les limites de gerbage (nombre, kg) sont exprimées par des pictogrammes distincts."
+    },
+    {
+      tag: 'Manutention', q: "Quand la mention « Limite de température » figure sur une charge, il faut :",
+      options: [
+        "Utiliser un diable pour déplacer le colis.",
+        "Empiler le colis au maximum trois fois.",
+        "Respecter les températures indiquées lors du transport et du stockage.",
+        "Soulever la charge uniquement avec des crochets."
+      ],
+      answer: 2,
+      explain: "La limite de température impose de respecter les températures indiquées pendant le transport et le stockage, sous peine d'altérer le produit."
     }
   ];
+
+  const MANUTENTION_TAG = 'Manutention';
+  const MANUTENTION_INDICES = QUIZ.map(function (q, i) { return q.tag === MANUTENTION_TAG ? i : null; }).filter(function (i) { return i !== null; });
+  const MIN_MANUTENTION = 2;
 
   const GEAR = [
     { id: 'casque', name: 'Casque', hint: 'Protège la tête', icon: 'i-casque' },
@@ -1576,15 +1781,15 @@ h1,h2,h3{letter-spacing:-.025em}
     { id: 'incendie', label: 'Incendie' }
   ];
 
+  const MAX = QUIZ.length * 10 + PPE_SCENARIOS.length * 30 + SIGNALS.length * 10;
   const RANKS = [
     { min: 0, name: 'Observateur' },
     { min: 110, name: 'Vigilant' },
-    { min: 250, name: 'Gardien SST' },
-    { min: 390, name: 'Expert SST' },
-    { min: 520, name: 'Légende SST' }
+    { min: 270, name: 'Gardien SST' },
+    { min: 420, name: 'Expert SST' },
+    { min: MAX, name: 'Légende SST' }
   ];
 
-  const MAX = QUIZ.length * 10 + PPE_SCENARIOS.length * 30 + SIGNALS.length * 10;
   const STORAGE_KEY = 'vigilance_sst_v1';
   const FLASH_SECONDS = 12;
   const EXAM_QUIZ_COUNT = 10;
@@ -1672,6 +1877,43 @@ h1,h2,h3{letter-spacing:-.025em}
   };
 
   /* ---------- Utilitaires UI ---------- */
+  function syncMaxTexts() {
+    const map = {
+      goalMaxPv: MAX + ' PV à gagner',
+      heroMaxPx: 'sur ' + MAX + ' PV',
+      cardQuizMax: QUIZ.length * 10,
+      cardPpeMax: PPE_SCENARIOS.length * 30,
+      cardSignalsMax: SIGNALS.length * 10,
+      quizChipMax: QUIZ.length * 10,
+      signalsChipMax: SIGNALS.length * 10,
+      footMax: MAX
+    };
+    Object.keys(map).forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = String(map[id]);
+    });
+  }
+
+  /* ---------- Sous-pages du mémo ---------- */
+  function initMemoTabs() {
+    $$('.memo-tab[data-memo-tab]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const name = btn.getAttribute('data-memo-tab');
+        $$('.memo-tab[data-memo-tab]').forEach(function (b) {
+          const on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        $$('.memo-pane[data-memo-pane]').forEach(function (pane) {
+          const on = pane.getAttribute('data-memo-pane') === name;
+          pane.classList.toggle('active', on);
+          if (on) pane.removeAttribute('hidden'); else pane.setAttribute('hidden', '');
+        });
+        scrollPageTop();
+      });
+    });
+  }
+
   function icon(name, cls) {
     return '<svg class="icon ' + (cls || '') + '" aria-hidden="true"><use href="#' + name + '"></use></svg>';
   }
@@ -1905,12 +2147,19 @@ h1,h2,h3{letter-spacing:-.025em}
     return sa.every(function (v, i) { return v === sb[i]; });
   }
 
+  function composeQuizPool(size) {
+    const man = shuffleIndices(MANUTENTION_INDICES).slice(0, Math.min(MIN_MANUTENTION, MANUTENTION_INDICES.length));
+    const others = shuffleIndices(
+      QUIZ.map(function (_, i) { return i; }).filter(function (i) { return MANUTENTION_INDICES.indexOf(i) === -1; })
+    ).slice(0, Math.max(0, size - man.length));
+    return shuffleIndices(man.concat(others));
+  }
+
   function pickQuizPool() {
-    const all = QUIZ.map(function (_, i) { return i; });
-    let pool = shuffleIndices(all).slice(0, QUIZ_SESSION_SIZE);
+    let pool = composeQuizPool(QUIZ_SESSION_SIZE);
     let tries = 0;
     while (lastQuizPool.length && sameQuizPool(pool, lastQuizPool) && tries < 20) {
-      pool = shuffleIndices(all).slice(0, QUIZ_SESSION_SIZE);
+      pool = composeQuizPool(QUIZ_SESSION_SIZE);
       tries++;
     }
     lastQuizPool = pool.slice();
@@ -2415,7 +2664,7 @@ h1,h2,h3{letter-spacing:-.025em}
     const keepKey = ui.exam.includeKey;
     ui.exam = {
       generated: true,
-      quizIndices: shuffleIndices(QUIZ.map(function (_, i) { return i; })).slice(0, EXAM_QUIZ_COUNT),
+      quizIndices: composeQuizPool(EXAM_QUIZ_COUNT),
       ppeIndices: shuffleIndices(PPE_SCENARIOS.map(function (_, i) { return i; })).slice(0, EXAM_PPE_COUNT),
       signalIndices: shuffleIndices(SIGNALS.map(function (_, i) { return i; })).slice(0, EXAM_SIGNAL_COUNT),
       includeKey: keepKey,
@@ -2618,6 +2867,8 @@ h1,h2,h3{letter-spacing:-.025em}
     if (e.key === 'Escape') closeReset();
   });
 
+  syncMaxTexts();
+  initMemoTabs();
   updateScoreUI();
   showView(currentHashView());
 
