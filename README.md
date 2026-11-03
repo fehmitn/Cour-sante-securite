@@ -194,11 +194,11 @@ après confirmation dans une boîte de dialogue accessible.
 | **HTML5 sémantique** | Structure `header`/`nav`/`main`/`section`/`footer`, landmarks ARIA, `lang="fr"`, meta description |
 | **CSS3 pur** | Variables `:root`, CSS Grid, Flexbox, `clamp()`, dégradés radiaux, animations et media queries — *aucun framework CSS* |
 | **JavaScript ES6+ (vanilla)** | État applicatif, routage par hash, rendu par templates, `localStorage`, timers — *aucune bibliothèque, aucun build* |
-| **SVG** | Pictogrammes **ISO 7010** aux `viewBox` variés (265×265, 600×525, 200×200, 100×100, 52,9×52,9), sprite `<symbol>` inline, travailleur et jauges animés |
+| **SVG** | Pictogrammes **ISO 7010** aux `viewBox` variés (265×265, 600×525, 200×200, 100×100, 52,9×52,9), sprite `<symbol>` inline, travailleur et jauges animés, **logo de l'établissement** (`#csfmi-logo`, 1241×1241) |
 | **localStorage** | Persistance `vigilance_sst_v1` : meilleurs scores, niveaux terminés, réinitialisation |
 
 > 🧊 **Zéro dépendance, zéro requête réseau.** Pas de CDN, pas de police distante, pas de
-> `npm install` : l'application est un unique fichier `index.html` autonome (~210 Ko).
+> `npm install` : l'application est un unique fichier `index.html` autonome (~265 Ko).
 
 ---
 
@@ -206,7 +206,8 @@ après confirmation dans une boîte de dialogue accessible.
 
 ```text
 Cour-sante-securite/
-├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes inline
+├── index.html                    # Application complète : HTML + CSS + JS + pictogrammes + logo inline
+├── logo.svg                      # Logo du centre (source, embarqué dans index.html)
 ├── README.md                     # Ce document
 ├── LICENSE                       # Licence MIT (code) + note sur les contenus et pictogrammes
 └── sst.pdf                       # Support de formation M02 (source pédagogique)
@@ -281,6 +282,9 @@ rechargement automatique à chaque sauvegarde.
 - **Mémo en 3 sous-pages** : `index.html#memo` — pages 1–6 du support (fondamentaux), pages 8–16
   (notions de sécurité, feu-électricité-environnement) et onglet « Équipements & pictogrammes »
   (EPI au style « obligation » ISO 7010, 5 familles de signaux, pictogrammes de manutention).
+- **Entête institutionnelle** : « Centre Sectoriel de Formation aux Métiers industriels khnis »
+  avec le logo du centre (`logo.svg` vectorisé puis embarqué comme `<symbol id="csfmi-logo">`)
+  affichée en haut de l'application, et reprise en tête du **sujet d'examen imprimable**.
 - **Parti pris** : contenus reformulés et situations EPI simplifiées à des fins pédagogiques.
   Ce jeu **ne remplace pas** une formation réglementaire, un plan de prévention ou l'avis d'un
   préventeur : il sert à sensibiliser et à réviser.
