@@ -772,6 +772,22 @@ h1,h2,h3{letter-spacing:-.025em}
   @page{size:A4;margin:12mm 11mm 14mm}
   .institution-bar{display:none!important}
   body.exam-active.exam-ready{background:#fff!important}
+  /* compaction du sujet à l'impression : parties 1+2 tiennent sur 2 pages, partie 3 en haut de la page 3 */
+  body.exam-active.exam-ready .exam-doc-head{padding-bottom:9px;margin-bottom:11px}
+  body.exam-active.exam-ready .exam-institution{gap:9px;margin-bottom:7px}
+  body.exam-active.exam-ready .exam-institution-logo{width:38px;height:38px}
+  body.exam-active.exam-ready .exam-institution-text{font-size:.9rem}
+  body.exam-active.exam-ready .exam-doc-head h1{font-size:1.5rem;margin:8px 0 3px}
+  body.exam-active.exam-ready .exam-id-grid{margin-top:10px}
+  body.exam-active.exam-ready .exam-instructions{margin-top:10px;padding:9px 11px}
+  body.exam-active.exam-ready .exam-question{padding:7px 0}
+  body.exam-active.exam-ready .exam-question h3{font-size:.78rem}
+  body.exam-active.exam-ready .exam-options{gap:3px 14px}
+  body.exam-active.exam-ready .exam-part{margin-top:15px}
+  body.exam-active.exam-ready .exam-part-head{padding-bottom:6px;margin-bottom:10px}
+  body.exam-active.exam-ready .exam-scenario{padding:9px 11px;margin-bottom:8px}
+  body.exam-active.exam-ready .exam-page-head{padding-bottom:8px;margin-bottom:12px}
+  body.exam-active.exam-ready .exam-page-head .exam-institution{margin-bottom:0}
   body.exam-active.exam-ready .topbar,
   body.exam-active.exam-ready .footer,
   body.exam-active.exam-ready .toast,
@@ -785,6 +801,7 @@ h1,h2,h3{letter-spacing:-.025em}
   body.exam-active.exam-ready main>#view-exam{display:block!important;animation:none!important;transform:none!important;opacity:1!important;margin:0;padding:0}
   body.exam-active.exam-ready .exam-paper{max-width:none;width:auto;margin:0;padding:0;border:0;border-radius:0;box-shadow:none}
   body.exam-active.exam-ready .exam-answer-key{break-before:page;page-break-before:always;margin-top:0;padding-top:0;border-top:0}
+  body.exam-active.exam-ready .exam-page-head{break-before:page;page-break-before:always}
   body.exam-active.exam-ready .exam-answer-key[hidden]{display:none!important}
   body.exam-active.exam-ready .exam-question,
   body.exam-active.exam-ready .exam-scenario,
@@ -2892,6 +2909,12 @@ h1,h2,h3{letter-spacing:-.025em}
       '</div>';
   }
 
+  function examPageHeadHTML() {
+    return '<header class="exam-page-head">' + examInstitutionHTML() +
+      '<div class="exam-page-line"><span><b>Vigilance SST</b> · Mode examen</span><span>Sujet ' + esc(ui.exam.code) + ' · ' + examDateLabel(ui.exam.generatedAt) + '</span></div>' +
+    '</header>';
+  }
+
   function examDocHeadHTML() {
     return '<header class="exam-doc-head">' +
       examInstitutionHTML() +
@@ -2972,17 +2995,18 @@ h1,h2,h3{letter-spacing:-.025em}
 
   function examPaperHTML() {
     const quiz = ui.exam.quizIndices.map(function (qi, i) { return examQuestionHTML(QUIZ[qi], i); }).join('');
-    const ppe = ui.exam.ppeIndices.map(function (pi, i) { return examScenarioHTML(PPE_SCENARIOS[pi], i); }).join('');
+    const ppeCards = ui.exam.ppeIndices.map(function (pi, i) { return examScenarioHTML(PPE_SCENARIOS[pi], i); });
     const signals = ui.exam.signalIndices.map(function (si, i) { return examSignalHTML(SIGNALS[si], i); }).join('');
     const legend = CATEGORIES.map(function (c, i) { return EXAM_LETTERS[i] + ' ' + esc(c.label); }).join(' · ');
     return '<div class="exam-paper">' +
       examDocHeadHTML() +
       '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">1</span><div><h2>Les fondamentaux</h2><p>' + EXAM_QUIZ_COUNT + ' questions · ' + EXAM_QUIZ_POINTS + ' points par bonne réponse</p></div></div>' + quiz + '</section>' +
-      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">2</span><div><h2>Bien s\'équiper</h2><p>' + EXAM_PPE_COUNT + ' scénarios · 3 EPI à cocher par scénario · ' + EXAM_PPE_POINTS + ' points par scénario (3 EPI corrects)</p></div></div>' + ppe + '</section>' +
-      '<section class="exam-part"><header class="exam-page-head">' + examInstitutionHTML() +
-        '<div class="exam-page-line"><span><b>Vigilance SST</b> · Mode examen</span><span>Sujet ' + esc(ui.exam.code) + ' · ' + examDateLabel(ui.exam.generatedAt) + '</span></div>' +
-      '</header>' +
-      '<div class="exam-part-head"><span class="exam-part-num">3</span><div><h2>Reconnaissance des signaux</h2><p>' + EXAM_SIGNAL_COUNT + ' signaux · ' + EXAM_SIGNAL_POINTS + ' points par bonne famille</p></div></div><div class="exam-family-legend"><b>Familles :</b> ' + legend + '</div><div class="exam-signal-grid">' + signals + '</div></section>' +
+      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">2</span><div><h2>Bien s\'équiper</h2><p>' + EXAM_PPE_COUNT + ' scénarios · 3 EPI à cocher par scénario · ' + EXAM_PPE_POINTS + ' points par scénario (3 EPI corrects)</p></div></div>' +
+        ppeCards.slice(0, EXAM_PPE_COUNT - 1).join('') +
+        examPageHeadHTML() +
+        ppeCards.slice(EXAM_PPE_COUNT - 1).join('') +
+      '</section>' +
+      '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">3</span><div><h2>Reconnaissance des signaux</h2><p>' + EXAM_SIGNAL_COUNT + ' signaux · ' + EXAM_SIGNAL_POINTS + ' points par bonne famille</p></div></div><div class="exam-family-legend"><b>Familles :</b> ' + legend + '</div><div class="exam-signal-grid">' + signals + '</div></section>' +
       examKeyHTML() +
     '</div>';
   }

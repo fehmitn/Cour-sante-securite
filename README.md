@@ -159,6 +159,9 @@ quitter l'application et sans connexion réseau.
   distribution.
 - Impression par le bouton **Imprimer** ou par `Ctrl+P` / `Cmd+P` ; seule l'épreuve est imprimée,
   sans la navigation de l'application.
+- **3 pages fixes** : page 1 = entête + partie 1, page 2 = suite de la partie 1 + partie 2
+  (scénarios 1 et 2), page 3 = entête institutionnelle répétée en haut, scénario 3 de la partie 2
+  puis partie 3.
 - **Lisible en noir & blanc** : dans la partie 3, la couleur de chaque pictogramme est indiquée
   entre parenthèses — ex. « (Couleur : jaune) » — avant la ligne de réponses A–E ; les panneaux
   d'interdiction précisent « (Couleur : cercle et barre rouge) ».
