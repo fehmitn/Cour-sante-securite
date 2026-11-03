@@ -159,6 +159,9 @@ quitter l'application et sans connexion réseau.
   distribution.
 - Impression par le bouton **Imprimer** ou par `Ctrl+P` / `Cmd+P` ; seule l'épreuve est imprimée,
   sans la navigation de l'application.
+- **Lisible en noir & blanc** : dans la partie 3, la couleur de chaque pictogramme est indiquée
+  entre parenthèses — ex. « (Couleur : fond jaune, panneau triangulaire) » — avant la ligne de
+  réponses A–E ; la légende des familles reprend aussi la couleur et la forme de chaque famille.
 - Le mode examen est **indépendant de la progression** : il ne modifie ni les scores, ni les badges,
   ni les meilleurs résultats.
 - Astuce : choisir « Enregistrer au format PDF » dans la boîte d'impression pour archiver un sujet.

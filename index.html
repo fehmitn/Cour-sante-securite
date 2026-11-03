@@ -609,6 +609,7 @@ h1,h2,h3{letter-spacing:-.025em}
 .exam-signal-head{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:.58rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#7a8fa1;margin-bottom:5px}
 .exam-signal-head b{color:#2e4a60}
 .exam-family-answer{display:flex;flex-wrap:wrap;gap:5px 8px;font-size:.65rem;color:#3b556a;margin:0}
+.exam-signal-hint{margin:0 0 4px;font-size:.6rem;font-style:italic;color:#6b8295}
 .exam-family-answer span{display:inline-flex;align-items:center;gap:3px}
 .exam-family-answer .exam-check{width:9px;height:9px}
 
@@ -1870,11 +1871,11 @@ h1,h2,h3{letter-spacing:-.025em}
   ];
 
   const CATEGORIES = [
-    { id: 'obligation', label: 'Obligation' },
-    { id: 'interdiction', label: 'Interdiction' },
-    { id: 'danger', label: 'Danger' },
-    { id: 'secours', label: 'Secours' },
-    { id: 'incendie', label: 'Incendie' }
+    { id: 'obligation', label: 'Obligation', color: 'bleu', hint: 'fond bleu, panneau circulaire' },
+    { id: 'interdiction', label: 'Interdiction', color: 'rouge', hint: 'cercle et barre rouge' },
+    { id: 'danger', label: 'Danger', color: 'jaune', hint: 'fond jaune, panneau triangulaire' },
+    { id: 'secours', label: 'Secours', color: 'vert', hint: 'fond vert, panneau carré' },
+    { id: 'incendie', label: 'Incendie', color: 'rouge', hint: 'fond rouge, panneau carré' }
   ];
 
   const MAX = QUIZ.length * 10 + PPE_SCENARIOS.length * 30 + SIGNALS.length * 10;
@@ -2826,7 +2827,7 @@ h1,h2,h3{letter-spacing:-.025em}
         '<label>Date <span class="exam-line"></span></label>' +
         '<label>Note <span class="exam-line"></span> / ' + EXAM_TOTAL_POINTS + '</label>' +
       '</div>' +
-      '<div class="exam-instructions"><strong>Consignes.</strong> Répondez directement sur ce document. Partie 1 : une seule réponse par question. Partie 2 : cochez exactement 3 EPI par scénario. Partie 3 : cochez la famille du signal (légende ci-dessous).</div>' +
+      '<div class="exam-instructions"><strong>Consignes.</strong> Répondez directement sur ce document. Partie 1 : une seule réponse par question. Partie 2 : cochez exactement 3 EPI par scénario. Partie 3 : cochez la famille de chaque signal — la couleur du pictogramme est précisée entre parenthèses (légende ci-dessous).</div>' +
       '<div class="exam-meta-line"><span>Durée conseillée : 30 minutes</span><span>Barème indicatif : ' + EXAM_TOTAL_POINTS + ' points</span></div>' +
     '</header>';
   }
@@ -2859,9 +2860,13 @@ h1,h2,h3{letter-spacing:-.025em}
     const families = CATEGORIES.map(function (c, i) {
       return '<span><span class="exam-check" aria-hidden="true"></span><b>' + EXAM_LETTERS[i] + '</b></span>';
     }).join('');
+    const cat = CATEGORIES.find(function (c) { return c.id === q.cat; });
+    const colorHint = cat ? '(Couleur : ' + esc(cat.hint) + ')' : '';
     return '<article class="exam-signal">' +
       signalPictoHTML(q) +
-      '<div class="exam-signal-body"><div class="exam-signal-head"><span>Signal <b>' + (idx + 1) + '</b></span><span>Réponse</span></div><p class="exam-family-answer">' + families + '</p></div>' +
+      '<div class="exam-signal-body"><div class="exam-signal-head"><span>Signal <b>' + (idx + 1) + '</b></span><span>Réponse</span></div>' +
+      '<p class="exam-signal-hint">' + colorHint + '</p>' +
+      '<p class="exam-family-answer">' + families + '</p></div>' +
     '</article>';
   }
 
@@ -2892,7 +2897,7 @@ h1,h2,h3{letter-spacing:-.025em}
     const quiz = ui.exam.quizIndices.map(function (qi, i) { return examQuestionHTML(QUIZ[qi], i); }).join('');
     const ppe = ui.exam.ppeIndices.map(function (pi, i) { return examScenarioHTML(PPE_SCENARIOS[pi], i); }).join('');
     const signals = ui.exam.signalIndices.map(function (si, i) { return examSignalHTML(SIGNALS[si], i); }).join('');
-    const legend = CATEGORIES.map(function (c, i) { return EXAM_LETTERS[i] + ' ' + esc(c.label); }).join(' · ');
+    const legend = CATEGORIES.map(function (c, i) { return EXAM_LETTERS[i] + ' ' + esc(c.label) + ' (' + esc(c.color) + ' : ' + esc(c.hint) + ')'; }).join(' · ');
     return '<div class="exam-paper">' +
       examDocHeadHTML() +
       '<section class="exam-part"><div class="exam-part-head"><span class="exam-part-num">1</span><div><h2>Les fondamentaux</h2><p>' + EXAM_QUIZ_COUNT + ' questions · ' + EXAM_QUIZ_POINTS + ' points par bonne réponse</p></div></div>' + quiz + '</section>' +
