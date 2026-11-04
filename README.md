@@ -329,7 +329,12 @@ rechargement automatique à chaque sauvegarde.
 
 ## 📚 Contenu pédagogique et sources
 
-- **Support de formation** : *Règles de Santé et de Sécurité au Travail* (module M02) — `sst.pdf`.
+- **Support de formation** : *Règles de Santé et de Sécurité au Travail* (module M02) — `sst.pdf`,
+  lié depuis la note de source du mémo. Le lien cible toujours `sst.pdf` **relativement à
+  `index.html`** (local ou hébergé, quel que soit le domaine) ; si le PDF n'est pas déployé à côté
+  de la page, le lien retombe automatiquement sur la copie du
+  [dépôt GitHub Pages](https://fehmitn.github.io/Cour-sante-securite/sst.pdf), et un message
+  s'affiche si l'appareil est hors-ligne.
 - **Référentiel graphique** : pictogrammes de sécurité conformes à la norme **ISO 7010**
   (formes et couleurs : obligation, interdiction, danger, secours, lutte incendie), embarqués en
   SVG inline dans `index.html`.

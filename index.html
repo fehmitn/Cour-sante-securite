@@ -1281,7 +1281,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <p style="margin-top:10px">Le support compare la mauvaise technique (dos rond, effort sur la colonne) à la bonne (dos plat, genoux pliés) : le dos rond est la cause n°1 des maux de dos au travail.</p>
         </article>
       </div>
-      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <a href="sst.pdf" target="_blank" rel="noopener" aria-label="Ouvrir le support de formation sst.pdf (PDF, nouvelle fenêtre)"><b>sst.pdf</b> <span aria-hidden="true">↗</span></a> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 et marques de manutention ISO 7000/780 (fragile, crochets, haut, diable, gerbage, température) issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Trois marques de manutention sans SVG officiel sur Commons (ne pas empiler, prise latérale, chariot à fourches) restent redessinées en SVG dans la géométrie normalisée. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
+      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <a id="pdf-link" href="sst.pdf" target="_blank" rel="noopener" aria-label="Ouvrir le support de formation sst.pdf (PDF, nouvelle fenêtre)"><b>sst.pdf</b> <span aria-hidden="true">↗</span></a> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 et marques de manutention ISO 7000/780 (fragile, crochets, haut, diable, gerbage, température) issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Trois marques de manutention sans SVG officiel sur Commons (ne pas empiler, prise latérale, chariot à fourches) restent redessinées en SVG dans la géométrie normalisée. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
     </section>
   </main>
 
@@ -3668,8 +3668,35 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
   });
 
   syncMaxTexts();
+  /* ---------- Lien vers sst.pdf : repli si le PDF n'est pas déployé à côté de la page ---------- */
+  const PDF_FALLBACK_URL = 'https://fehmitn.github.io/Cour-sante-securite/sst.pdf';
+  function initPdfLink() {
+    const link = $('#pdf-link');
+    if (!link) return;
+    /* En local (file://), le href relatif suffit : le PDF est distribué à côté de index.html. */
+    if (location.protocol === 'file:') return;
+    /* En ligne, vérifier que le PDF est bien déployé à cet emplacement (hébergement quelconque). */
+    link.addEventListener('click', function (ev) {
+      if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+      ev.preventDefault();
+      function ouvrir(url) { window.open(url, '_blank', 'noopener'); }
+      function repli() {
+        if (navigator.onLine && PDF_FALLBACK_URL) {
+          toast('sst.pdf absent côté serveur — ouverture du PDF depuis le dépôt du projet.', 'ok');
+          ouvrir(PDF_FALLBACK_URL);
+        } else {
+          toast('sst.pdf est à côté de index.html et doit être déployé avec elle (ou connectez-vous à Internet).', 'bad');
+        }
+      }
+      fetch('sst.pdf', { method: 'HEAD' }).then(function (r) {
+        if (r.ok) ouvrir(r.url); else repli();
+      }).catch(repli);
+    });
+  }
+
   initMemoTabs();
   initMemoPictos();
+  initPdfLink();
   updateScoreUI();
   showView(currentHashView());
 
