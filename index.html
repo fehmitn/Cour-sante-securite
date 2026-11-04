@@ -554,6 +554,14 @@ h1,h2,h3{letter-spacing:-.025em}
   background:#f8fbfc;font-size:.75rem;font-weight:800;color:#4e687e;cursor:pointer;user-select:none;
 }
 .exam-toggle input{accent-color:var(--teal);width:15px;height:15px}
+.exam-head-edit{display:flex;align-items:center;gap:8px;flex:1 1 100%;max-width:560px}
+.exam-head-edit[hidden]{display:none}
+.exam-head-label{font-size:.66rem;font-weight:800;color:#8ba0b0;white-space:nowrap}
+.exam-head-edit input{
+  flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;
+  font-size:.75rem;font-weight:700;color:#20455e;
+}
+.exam-head-edit input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(20,102,216,.18)}
 
 .exam-paper{
   max-width:210mm;margin:0 auto;padding:16mm 15mm;background:#fff;color:#172b3d;
@@ -2307,7 +2315,7 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     },
     exam: {
       generated: false, quizIndices: [], ppeIndices: [], signalIndices: [],
-      includeKey: false, generatedAt: 0, code: '', unlocked: false
+      includeKey: false, editHead: false, generatedAt: 0, code: '', unlocked: false
     }
   };
 
@@ -3333,16 +3341,32 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     return 'EX-' + date.getFullYear() + p(date.getMonth() + 1) + p(date.getDate()) + '-' + p(examCount);
   }
 
+  /* ---------- Entête d'épreuve personnalisable ---------- */
+  const EXAM_INSTITUTION_DEFAULT = 'Centre Sectoriel de Formation aux Métiers industriels khnis';
+  const EXAM_INSTITUTION_STORE = 'vigilance_sst_institution_v1';
+  function examCustomInstitution() {
+    try { return localStorage.getItem(EXAM_INSTITUTION_STORE) || ''; } catch (e) { return ''; }
+  }
+  /* Texte affiché : la case « Modifier l'entête » active le nom personnalisé, sinon l'intitulé par défaut. */
+  function institutionText() {
+    return ui.exam.editHead ? (examCustomInstitution() || EXAM_INSTITUTION_DEFAULT) : EXAM_INSTITUTION_DEFAULT;
+  }
+  function updateExamInstitution() {
+    $$('.exam-institution-text').forEach(function (el) { el.textContent = institutionText(); });
+  }
+
   function generateExam() {
     examCount++;
     const now = new Date();
     const keepKey = ui.exam.includeKey;
+    const keepHead = ui.exam.editHead;
     ui.exam = {
       generated: true,
       quizIndices: composeQuizPool(EXAM_QUIZ_COUNT),
       ppeIndices: shuffleIndices(PPE_SCENARIOS.map(function (_, i) { return i; })).slice(0, EXAM_PPE_COUNT),
       signalIndices: shuffleIndices(SIGNALS.map(function (_, i) { return i; })).slice(0, EXAM_SIGNAL_COUNT),
       includeKey: keepKey,
+      editHead: keepHead,
       generatedAt: now.getTime(),
       code: examCode(now)
     };
@@ -3380,10 +3404,16 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
   }
 
   function examToolbarHTML() {
+    const custom = examCustomInstitution() || EXAM_INSTITUTION_DEFAULT;
     return '<div class="exam-toolbar no-print">' +
       '<div class="exam-toolbar-info"><strong>Sujet ' + esc(ui.exam.code) + '</strong><br>Généré le ' + examDateLabel(ui.exam.generatedAt) + ' · Tirage aléatoire</div>' +
       '<div class="exam-toolbar-actions">' +
         '<label class="exam-toggle"><input type="checkbox" data-action="exam-toggle-key"' + (ui.exam.includeKey ? ' checked' : '') + '> Inclure le corrigé</label>' +
+        '<label class="exam-toggle" title="Personnaliser le nom affiché dans l\'entête du sujet"><input type="checkbox" data-action="exam-edit-head"' + (ui.exam.editHead ? ' checked' : '') + '> Modifier l\'entête</label>' +
+        '<div class="exam-head-edit" id="examHeadEdit"' + (ui.exam.editHead ? '' : ' hidden') + '>' +
+          '<label for="examHeadInput" class="exam-head-label">Nom de l\'établissement</label>' +
+          '<input type="text" id="examHeadInput" maxlength="90" spellcheck="false" value="' + esc(custom) + '">' +
+        '</div>' +
         '<button class="btn btn-ghost btn-small" type="button" data-action="exam-generate">' + icon('i-refresh') + 'Nouveau tirage</button>' +
         '<button class="btn btn-primary btn-small" type="button" data-action="exam-print">' + icon('i-print') + 'Imprimer</button>' +
       '</div>' +
@@ -3393,7 +3423,7 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
   function examInstitutionHTML() {
     return '<div class="exam-institution">' +
         '<svg class="exam-institution-logo" aria-hidden="true"><use href="#csfmi-logo"></use></svg>' +
-        '<span class="exam-institution-text">Centre Sectoriel de Formation aux Métiers industriels khnis</span>' +
+        '<span class="exam-institution-text">' + esc(institutionText()) + '</span>' +
       '</div>';
   }
 
@@ -3625,6 +3655,28 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
   document.addEventListener('change', function (e) {
     const toggle = e.target.closest('[data-action="exam-toggle-key"]');
     if (toggle) toggleExamKey(toggle.checked);
+  });
+
+  /* --- Entête modifiable : la case révèle le champ, la saisie met le document à jour en direct --- */
+  document.addEventListener('change', function (e) {
+    const box = e.target.closest('[data-action="exam-edit-head"]');
+    if (!box) return;
+    ui.exam.editHead = !!box.checked;
+    const field = $('#examHeadEdit');
+    if (field) field.hidden = !ui.exam.editHead;
+    const input = $('#examHeadInput');
+    if (input && !input.value) input.value = EXAM_INSTITUTION_DEFAULT;
+    updateExamInstitution();
+  });
+  document.addEventListener('input', function (e) {
+    const field = e.target.closest('#examHeadInput');
+    if (!field) return;
+    const val = field.value.trim();
+    try {
+      if (val && val !== EXAM_INSTITUTION_DEFAULT) localStorage.setItem(EXAM_INSTITUTION_STORE, val);
+      else localStorage.removeItem(EXAM_INSTITUTION_STORE);
+    } catch (err) { /* stockage indisponible : la saisie reste valable pour la session */ }
+    updateExamInstitution();
   });
 
   const resetModal = $('#resetModal');
