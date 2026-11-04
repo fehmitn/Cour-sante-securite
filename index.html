@@ -504,6 +504,14 @@ h1,h2,h3{letter-spacing:-.025em}
 .legend-shape.incendie{border-radius:10px;background:linear-gradient(145deg,#e95c50,#b72e26)}
 .legend-item strong{display:block;font-size:.73rem;margin-bottom:4px}
 .legend-item small{display:block;font-size:.62rem;line-height:1.45;color:#8397a6}
+.legend-shape.with-picto{background:none;clip-path:none;padding:0;border-radius:0;overflow:hidden}
+.legend-shape.with-picto:after{display:none}
+.legend-shape.with-picto .signal-picto{width:100%;height:100%;filter:none}
+.legend-shape.with-picto .signal-picto svg{border-radius:14px}
+.equip-picto{display:block;width:78px;height:78px;margin:0 auto}
+.equip-picto svg{width:100%;height:100%;display:block}
+.picto-svg{display:block;width:88px;height:88px;margin:0 auto}
+.picto-svg svg{width:100%;height:100%;display:block}
 .fire-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
 .fire-chip{padding:10px 11px;border-radius:10px;background:#fff7ef;border:1px solid #ffe2cb;font-size:.72rem;font-weight:800;color:#a95521}
 .fire-chip.fire-blue{background:#eef7fd;border-color:#d7eaf8;color:#236b9c}
@@ -1199,40 +1207,16 @@ h1,h2,h3{letter-spacing:-.025em}
       <!-- Mémo 3 : équipements et pictogrammes -->
       <div class="memo-pane" data-memo-pane="equipements" hidden>
         <h3 class="memo-subhead"><svg class="icon"><use href="#i-ppe"></use></svg>Les équipements de protection individuelle (pages 16–17)</h3>
-        <p class="muted small">L'employeur fournit gratuitement les EPI. Voici les équipements clés, dessinés dans le style normalisé « obligation » : rond bleu, inscription blanche.</p>
+        <p class="muted small">L'employeur fournit gratuitement les EPI. Voici les équipements clés, représentés par les pictogrammes officiels ISO 7010 « obligation » (rond bleu, inscription blanche) issus de Wikimedia Commons.</p>
         <div class="equip-grid">
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Casque"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M28 58a22 22 0 0 1 44 0Z" fill="#fff"/><rect x="21" y="58" width="58" height="7" rx="3.5" fill="#fff"/></svg>
-            <strong>Casque</strong><small>Protège la tête</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gants"><circle cx="50" cy="50" r="48" fill="#1466d8"/><g fill="#fff"><rect x="38" y="22" width="9" height="36" rx="4.5"/><rect x="49" y="18" width="9" height="40" rx="4.5"/><rect x="60" y="24" width="9" height="34" rx="4.5"/><path d="M36 48h33v18a9 9 0 0 1-9 9H45a9 9 0 0 1-9-9Z"/><path d="M28 44a6 6 0 0 1 6 6v8h-6a7 7 0 0 1 0-14Z"/></g><rect x="37" y="76" width="31" height="8" rx="4" fill="#fff"/></svg>
-            <strong>Gants</strong><small>Protègent les mains</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chaussures de sécurité"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M32 22h16v28c12 0 24 3 27 11 2 6-2 12-9 12H36c-3 0-4-2-4-5Z" fill="#fff"/><rect x="28" y="66" width="50" height="6" rx="3" fill="#fff"/></svg>
-            <strong>Chaussures</strong><small>Protègent les pieds</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lunettes de protection"><circle cx="50" cy="50" r="48" fill="#1466d8"/><g fill="#fff"><circle cx="36" cy="54" r="13"/><circle cx="64" cy="54" r="13"/><rect x="41" y="52" width="18" height="5" rx="2.5"/><path d="M24 48l-8-6 3-5 12 8Z"/><path d="M76 48l8-6-3-5-12 8Z"/></g></svg>
-            <strong>Lunettes</strong><small>Protègent les yeux</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Masque"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M32 42h36v14a18 18 0 0 1-36 0Z" fill="#fff"/><g stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M33 50 18 44"/><path d="M67 50l15-6"/></g><rect x="43" y="72" width="14" height="6" rx="3" fill="#fff"/></svg>
-            <strong>Masque</strong><small>Protège les voies respiratoires</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Harnais antichute"><circle cx="50" cy="50" r="48" fill="#1466d8"/><circle cx="50" cy="30" r="8" fill="#fff"/><g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"><path d="M32 46h36"/><path d="M32 46 50 70 68 46"/></g><rect x="43" y="66" width="14" height="18" rx="5" fill="#fff"/></svg>
-            <strong>Harnais</strong><small>Protège contre les chutes</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Protections auditives"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M28 60v-8a22 22 0 0 1 44 0v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><rect x="23" y="58" width="13" height="20" rx="6.5" fill="#fff"/><rect x="64" y="58" width="13" height="20" rx="6.5" fill="#fff"/></svg>
-            <strong>Protections auditives</strong><small>Protègent du bruit</small>
-          </div>
-          <div class="equip-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vêtements de travail"><circle cx="50" cy="50" r="48" fill="#1466d8"/><path d="M37 24h9a4 4 0 0 0 8 0h9l9 9-7 6v37H36V39l-7-6Z" fill="#fff"/></svg>
-            <strong>Vêtements</strong><small>Protègent le corps</small>
-          </div>
+          <div class="equip-card"><span class="equip-picto" data-epi="casque"></span><strong>Casque</strong><small>Protège la tête</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="gants"></span><strong>Gants</strong><small>Protègent les mains</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="chaussures"></span><strong>Chaussures</strong><small>Protègent les pieds</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="lunettes"></span><strong>Lunettes</strong><small>Protègent les yeux</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="masque"></span><strong>Masque</strong><small>Protège les voies respiratoires</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="harnais"></span><strong>Harnais</strong><small>Protège contre les chutes</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="auditif"></span><strong>Protections auditives</strong><small>Protègent du bruit</small></div>
+          <div class="equip-card"><span class="equip-picto" data-epi="vetements"></span><strong>Vêtements</strong><small>Protègent le corps</small></div>
         </div>
 
         <h3 class="memo-subhead"><svg class="icon"><use href="#i-signals"></use></svg>Les 5 familles de signaux</h3>
@@ -1240,27 +1224,27 @@ h1,h2,h3{letter-spacing:-.025em}
           <h3><svg class="icon"><use href="#i-signals"></use></svg>Savoir reconnaître au premier regard</h3>
           <p>La forme et la couleur donnent le niveau d'information : obligation, interdiction, danger, secours ou lutte incendie.</p>
           <div class="legend-grid">
-            <div class="legend-item"><div class="legend-shape obligation"><svg><use href="#i-casque"></use></svg></div><strong>Obligation</strong><small>Rond bleu, inscription blanche</small></div>
-            <div class="legend-item"><div class="legend-shape interdiction"><svg><use href="#i-cigarette"></use></svg></div><strong>Interdiction</strong><small>Rond blanc, contour rouge, cercle barré</small></div>
-            <div class="legend-item"><div class="legend-shape danger"><svg><use href="#i-bolt"></use></svg></div><strong>Danger</strong><small>Triangle jaune, inscription noire</small></div>
-            <div class="legend-item"><div class="legend-shape secours"><svg><use href="#i-cross"></use></svg></div><strong>Secours</strong><small>Carré vert, inscription blanche</small></div>
-            <div class="legend-item"><div class="legend-shape incendie"><svg><use href="#i-extincteur"></use></svg></div><strong>Incendie</strong><small>Carré rouge, inscription blanche</small></div>
+            <div class="legend-item"><div class="legend-shape" data-legend="obligation"></div><strong>Obligation</strong><small>Rond bleu, inscription blanche</small></div>
+            <div class="legend-item"><div class="legend-shape" data-legend="interdiction"></div><strong>Interdiction</strong><small>Rond blanc, contour rouge, cercle barré</small></div>
+            <div class="legend-item"><div class="legend-shape" data-legend="danger"></div><strong>Danger</strong><small>Triangle jaune, inscription noire</small></div>
+            <div class="legend-item"><div class="legend-shape" data-legend="secours"></div><strong>Secours</strong><small>Carré vert, inscription blanche</small></div>
+            <div class="legend-item"><div class="legend-shape" data-legend="incendie"></div><strong>Incendie</strong><small>Carré rouge, inscription blanche</small></div>
           </div>
         </article>
 
         <h3 class="memo-subhead"><svg class="icon"><use href="#i-arrow"></use></svg>Pictogrammes de manutention (pages 44–48)</h3>
-        <p class="muted small">Marques apposées sur les colis pour préciser les précautions de transport et d'empilage. Dessins normalisés : glyphe noir sur fond clair.</p>
+        <p class="muted small">Marques apposées sur les colis pour préciser les précautions de transport et d'empilage. Marques ISO 780 / ISO 7000 : glyphe noir sur fond clair (Source : Wikimedia Commons).</p>
         <div class="picto-grid">
           <div class="picto-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fragile"><path d="M27 10h46v22a23 23 0 0 1-16 21.9V68h14v10H29V68h14V53.9A23 23 0 0 1 27 32Z" fill="#1a1a1a"/></svg>
+            <span class="picto-svg" data-mark="0621"></span>
             <strong>Fragile</strong><small>Charge sensible aux chocs</small>
           </div>
           <div class="picto-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Haut"><g fill="#1a1a1a"><path d="M50 6 70 32H57v28H43V32H30Z"/><rect x="28" y="70" width="44" height="10"/></g></svg>
+            <span class="picto-svg" data-mark="0623"></span>
             <strong>Haut</strong><small>Ce côté vers le haut, ne pas retourner</small>
           </div>
           <div class="picto-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Limite de température"><g fill="#1a1a1a"><circle cx="50" cy="64" r="17"/><path d="M45 10a5 5 0 0 1 10 0v46H45Z"/></g><path d="M24 78 78 22" stroke="#fff" stroke-width="11"/><path d="M24 78 78 22" stroke="#1a1a1a" stroke-width="5"/></svg>
+            <span class="picto-svg" data-mark="0632"></span>
             <strong>Limite de température</strong><small>Respecter les températures indiquées</small>
           </div>
           <div class="picto-card">
@@ -1268,11 +1252,11 @@ h1,h2,h3{letter-spacing:-.025em}
             <strong>Ne pas empiler</strong><small>Aucun colis ne doit être posé au-dessus</small>
           </div>
           <div class="picto-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Limite de gerbage en nombre"><g stroke="#1a1a1a" stroke-width="5" fill="none"><rect x="30" y="6" width="40" height="24"/><rect x="30" y="60" width="40" height="24"/></g><rect x="30" y="36" width="40" height="18" fill="#1a1a1a"/><path d="M20 42 80 60M80 36 20 66" stroke="#1a1a1a" stroke-width="5"/></svg>
-            <strong>Limite de gerbage en nombre</strong><small>Nombre maximum de colis empilés</small>
+            <span class="picto-svg" data-mark="0630"></span>
+            <strong>Limite de gerbage</strong><small>Charge ou nombre maximal de colis à ne pas dépasser</small>
           </div>
           <div class="picto-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ne pas utiliser de crochets"><path d="M26 62C12 52 14 30 32 26l30-8" fill="none" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/><path d="M18 30 84 68M84 30 18 68" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/></svg>
+            <span class="picto-svg" data-mark="0622"></span>
             <strong>Ne pas utiliser de crochets</strong><small>Soulèvement interdit par crochets</small>
           </div>
           <div class="picto-card">
@@ -1280,7 +1264,7 @@ h1,h2,h3{letter-spacing:-.025em}
             <strong>Prise latérale par pinces interdite</strong><small>Ne pas saisir le colis sur les côtés</small>
           </div>
           <div class="picto-card">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diable interdit"><g fill="none" stroke="#1a1a1a" stroke-linecap="round"><path d="M30 18l24 62" stroke-width="7"/><path d="M26 84h32" stroke-width="6"/></g><circle cx="41" cy="76" r="8" fill="#1a1a1a"/><path d="M16 24 88 78M88 24 16 78" stroke="#1a1a1a" stroke-width="7" stroke-linecap="round"/></svg>
+            <span class="picto-svg" data-mark="0629"></span>
             <strong>Diable interdit</strong><small>Déplacement au diable interdit</small>
           </div>
           <div class="picto-card">
@@ -1295,7 +1279,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <p style="margin-top:10px">Le support compare la mauvaise technique (dos rond, effort sur la colonne) à la bonne (dos plat, genoux pliés) : le dos rond est la cause n°1 des maux de dos au travail.</p>
         </article>
       </div>
-      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Pictogrammes de manutention et dessins d'équipements redessinés en SVG conforme au style normalisé. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
+      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <b>sst.pdf</b> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 et marques de manutention ISO 7000/780 (fragile, crochets, haut, diable, gerbage, température) issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Trois marques de manutention sans SVG officiel sur Commons (ne pas empiler, prise latérale, chariot à fourches) restent redessinées en SVG dans la géométrie normalisée. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
     </section>
   </main>
 
@@ -2340,6 +2324,47 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     Object.keys(map).forEach(function (id) {
       const el = document.getElementById(id);
       if (el) el.textContent = String(map[id]);
+    });
+  }
+
+
+
+  /* ---------- Pictogrammes officiels du mémo (ISO 7010 / ISO 7000 — source : Wikimedia Commons) ---------- */
+  const EPI_PICTOS = {
+    /* 4 pictos réutilisés depuis la source unique SIGNALS (mode examen) */
+    casque: SIGNALS[0].picto,
+    auditif: SIGNALS[5].picto,
+    lunettes: SIGNALS[10].picto,
+    gants: SIGNALS[11].picto,
+    chaussures: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265" fill-rule="evenodd"><path d="M132.5 0C59.529 0 0 59.51 0 132.466S59.532 265 132.5 265 265 205.419 265 132.466 205.472 0 132.5 0" fill="#005387" fill-rule="nonzero"/><path d="M105.862 55.133l5.414-28.444 65.392 15.392-16.28 62.008c-1.213 4.612-1.045 8.351 1.287 11.575l24.552 33.914c3.276 4.526 7.343 7.992 10.922 9.067 19.071 5.328 25.72 15.985 19.981 31.877l2.246.586-1.91 7.112-15.414-3.407 1.06-4.847 6.951 1.534c8.545-14.205 3.963-23.496-14.179-28.56-4.944-1.478-9.757-5.862-13.284-10.735l-24.556-33.914c-3.437-4.746-3.377-10.067-1.993-15.34l15.116-57.56-56.366-13.269-4.541 23.847zm66.537 126.318c-6.022-1.369-3.537-7.56 4.187-7.09 5.388.329 12.448 4.444 15.369 9.273 2.746 4.541-2.817 8.653-5.817 5.694-4.616-4.556-8.672-6.724-13.739-7.877m-114.347.056h46.265c14.817 0 25.944 13.716 38.239 13.716h47.426v4.481h-47.426c-13.795 0-24.187-13.713-38.239-13.713H58.052zM52.436 62.715h69.411l-2.19 63.944c-.187 5.392.899 9.739 4.429 12.634l30.302 24.832c3.119 2.556 5.925 4.534 9.082 5.198l14.604 3.063c12.638 2.649 18.254 8.952 16.523 20.672-.47 2.537.168 3.813 1.911 3.832l.003 8.642h-64.534c-1.638 0-3.463-.672-5.597-1.634 0 0-21.739-12.922-25.758-12.97l-.549 14.605H54.895l-1.914-24.343c-5.549-6.739-4.642-21.616 2.735-44.631 2.978-9.295.25-39.56-3.28-73.844" fill="#fff"/></svg>`,
+    vetements: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265"><path d="M132.499 0C59.528 0 0 59.511 0 132.468S59.532 265 132.5 265 265 205.422 265 132.468 205.471 0 132.499 0" fill="#005387"/><path d="M119.193 34.807c0-4.615 3.738-8.356 8.356-8.356h2.443v86.175h5.013V26.451h2.443a8.36 8.36 0 0 1 8.356 8.356h12.836c5.334 0 9.891 3.339 11.696 8.035a10.71 10.71 0 0 1 .336.993l23.813 70.603-16.33 4.53-19.051-54.722-3.923 45.952 19.646 120.93-22.978 3.927-19.325-98.857-19.376 98.857-22.974-3.927 19.65-120.93-3.927-45.952-19.059 54.722-16.322-4.53 23.813-70.615a11.28 11.28 0 0 1 .332-.982c1.801-4.7 6.362-8.035 11.7-8.035zm21.76 23.217h12.531v5.013h-12.531z" fill="#fff" fill-rule="evenodd"/></svg>`,
+    masque: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265" fill-rule="evenodd"><path d="M265 132.5C265 59.322 205.678 0 132.5 0S0 59.322 0 132.5 59.322 265 132.5 265 265 205.678 265 132.5" fill="#005387"/><path d="M167.129 228.794c2.569-.038 4.636-1.129 4.617-2.436s-2.118-2.335-4.688-2.296-4.636 1.129-4.616 2.436 2.118 2.335 4.687 2.296zM58.12 106.498c-18.826.069-11.418 26.681-7.173 36.58 3.152 7.349 7.868 17.05 15.881 19.597 2.217.705 4.315.632 5.487.632 4.63 13.745 3.662 17.921 13.606 31.677 2.289 3.168 1.815 4.271 1.819 8.585l.03 13.039c2.44-2.483 7.508-5.613 10.856-6.613l2.341 1.887c-2.786 1.266-8.557 3.176-11.705 8.654-3.401 5.916 2.153 11.622 6.239 13.858 7.785 4.673 21.812 7.152 35.511 7.372-1.882-.322-3.244-1.259-3.244-2.365 0-1.372 2.098-2.485 4.686-2.485s4.686 1.112 4.686 2.485c0 1.121-1.401 2.069-3.326 2.378 8.647-.057 16.981-1.027 23.322-2.928l.246-.096c5.685-2.121 23.252-7.07 18.582-17.515-2.433-5.441-10.309-7.813-12.174-8.997l2.013-2.184c3.473 1.241 9.342 4.344 11.247 6.456l.047-17.283c.001-2.218.761-2.638 1.879-4.25 3.341-4.821 10.987-18.964 13.633-32.019 4.481.126 6.236-.601 9.086-2.616 6.369-4.501 11.161-14.624 13.844-21.981 4.332-11.879 7.967-30.695-9.498-32.044-.062-1.899.315-2.394.443-4.051 1.136-14.661-3.063-31.457-10.631-43.547-6.127-9.788-14.678-18.888-24.61-24.798-11.698-6.96-23.266-11.152-38.772-11.137-10.825.011-22.821 2.185-32.428 7.376-11.48 6.202-21.987 13.932-29.18 25.116-7.593 11.804-9.732 18.126-12.504 32.337-1.232 6.314-.389 13.865-.239 18.879zm15.827 47.179c-1.288 2.224-4.093 4.219-8.513-1.06-3.329-3.975-6.024-8.63-7.904-13.688-2.077-5.587-4.029-10.857-4.042-17.511-.005-2.199.178-5.86 1.935-7.425 3.971-3.54 4.904 4.68 9.976 1.961 3.029-1.624 1.412-5.075 1.098-7.673-.287-2.372-.753-4.246-.806-6.393-.573-23.184 4.244-32.554 17.74-50.031 12.109-13.636 28.529-20.968 47.431-21.332s36.243 7.191 50.077 21.197c14.08 14.256 18.074 31.124 17.945 50.182-.015 2.17-.794 4.269-1.084 6.419-.043.322-1.073 3.755.021 5.911.9 1.771 2.391 2.051 4.269 1.783 2.242-.321 2.423-2.203 3.87-2.927 4.259-2.13 6.327 6.578 4.825 13.223-1.61 7.122-3.224 12.955-6.823 19.279-1.539 2.703-3.219 5.466-5.311 7.555-4.067 4.061-5.78 2.636-7.785.703-3.619-3.49-1.387-68.823-2.02-69.913-26.27-11.193-87.727-8.94-112.803-.344l-.237 37.21c.006 3.007-1.423 32.124-1.859 32.876zm58.971 69.362c-2.559-.034-4.647 1.034-4.665 2.383s2.042 2.47 4.601 2.504 4.648-1.034 4.665-2.383-2.043-2.47-4.601-2.503zm22.136 15.145c2.575-.071 4.632-1.215 4.595-2.557s-2.154-2.371-4.729-2.3-4.631 1.215-4.595 2.557 2.154 2.371 4.729 2.3zm-30.134-3.16c2.588 0 4.686-1.112 4.686-2.485s-2.098-2.485-4.686-2.485-4.686 1.113-4.686 2.485 2.098 2.485 4.686 2.485zm-16.508-2.799c-2.562-.026-4.651 1.052-4.664 2.409s2.052 2.479 4.614 2.505 4.65-1.052 4.664-2.409-2.052-2.479-4.614-2.505zm-10.711-4.499c2.556-.078 4.594-1.275 4.552-2.674s-2.149-2.472-4.705-2.394-4.594 1.275-4.552 2.674 2.149 2.471 4.705 2.394zm42.162 7.691c2.567-.05 4.627-1.198 4.601-2.566s-2.128-2.437-4.696-2.389-4.627 1.198-4.601 2.566 2.129 2.437 4.696 2.389zm10.937-3.528c2.663 0 4.821-1.125 4.821-2.514s-2.159-2.514-4.821-2.514-4.821 1.126-4.821 2.514 2.159 2.514 4.821 2.514zm-36.788-.669c2.53-.076 4.548-1.268 4.506-2.663s-2.127-2.465-4.657-2.39-4.548 1.268-4.506 2.663 2.127 2.465 4.657 2.389zm-6.021-13.594c2.814-.033 5.083-1.143 5.067-2.479s-2.309-2.394-5.124-2.361-5.083 1.143-5.067 2.479 2.309 2.394 5.124 2.362zm17.191-2.456c-2.833-.037-5.145 1.014-5.162 2.347s2.266 2.443 5.1 2.48 5.145-1.014 5.162-2.347-2.266-2.443-5.1-2.48zm8.97-6.752c-2.799 0-5.069 1.089-5.069 2.432s2.269 2.433 5.069 2.433 5.069-1.089 5.069-2.433-2.269-2.432-5.069-2.432zm18.644 16.981c2.854 0 5.167-1.112 5.167-2.483s-2.313-2.483-5.167-2.483-5.166 1.112-5.166 2.483 2.313 2.483 5.166 2.483zm-39.07-.65c2.848 0 5.156-1.109 5.156-2.476s-2.308-2.476-5.156-2.476-5.156 1.109-5.156 2.476 2.308 2.476 5.156 2.476zm27.865-4.13c2.838-.035 5.125-1.15 5.109-2.49s-2.33-2.398-5.169-2.363-5.125 1.15-5.109 2.49 2.331 2.399 5.169 2.364zm17.814-2.019c2.764 0 5.005-1.141 5.005-2.549s-2.241-2.549-5.005-2.549-5.005 1.141-5.005 2.549 2.241 2.549 5.005 2.549zm-50.873-11.415l2.494 2.155c12.964-3.481 28.238-3.575 43.294-.316l1.995-2.188c-13.452-3.886-35.092-3.811-47.783.349zm-19.996-22.409l1.44 2.719c21.897-14.312 64.451-12.125 84.936-.02.472-.864.854-1.887 1.341-3.061-20.503-12.538-68.222-14.696-87.718.361zm16.377-53.581c11.575-.127 20.869-8.376 20.759-18.426s-9.583-18.094-21.158-17.967-20.869 8.376-20.759 18.426 9.583 18.094 21.157 17.967zm55.128-36.467c-11.621 0-21.041 8.157-21.041 18.22s9.42 18.22 21.041 18.22 21.041-8.157 21.041-18.22-9.42-18.22-21.041-18.22" fill="#fff"/></svg>`,
+    harnais: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 265" fill-rule="evenodd"><path d="M265 132.5C265 59.323 205.677 0 132.5 0S0 59.323 0 132.5 59.323 265 132.5 265 265 205.678 265 132.5" fill="#005387"/><path d="M152.426 52.049a14.46 14.46 0 0 0-12.663-16.06c-7.933-.936-15.126 4.737-16.065 12.671a14.46 14.46 0 0 0 12.663 16.059c7.933.936 15.126-4.737 16.065-12.67zm-13.923 9.233c6.026-.26 10.706-5.355 10.452-11.381a10.91 10.91 0 0 0-11.37-10.44 10.94 10.94 0 0 0-10.452 11.381 10.91 10.91 0 0 0 11.37 10.44zm27.935 13.96l-5.808-4.53c-2.191-1.709-4.7-1.922-7.412-1.922h-30.6c-4.567.038-6.157.674-9.509 4.117L93.525 92.265c-.686.678-1.893 1.43-3.741 1.43l-27.999.005c-16.5.003-16.021 21.428 0 21.428h30.501c7.197.026 8.546-.645 11.797-3.728l14.109-13.216v34.198l-31.237 25.35c-5.038 4.088-4.603 9.454-2.592 14.701l14.985 39.097c5.778 15.075 27.709 8.047 21.96-7.672l-12.434-33.994 25.726-20.275v78.037c0 16.453 23.09 16.559 23.118 0V97.215c.221-1.022.884-1.333 1.667-.762l12.818 9.364v30.193c.027 14.986 21.333 15.574 21.333 0v-32.475c.021-4.412-.312-6.906-3.599-10.106-1.977-1.925-4.555-3.596-6.832-5.406-2.498-1.986-8.863-6.5-10.759-8.407 4.268-14.734 6.601-29.909 5.901-45.332l-6.688-2.802c.012 19.468-1.046 27.584-5.123 43.761zm-11.816 65.566c-5.528.944-10.994 3.419-16.636 8.292v78.634c-.067 12.022 16.65 11.357 16.636.275zm-50.002 28.103l25.202-20.062-10.73-12.716-28.131 22.601c-5.393 4.333-5.38 6.946-3.18 12.736l14.549 38.284c4.376 11.517 20.032 6.694 15.529-5.37zm45.867-39.951l4.152-.194V96.72c0-3.382 3.109-5.184 6.115-3.465l14.866 11.107v32.49c0 9.8 14.516 9.919 14.516 0v-34.018c0-4.415-1.243-6.144-4.119-8.344l-25.099-19.205c-1.732-1.338-4.304-3.398-7.009-3.059-3.211 19.649-3.375 37.227-3.421 56.735zm-54.484-17.581c2.667-.001 3.803-.534 5.542-2.281l16.648-16.727c-.014-7.197-.2-12.585.605-19.509L95.846 94.67c-1.941 1.845-3.119 2.748-6.629 2.745l-27.907-.019c-10.785.091-10.256 14.009 0 14.002zm28.916 13.29c5.608 2.392 12.733 3.665 19.738 3.852-.128-9.24-.059-18.836.298-28.561l-20.037-.223zm0-32.075l20.413.285c.488-7.692 1.256-14.541 2.229-20.777h-22.353c-.283 6.123-.388 11.451-.289 20.492zm10.186 49.889c3.252-2.69 5.62-4.456 10.92-6.594-7.661.04-13.73-.98-20.014-3.48z" fill="#fff"/></svg>`
+  };
+  const PACKAGING_PICTOS = {
+    '0621': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><g fill="none" stroke="#999" stroke-width="3"><path d="m0 16v-16h16"/><path d="m200 16v-16h-16"/><path d="m0 184v16h16"/><path d="m200 184v16h-16"/></g><path d="m63.559 184.96v-6.3559l31.144-3.2688-0.0023-72.983c-7.355-1.1279-14.158-4.5733-19.42-9.8349-6.5558-6.5558-10.239-15.447-10.239-24.719l-1e-6 -52.754h69.915v52.754c0 9.2713-3.683 18.163-10.239 24.719-5.2617 5.2617-12.065 8.7071-19.42 9.8349l-2e-3 72.983 31.144 3.2688v6.3559h-72.881z"/></svg>`,
+    '0622': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 53.710415 53.710415"><g transform="translate(76.412563,20.316385)"><g fill="none" transform="matrix(0.26458333,0,0,0.26458333,-76.015688,-19.91951)" style="display:inline"><g stroke="#999999" stroke-width="3" ><path d="M 0,16 V 0 h 16" /><path d="M 200,16 V 0 h -16" /><path d="m 0,184 v 16 h 16" /><path d="m 200,184 v 16 h -16" /></g></g><path style="color:#000000;fill:#000000;stroke-linecap:round;stroke-dashoffset:2.39055;-inkscape-stroke:none;paint-order:markers stroke fill" d="m -54.736875,-16.8163 -0.0765,0.004 c -1.74282,0.11958 -3.15914,1.00053 -3.94705,2.18953 -0.78792,1.18899 -1.02396,2.57947 -0.96893,3.89434 0.055,1.31487 0.39706,2.57725 1.00407,3.62717 0.60702,1.04992 1.60344,2.05337 3.03289,2.04277 l -0.0816,-0.002 3.67161,0.1819 0.01,0.002 c 0.65644,0.0228 0.88663,0.20687 1.09606,0.51366 0.20943,0.3068 0.3458,0.84455 0.26923,1.4919 l -0.7028,5.67666 -13.39298,-12.43439 -1.94924,2.09962 14.90814,13.84101 -0.0527,0.42323 -14.85543,13.79244 1.94924,2.09961 12.35945,-11.47475 -0.13849,1.11725 c -0.20284,1.05313 -0.71563,2.29752 -1.54306,3.07061 l 0.0351,-0.0315 c -3.8657,3.38393 -3.74829,8.3848 -1.5875,11.51557 1.08039,1.5654 2.69055,2.75158 4.60541,3.01791 1.91134,0.26585 4.0146,-0.49226 5.75003,-2.30684 1.02598,-1.03591 1.88982,-2.36996 2.68253,-3.77444 l -0.21756,-5.73867 c -0.49167,0.9366 -0.9891,1.93243 -1.50637,2.91145 -0.984,1.86239 -2.05505,3.64344 -3.00188,4.5961 l -0.01,0.01 -0.0119,0.0119 c -1.25343,1.31441 -2.32527,1.58742 -3.29075,1.45315 -0.96549,-0.13429 -1.93544,-0.78231 -2.64274,-1.80713 -1.4146,-2.04963 -1.7061,-5.26089 1.11725,-7.73234 l 0.0176,-0.0155 0.0176,-0.0155 c 1.46565,-1.36939 2.12714,-3.16684 2.40812,-4.65243 l 0.008,-0.045 0.49764,-4.01991 14.98255,13.91026 1.94924,-2.09961 -15.10968,-14.0286 15.10968,-14.02808 -1.94924,-2.09962 -14.36191,13.33407 0.77204,-6.23424 v -0.004 c 0.1414,-1.19545 -0.0528,-2.42722 -0.74776,-3.44526 -0.69496,-1.01806 -1.94407,-1.71298 -3.36362,-1.76217 h 0.0217 l -3.70107,-0.18345 h -0.0413 c 0.0465,-3.5e-4 -0.20931,-0.0545 -0.53123,-0.61133 -0.32191,-0.5568 -0.58449,-1.4487 -0.62064,-2.31252 -0.0361,-0.86383 0.15163,-1.67646 0.49403,-2.19315 0.33854,-0.51088 0.75971,-0.83329 1.72858,-0.90641 l 10.01334,0.38086 c 0.45381,0.035 0.87314,0.27988 1.28158,0.81649 0.40841,0.53662 0.73034,1.34119 0.83767,2.15439 0.10733,0.81321 -0.002,1.6179 -0.2713,2.17351 -0.26566,0.54828 -0.61366,0.87599 -1.2914,1.0511 l -1.06608,0.1266 c -0.78528,0.093 -1.34667,0.80474 -1.25419,1.59009 0.0932,0.78598 0.80623,1.34739 1.59215,1.25367 l 1.3162,-0.15607 0.0858,-0.0217 c 1.49369,-0.37156 2.617,-1.40147 3.19567,-2.59571 0.57866,-1.19425 0.70061,-2.52512 0.53278,-3.79666 -0.16783,-1.27155 -0.62748,-2.50069 -1.39836,-3.51349 -0.77087,-1.01279 -1.92907,-1.83059 -3.33985,-1.93941 l -0.0289,-0.002 z" /></g></svg>`,
+    '0623': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 53.710415 53.710415"><g transform="translate(-22.358002,-114.24561)"><g fill="none" transform="matrix(0.26458333,0,0,0.26458333,22.754877,114.64248)" style="display:inline"><g stroke="#999999" stroke-width="3" ><path d="M 0,16 V 0 h 16" /><path d="M 200,16 V 0 h -16" /><path d="m 0,184 v 16 h 16" /><path d="m 200,184 v 16 h -16" /></g></g><path style="color:#000000;fill:#000000;stroke-width:0.421337;stroke-dashoffset:2.39055;paint-order:markers stroke fill" d="m 40.443721,118.90217 -6.049243,10.6903 h 4.617289 v 28.58637 h 2.864942 v -28.58637 h 4.616772 z m 17.538981,0 -6.049243,10.6903 h 4.617289 v 28.58637 h 2.864942 v -28.58637 h 4.616774 z M 33.683927,160.434 v 2.86546 H 64.742494 V 160.434 Z" /></g></svg>`,
+    '0629': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 53.710415 53.710415"><g transform="translate(-137.99184,-83.272254)"><g fill="none" transform="matrix(0.26458333,0,0,0.26458333,138.38871,83.669129)" style="display:inline"><g stroke="#999999" stroke-width="3" ><path d="M 0,16 V 0 h 16" /><path d="M 200,16 V 0 h -16" /><path d="m 0,184 v 16 h 16" /><path d="m 200,184 v 16 h -16" /></g></g><path style="color:#000000;display:inline;fill:#000000;stroke-dashoffset:2.39055;-inkscape-stroke:none;paint-order:markers stroke fill" d="m 173.74545,88.963377 -7.4414,7.5644 -2.59158,9.627323 -8.38501,-8.263583 -2.01177,2.0407 9.54102,9.402533 -0.0377,0.14056 -9.35705,9.36894 2.02778,2.02365 5.8353,-5.84254 -2.30063,8.54625 -5.19452,1.73323 -0.0465,1.56683 7.77627,-1.79473 3.63079,-13.44207 9.17618,9.04337 2.01177,-2.0407 -9.40408,-9.26817 9.39994,-9.411823 -2.02726,-2.0252 -7.47758,7.487393 2.00297,-7.417113 6.91586,-7.02955 z m -5.90041,30.582123 c -1.89976,0 -3.47059,1.57083 -3.47059,3.47059 0,1.89975 1.57083,3.4711 3.47059,3.4711 1.89976,0 3.47059,-1.57135 3.47059,-3.4711 0,-1.89976 -1.57083,-3.47059 -3.47059,-3.47059 z m -13.93197,8.88266 v 2.86339 h 20.92999 v -2.86339 z" /></g></svg>`,
+    '0630': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 53.710415 53.710415"><g transform="translate(-32.682455,-93.596704)"><g fill="none" transform="matrix(0.26458333,0,0,0.26458333,33.07933,93.993579)" style="display:inline"><g stroke="#999999" stroke-width="3" ><path d="M 0,16 V 0 h 16" /><path d="M 200,16 V 0 h -16" /><path d="m 0,184 v 16 h 16" /><path d="m 200,184 v 16 h -16" /></g></g><path style="font-weight:bold;font-size:8.46667px;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;stroke-width:1.265;stroke-dashoffset:2.39055;paint-order:markers stroke fill" d="m 52.25387,98.011163 2.09599,3.079917 -2.1456,3.07578 h 0.89297 l 1.71979,-2.53422 1.67845,2.53422 h 0.94671 l -2.1208,-3.11299 2.12493,-3.042707 h -0.8971 l -1.69499,2.501137 -1.65778,-2.501137 z m 5.80016,0 2.096,3.079917 -2.14561,3.07578 h 0.89297 l 1.71979,-2.53422 1.67845,2.53422 h 0.94671 l -2.1208,-3.11299 2.12494,-3.042707 h -0.89711 l -1.69498,2.501137 -1.65778,-2.501137 z m 8.14679,0.15296 v 6.024437 h 0.77721 v -1.54202 l 0.50436,-0.47956 1.48674,2.06447 h 1.02526 l -1.93735,-2.52749 1.58646,-1.875337 h -0.97978 l -1.68569,2.053097 v -3.717597 z m -16.8615,1.15807 -4.24161,1.699117 v 0.51263 l 4.24161,1.70998 v -0.74415 l -3.23288,-1.22214 3.23288,-1.2113 z m 22.69163,0.35657 c -0.24417,0 -0.49008,0.05353 -0.7369,0.15968 -0.24682,0.10351 -0.45639,0.249267 -0.6289,0.437697 -0.18577,0.2017 -0.33303,0.44171 -0.44184,0.72037 -0.10614,0.27602 -0.15916,0.60537 -0.15916,0.98753 0,0.698 0.15509,1.23937 0.4656,1.62419 0.31317,0.38218 0.73529,0.5731 1.26608,0.5731 0.31848,0 0.58008,-0.0438 0.78444,-0.13126 0.20701,-0.0902 0.42296,-0.2257 0.64854,-0.40618 v 0.40618 c 0,0.18048 -0.0196,0.34393 -0.0594,0.48989 -0.0398,0.14597 -0.10606,0.27064 -0.19896,0.37414 -0.0929,0.10881 -0.22296,0.19376 -0.39016,0.25476 -0.1672,0.0611 -0.37825,0.0915 -0.63303,0.0915 -0.26539,0 -0.53094,-0.0358 -0.79634,-0.10749 -0.26539,-0.069 -0.45927,-0.12738 -0.58136,-0.17518 h -0.0398 v 0.76429 c 0.21762,0.061 0.43802,0.10763 0.66094,0.13953 0.22559,0.0345 0.45678,0.0517 0.69299,0.0517 0.71126,0 1.2379,-0.17671 1.58026,-0.52969 0.34236,-0.35297 0.51366,-0.90611 0.51366,-1.65984 v -3.941356 h -0.70073 l -0.0481,0.191199 c -0.19374,-0.10612 -0.37777,-0.18411 -0.55293,-0.23461 -0.17251,-0.053 -0.3875,-0.0801 -0.64493,-0.0801 z m 0.13126,0.672827 c 0.16986,0 0.33968,0.0201 0.50953,0.0599 0.17251,0.0371 0.35802,0.101 0.55707,0.1912 v 2.42414 c 0,0.23091 -0.38485,0.25359 -0.60513,0.33849 -0.21762,0.0823 -0.43505,0.1235 -0.65267,0.1235 -0.40606,0 -0.69662,-0.12858 -0.87178,-0.38602 -0.17514,-0.25743 -0.26252,-0.63587 -0.26252,-1.13482 0,-0.52548 0.11779,-0.92597 0.35398,-1.20199 0.2362,-0.27601 0.56016,-0.41444 0.97152,-0.41444 z m -14.63735,6.74997 v 2.98948 h -3.95841 l 3.08663,3.08715 3.08715,3.08664 3.08715,-3.08664 3.08663,-3.08715 H 61.9556 v -2.98948 z m -7.80779,11.6582 v 1.33326 h 20.04632 v -1.33326 z m 1.59163,3.39825 c -1.00095,0 -1.80712,0.80565 -1.80712,1.8066 v 17.12144 c 0,1.00096 0.80617,1.80661 1.80712,1.80661 h 16.86306 c 1.00095,0 1.80661,-0.80565 1.80661,-1.80661 v -17.12144 c 0,-1.00095 -0.80566,-1.8066 -1.80661,-1.8066 z" /></g></svg>`,
+    '0632': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><g fill="none"><g stroke="#999" stroke-width="3"><path d="m0 16v-16h16"/><path d="m200 16v-16h-16"/><path d="m0 184v16h16"/><path d="m200 184v16h-16"/></g><path d="m100.29 13.643c-5.3121 0-9.6172 4.5863-9.6172 10.242v84.805l-35.525 54.471h-17.975v5.4766h20.941l32.559-49.924v31.863c-5.7633 3.3119-9.6484 9.5243-9.6484 16.648 0 10.601 8.5947 19.193 19.195 19.193 10.601 0 19.193-8.5928 19.193-19.193 0-7.0637-3.8193-13.232-9.502-16.564v-61.445l34.117-52.314h18.357v-5.4746h-21.324l-31.15 47.766v-55.307h-2e-3c0-5.6559-4.307-10.242-9.6191-10.242zm-0.0176 5.4688c2.3353 0 4.2285 1.8933 4.2285 4.2285 0 0.06354-3e-3 0.12665-6e-3 0.18945 2e-3 -0.03759 5e-3 -0.07535 6e-3 -0.11328v64.07l-8.457 12.967v-77.037c8.6e-4 0.03793 4e-3 0.07569 6e-3 0.11328-3e-3 -0.06281-6e-3 -0.12592-6e-3 -0.18945 0-2.3353 1.8932-4.2285 4.2285-4.2285z" fill="#000" fill-rule="evenodd"/></g></svg>`
+  };
+  const LEGEND_PICTOS = { obligation: 0, interdiction: 1, danger: 14, secours: 3, incendie: 4 };
+
+  function initMemoPictos() {
+    $$('.equip-picto[data-epi]').forEach(function (el) {
+      const svg = EPI_PICTOS[el.getAttribute('data-epi')];
+      if (svg) el.innerHTML = svg;
+    });
+    $$('.legend-shape[data-legend]').forEach(function (holder) {
+      const idx = LEGEND_PICTOS[holder.getAttribute('data-legend')];
+      if (idx === undefined || !SIGNALS[idx]) return;
+      holder.classList.add('with-picto');
+      holder.innerHTML = '<span class="signal-picto ' + SIGNALS[idx].cat + ' official-picto">' + SIGNALS[idx].picto + '</span>';
+    });
+    $$('.picto-svg[data-mark]').forEach(function (el) {
+      const svg = PACKAGING_PICTOS[el.getAttribute('data-mark')];
+      if (svg) el.innerHTML = svg;
     });
   }
 
@@ -3642,6 +3667,7 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
 
   syncMaxTexts();
   initMemoTabs();
+  initMemoPictos();
   updateScoreUI();
   showView(currentHashView());
 

@@ -88,7 +88,7 @@ hygiène-sécurité, formateurs cherchant un support d'ouverture ou de révision
 - 🧯 **Pictogrammes officiels** — 20 signaux ISO 7010 intégrés en SVG inline, sans chargement réseau.
 - 📱 **Responsive** — grilles fluides du mobile au grand écran, barre supérieure collante.
 - ♿ **Accessible** — HTML sémantique, `aria-live` sur les retours, `aria-modal`, focus visibles, `prefers-reduced-motion`.
-- 🖨️ **Mémo en 3 sous-pages** — pages 1–6 (fondamentaux), pages 8–16 (notions de sécurité) et onglet équipements : EPI, familles de signaux et pictogrammes de manutention normalisés en SVG.
+- 🖨️ **Mémo en 3 sous-pages** — pages 1–6 (fondamentaux), pages 8–16 (notions de sécurité) et onglet équipements : EPI en pictogrammes officiels ISO 7010, familles de signaux illustrées par les pictos de l'examen et marques de manutention ISO 780/ISO 7000 officielles (fragile, crochets, haut, diable, gerbage, température).
 - 🧾 **Mode examen** — 10 questions du niveau 1 (dont au moins 2 de manutention), 3 scénarios EPI et 10 signaux tirés au hasard, document A4 avec corrigé optionnel sur une page séparée.
 - 🔗 **Routes par ancre** — `#dashboard`, `#quiz`, `#ppe`, `#signals`, `#exam`, `#memo` : chaque écran est partageable.
 
@@ -333,16 +333,20 @@ rechargement automatique à chaque sauvegarde.
 - **Référentiel graphique** : pictogrammes de sécurité conformes à la norme **ISO 7010**
   (formes et couleurs : obligation, interdiction, danger, secours, lutte incendie), embarqués en
   SVG inline dans `index.html`.
-- **Pictogrammes complémentaires** : SVG issus de **Wikimedia Commons** (M004, M009, P003, P010,
-  W001, W016, E007, E011, F003, F005), nettoyés puis intégrés directement dans `index.html` — le
-  dépôt ne distribue aucun fichier SVG séparé.
-- **Pictogrammes de manutention** (pages 44–48 du support) : marques sur les colis (fragile, haut,
-  limite de température, empilage, crochets, pinces, diable, chariot à fourches) redessinées en
-  SVG inline dans le style normalisé (glyphe noir sur fond clair), et mobilisées dans le quiz
-  (banque de 25 questions).
+- **Pictogrammes complémentaires** : SVG officiels issus de **Wikimedia Commons** (M004, M008,
+  M009, M010, M017, M018, P003, P010, W001, W016, E007, E011, F003, F005 et les marques ISO 7000 ·
+  réf. 0621, 0622, 0623, 0629, 0630, 0632), nettoyés puis intégrés directement dans
+  `index.html` — le dépôt ne distribue aucun fichier SVG séparé.
+- **Pictogrammes de manutention** (pages 44–48 du support) : marques sur les colis. Six d'entre
+  elles sont les **SVG officiels ISO 780 / ISO 7000** de Wikimedia Commons (fragile 0621, crochets
+  0622, haut 0623, diable interdit 0629, limite de gerbage 0630, limite de température 0632) ;
+  trois n'ont pas de SVG officiel sur Commons (ne pas empiler, prise latérale par pinces, chariot
+  à fourches) et restent redessinées en SVG inline dans la géométrie normalisée. Elles sont
+  mobilisées dans le quiz (banque de 25 questions).
 - **Mémo en 3 sous-pages** : `index.html#memo` — pages 1–6 du support (fondamentaux), pages 8–16
   (notions de sécurité, feu-électricité-environnement) et onglet « Équipements & pictogrammes »
-  (EPI au style « obligation » ISO 7010, 5 familles de signaux, pictogrammes de manutention).
+  (EPI en pictogrammes officiels ISO 7010, 5 familles de signaux illustrées par les pictos du
+  niveau 3, marques de manutention ISO 780/7000).
 - **Entête institutionnelle** : « Centre Sectoriel de Formation aux Métiers industriels khnis »
   avec le logo du centre (vectorisé puis embarqué comme `<symbol id="csfmi-logo">`)
   affichée en haut de l'application, et reprise en tête du **sujet d'examen imprimable**.
