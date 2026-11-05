@@ -701,6 +701,15 @@ h1,h2,h3{letter-spacing:-.025em}
   background:rgba(5,18,31,.58);backdrop-filter:blur(5px);
 }
 .modal-backdrop.open{display:grid;animation:viewIn .2s ease both}
+/* ---------- Lecteur PDF embarque (sst.pdf, fichier externe) ---------- */
+.pdf-backdrop{position:fixed;inset:0;z-index:500;display:none;place-items:center;padding:14px;background:rgba(5,18,31,.62);backdrop-filter:blur(6px);}
+.pdf-backdrop.open{display:grid;animation:viewIn .2s ease both}
+.pdf-modal{width:min(960px,96vw);height:min(88vh,900px);background:#fff;border-radius:16px;box-shadow:0 40px 90px -40px rgba(5,18,31,.7);display:grid;grid-template-rows:auto 1fr;overflow:hidden;}
+.pdf-modal-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:#f8fbfc;font-size:.85rem;}
+.pdf-modal-head strong{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pdf-modal-actions{display:flex;gap:8px;flex-shrink:0;}
+iframe#pdfFrame{width:100%;height:100%;border:0;background:#eef3f7;}
+#pdfModal[hidden]{display:none !important;}
 .exam-gate-row{margin:12px 0 2px}
 .exam-print-modes{display:flex;flex-direction:column;gap:8px;margin:12px 0 0;text-align:left;font-size:.78rem;line-height:1.45;color:#2e4a60}
 .exam-print-modes label{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:7px 9px;border:1px solid #e3ecf3;border-radius:10px;background:#f8fbfc}
@@ -1289,7 +1298,7 @@ h1,h2,h3{letter-spacing:-.025em}
           <p style="margin-top:10px">Le support compare la mauvaise technique (dos rond, effort sur la colonne) à la bonne (dos plat, genoux pliés) : le dos rond est la cause n°1 des maux de dos au travail.</p>
         </article>
       </div>
-      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <a id="pdf-link" href="sst.pdf" target="_blank" rel="noopener" aria-label="Ouvrir le support de formation sst.pdf (PDF, nouvelle fenêtre)"><b>sst.pdf</b> <span aria-hidden="true">↗</span></a> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 et marques de manutention ISO 7000/780 (fragile, crochets, haut, diable, gerbage, température) issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Trois marques de manutention sans SVG officiel sur Commons (ne pas empiler, prise latérale, chariot à fourches) restent redessinées en SVG dans la géométrie normalisée. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
+      <p class="source-note"><b>Source :</b> support de formation « Règles de Santé et de Sécurité au Travail » (M02) — <a id="pdf-link" href="sst.pdf" target="_blank" rel="noopener" aria-label="Ouvrir le support de formation sst.pdf dans le lecteur intégré (page 1)"><b>sst.pdf</b></a> (pages 1–6, 8–16 et 44–48). Pictogrammes ISO 7010 et marques de manutention ISO 7000/780 (fragile, crochets, haut, diable, gerbage, température) issus de <b>Wikimedia Commons</b>, intégrés directement dans cette page. Trois marques de manutention sans SVG officiel sur Commons (ne pas empiler, prise latérale, chariot à fourches) restent redessinées en SVG dans la géométrie normalisée. Contenu reformulé à visée pédagogique ; les situations EPI sont simplifiées.</p>
     </section>
   </main>
 
@@ -1355,6 +1364,21 @@ h1,h2,h3{letter-spacing:-.025em}
       <button class="btn btn-ghost btn-small" type="button" data-action="close-exam-pin">Annuler</button>
       <button class="btn btn-accent btn-small" type="button" data-action="exam-pin-submit">Imprimer</button>
     </div>
+  </div>
+</div>
+
+<!-- LECTEUR PDF DU SUPPORT (sst.pdf, fichier externe, affiche dans une modale) -->
+<div class="pdf-backdrop" id="pdfModal" role="dialog" aria-modal="true" aria-label="Support de formation sst.pdf" hidden>
+  <div class="pdf-modal">
+    <div class="pdf-modal-head">
+      <svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg>
+      <strong>Support de formation · page <span id="pdfPageLabel">—</span></strong>
+      <div class="pdf-modal-actions">
+        <a class="btn btn-ghost btn-small" id="pdfOpenBtn" href="sst.pdf" target="_blank" rel="noopener">Ouvrir dans un onglet</a>
+        <button class="btn btn-accent btn-small" type="button" data-action="close-pdf-modal">Fermer</button>
+      </div>
+    </div>
+    <iframe id="pdfFrame" title="Lecteur du support de formation sst.pdf"></iframe>
   </div>
 </div>
 
@@ -2889,6 +2913,9 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
       '</div>' + quizSideHTML() + '</div>';
   }
 
+  /* Page du support sst.pdf contenant l'information de chaque question (niveau 1) */
+  const QUIZ_PDF_PAGE = [2,3,4,5,4,8,8,10,6,9,12,14,50,11,11,11,15,21,61,16,45,45,48,46,45];
+
   function renderQuiz() {
     const app = $('#quizApp');
     if (!app) return;
@@ -2914,7 +2941,8 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
       const correct = ui.quiz.lastCorrect;
       feedback = '<div class="feedback ' + (correct ? 'good' : 'bad') + '" role="status">' +
         '<div class="feedback-head">' + icon(correct ? 'i-check' : 'i-x') + (correct ? 'Bonne réponse !' : 'Pas tout à fait…') + (ui.quiz.gained ? ' <span class="tag" style="margin-left:auto">+' + ui.quiz.gained + ' PV</span>' : '') + '</div>' +
-        '<p><strong>Réponse : ' + esc(q.options[q.answer]) + '</strong><br>' + esc(q.explain) + '</p></div>';
+        '<p><strong>Réponse : ' + esc(q.options[q.answer]) + '</strong><br>' + esc(q.explain) + '</p>' +
+        '<button class="btn btn-ghost btn-small" type="button" data-action="open-pdf" data-page="' + QUIZ_PDF_PAGE[qIndex] + '" style="margin-top:8px">' + icon('i-book') + ' Voir page ' + QUIZ_PDF_PAGE[qIndex] + ' du support</button></div>';
     }
     const actions = answered
       ? '<div class="quiz-actions"><button class="btn btn-accent" type="button" data-action="quiz-next">' + (ui.quiz.index === QUIZ_SESSION_SIZE - 1 ? 'Voir mon résultat' : 'Question suivante') + icon('i-arrow') + '</button></div>'
@@ -3588,6 +3616,30 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
     const m = $('#examPinModal');
     if (m) m.classList.remove('open');
   }
+
+  /* ---------- Lecteur PDF du support (fichier externe sst.pdf) ---------- */
+  function openPdfViewer(page) {
+    const m = $('#pdfModal');
+    if (!m) return;
+    const frame = $('#pdfFrame');
+    const label = $('#pdfPageLabel');
+    const openBtn = $('#pdfOpenBtn');
+    const n = parseInt(page, 10) || 1;
+    if (label) label.textContent = n;
+    if (openBtn) openBtn.href = 'sst.pdf#page=' + n;
+    if (frame) frame.src = 'sst.pdf#page=' + n + '&_=' + Date.now();
+    m.hidden = false;
+    m.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePdfViewer() {
+    const m = $('#pdfModal');
+    if (m) { m.classList.remove('open'); m.hidden = true; }
+    const frame = $('#pdfFrame');
+    if (frame) frame.src = 'about:blank';
+    document.body.style.overflow = '';
+  }
+
   function submitExamPin() {
     const input = $('#examPinInput');
     const err = $('#examPinError');
@@ -3648,6 +3700,8 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
       case 'signals-restart': startSignals(); break;
       case 'exam-generate': generateExam(); break;
       case 'exam-print': printExam(); break;
+      case 'open-pdf': openPdfViewer(btn.getAttribute('data-page')); break;
+      case 'close-pdf-modal': closePdfViewer(); break;
       default: break;
     }
   });
@@ -3715,34 +3769,28 @@ n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>
       if (row) row.hidden = (examPinMode() === 'key');
     });
   });
+const pdfModal = $('#pdfModal');
+  if (pdfModal) {
+    pdfModal.addEventListener('click', function (e) {
+      if (e.target === pdfModal) closePdfViewer();
+    });
+  }
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { closeReset(); closeExamGate(); closeExamPinModal(); }
+    if (e.key === 'Escape') { closeReset(); closeExamGate(); closeExamPinModal(); closePdfViewer(); }
   });
 
   syncMaxTexts();
-  /* ---------- Lien vers sst.pdf : repli si le PDF n'est pas déployé à côté de la page ---------- */
-  const PDF_FALLBACK_URL = 'https://fehmitn.github.io/Cour-sante-securite/sst.pdf';
+  /* ---------- Lien sst.pdf du mémo : ouvre notre lecteur PDF à la page 1 ----------
+     Le PDF reste un fichier externe à côté de index.html ; le lien n'utilise plus
+     window.open (plus de repli distant nécessaire). Ctrl+clic / clic milieu
+     conservent le comportement natif du navigateur (nouvel onglet). */
   function initPdfLink() {
     const link = $('#pdf-link');
     if (!link) return;
-    /* En local (file://), le href relatif suffit : le PDF est distribué à côté de index.html. */
-    if (location.protocol === 'file:') return;
-    /* En ligne, vérifier que le PDF est bien déployé à cet emplacement (hébergement quelconque). */
     link.addEventListener('click', function (ev) {
-      if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+      if (ev.defaultPrevented || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
       ev.preventDefault();
-      function ouvrir(url) { window.open(url, '_blank', 'noopener'); }
-      function repli() {
-        if (navigator.onLine && PDF_FALLBACK_URL) {
-          toast('sst.pdf absent côté serveur — ouverture du PDF depuis le dépôt du projet.', 'ok');
-          ouvrir(PDF_FALLBACK_URL);
-        } else {
-          toast('sst.pdf est à côté de index.html et doit être déployé avec elle (ou connectez-vous à Internet).', 'bad');
-        }
-      }
-      fetch('sst.pdf', { method: 'HEAD' }).then(function (r) {
-        if (r.ok) ouvrir(r.url); else repli();
-      }).catch(repli);
+      openPdfViewer(1);
     });
   }
 
